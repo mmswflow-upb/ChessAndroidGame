@@ -16,14 +16,15 @@ class ChessGameViewModel: ViewModel(){
 
     val uiTheme: MutableState<GameTheme> = mutableStateOf(GameTheme.Normal)
 
-    //In millis
-    val whiteTimeRemaining: MutableState<Long> = mutableStateOf(0L)
-    val blackTimeRemaining: MutableState<Long> = mutableStateOf(0L)
+    //In seconds
+    val whiteTimeRemaining: MutableState<Int> = mutableStateOf(0)
+    val blackTimeRemaining: MutableState<Int> = mutableStateOf(0)
 
 
 
     val chessBoard: MutableState<ChessBoard?> = mutableStateOf<ChessBoard?>(null)
     val historyOfGameMoves: MutableState<HistoryOfGameMoves?> = mutableStateOf(null)
+
 
 
 }

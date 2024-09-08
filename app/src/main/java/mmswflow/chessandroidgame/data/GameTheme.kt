@@ -4,5 +4,4 @@ enum class GameTheme {
 
     Normal,
     Gotham
-
 }
