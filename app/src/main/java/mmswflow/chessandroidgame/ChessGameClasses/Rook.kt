@@ -3,7 +3,7 @@ package mmswflow.chessandroidgame.ChessGameClasses
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.data.ChessBoard
 
-class Rook(val rColor: PieceColor, val rPosition: PiecePosition, val canCastle: Boolean ): ChessPiece(rColor, R.drawable.ic_launcher_background , rPosition) {
+class Rook(val rColor: PieceColor, val rPosition: PiecePosition, var firstMove: Boolean ): ChessPiece(rColor, R.drawable.ic_launcher_background , rPosition) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,

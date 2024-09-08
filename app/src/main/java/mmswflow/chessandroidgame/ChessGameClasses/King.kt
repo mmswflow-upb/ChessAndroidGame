@@ -3,13 +3,13 @@ package mmswflow.chessandroidgame.ChessGameClasses
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.data.ChessBoard
 
-class King(val kgColor: PieceColor, val kgPosition: PiecePosition  ): ChessPiece(kgColor, R.drawable.ic_launcher_background , kgPosition) {
+class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove: Boolean  ): ChessPiece(kgColor, R.drawable.ic_launcher_background , kgPosition) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
         enPassantEdiblePiece: Pawn?
     ): List<PiecePosition> {
-        val newPossiblePositions = mutableListOf<PiecePosition>(
+        val newPossiblePositions: MutableList<PiecePosition> = mutableListOf<PiecePosition>(
             PiecePosition(this.position.row+1,this.position.column+1),
             PiecePosition(this.position.row+1,this.position.column-1),
             PiecePosition(this.position.row+1, this.position.column),
@@ -19,14 +19,52 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition  ): ChessPiece
             PiecePosition(this.position.row-1,this.position.column-1),
             PiecePosition(this.position.row-1, this.position.column)
         ).filter {
-            if(it.row in 0..7 && it.column in 0..7){
+            it.row in 0..7 && it.column in 0..7
+        }.toMutableList()
 
-                true
-            }else{
-                false
+
+        //Castling condition, if the king didn't move before castling MIGHT be allowed
+
+        if(this.firstMove){
+
+            //The rooks might have moved from their starting positions
+            val closeRook = chessBoard.boardMatrix.get(this.position.row).get(this.position.column+3).occupyingPiece
+            val farRook = chessBoard.boardMatrix.get(this.position.row).get(this.position.column-4).occupyingPiece
+
+            if(closeRook != null){
+
+                if(closeRook is Rook){
+
+                    if(closeRook.firstMove){
+
+                        //Check if the path is clear for the castling
+                        if(closeRook.protectsPiece(chessBoard, this.position)){
+
+                            newPossiblePositions.add(PiecePosition(this.position.row, this.position.column+2))
+
+                        }
+                    }
+
+                }
+            }
+
+            if(farRook != null){
+
+                if(farRook is Rook){
+
+                    if(farRook.firstMove){
+
+                        //Check if the path is clear for the castling
+                        if(farRook.protectsPiece(chessBoard, this.position)) {
+
+                            newPossiblePositions.add(PiecePosition(this.position.row, this.position.column-2))
+                        }
+
+                    }
+
+                }
             }
         }
-
 
         return newPossiblePositions
     }
