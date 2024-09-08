@@ -11,6 +11,8 @@ You can also view your games history and go through each move one by one
 ## Technologies Used
 
 - Kotlin with Jetpack Compose
+- ROOM Database
+- Retrofit
 - Android SDK
 - XML
 - Gradle
