@@ -16,11 +16,11 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
         var offset = 0
 
-        //Go right up diagonally
 
         while(this.position.row + offset < 7 && this.position.column + offset < 7){
 
             offset++
+
 
             val currentPiece = chessBoard.boardMatrix.get(this.position.row+offset).get(this.position.column+offset).occupyingPiece
 
@@ -38,19 +38,63 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
         }
         offset = 0
 
-        //Go left up diagonally
+        while(this.position.row +offset < 7 && this.position.column - offset > 0){
 
+            val currentPiece = chessBoard.boardMatrix.get(this.position.row+offset).get(this.position.column-offset).occupyingPiece
+
+            if(currentPiece != null){
+
+                if(currentPiece.color != this.color){
+                    newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column-offset))
+                }
+                break
+
+            }else{
+
+                newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column-offset))
+            }
+        }
 
         offset = 0
-        //Go right down diagonally
 
+
+        while(this.position.row - offset > 0 && this.position.column + offset < 7){
+
+            val currentPiece = chessBoard.boardMatrix.get(this.position.row-offset).get(this.position.column+offset).occupyingPiece
+
+            if(currentPiece != null){
+
+                if(currentPiece.color != this.color){
+                    newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column+offset))
+                }
+                break
+
+            }else{
+
+                newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column+offset))
+            }
+        }
 
         offset = 0
 
-        //go left down diagonally
 
-        while(this.position.row > 0 && this.position.column > 0){
+        while(this.position.row -offset > 0 && this.position.column -offset > 0){
 
+            offset++
+
+            val currentPiece = chessBoard.boardMatrix.get(this.position.row-offset).get(this.position.column-offset).occupyingPiece
+
+            if(currentPiece != null){
+
+                if(currentPiece.color != this.color){
+                    newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column-offset))
+                }
+                break
+
+            }else{
+
+                newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column-offset))
+            }
         }
 
         return newPossiblePositions
