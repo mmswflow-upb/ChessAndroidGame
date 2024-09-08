@@ -35,16 +35,17 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
                     //If there isn't, there might be a pawn that can be eaten using en passant
                     if(rightDiagonalPiece != null){
 
-                        if(rightDiagonalPiece.color != this.color){
+                        newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column+1))
 
-                            newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column+1))
-                        }
-                    }else if(enPassantEdiblePiece != null){
-                        //Check if enPassant edible piece is on its right
-                        if(enPassantEdiblePiece.position.row == this.position.row
-                            && enPassantEdiblePiece.position.column == this.position.column+1){
+                    }else{
+                        if(enPassantEdiblePiece != null){
+                            //Check if enPassant edible piece is on its right
+                            if(enPassantEdiblePiece.position.row == this.position.row
+                                && enPassantEdiblePiece.position.column == this.position.column+1
+                                && enPassantEdiblePiece.color != this.color){
 
-                            newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column+1))
+                                newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column+1))
+                            }
                         }
                     }
                 }
@@ -55,17 +56,18 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
                     val leftDiagonalPiece : ChessPiece? = chessBoard.boardMatrix.get(position.row+1).get(position.column-1).occupyingPiece
 
                     if(leftDiagonalPiece != null){
-                        if(leftDiagonalPiece.color != this.color){
 
-                            newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column-1))
-                        }
-                    }else if(enPassantEdiblePiece != null){
+                        newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column-1))
 
+                    }else{
+                        if(enPassantEdiblePiece != null){
 
-                        //Check if enPassant edible piece is on its left
-                        if(enPassantEdiblePiece.position.row == this.position.row
-                            && enPassantEdiblePiece.position.column == this.position.column-1){
-                            newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column-1))
+                            //Check if enPassant edible piece is on its left
+                            if(enPassantEdiblePiece.position.row == this.position.row
+                                && enPassantEdiblePiece.position.column == this.position.column-1
+                                && enPassantEdiblePiece.color != this.color){
+                                newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column-1))
+                            }
                         }
                     }
                 }
@@ -121,17 +123,18 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
                     //If there isn't, there might be a pawn that can be eaten using en passant
                     if(rightDiagonalPiece != null){
 
-                        if(rightDiagonalPiece.color != this.color){
+                        newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column-1))
 
-                            newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column-1))
-                        }
 
-                    }else if(enPassantEdiblePiece != null){
-                        //Check if enPassant edible piece is on its right
-                        if(enPassantEdiblePiece.position.row == this.position.row
-                            && enPassantEdiblePiece.position.column == this.position.column-1){
+                    }else{
+                        if(enPassantEdiblePiece != null){
+                            //Check if enPassant edible piece is on its right
+                            if(enPassantEdiblePiece.position.row == this.position.row
+                                && enPassantEdiblePiece.position.column == this.position.column-1
+                                && enPassantEdiblePiece.color != this.color){
 
-                            newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column-1))
+                                newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column-1))
+                            }
                         }
                     }
                 }
@@ -141,18 +144,21 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
                     val leftDiagonalPiece : ChessPiece? = chessBoard.boardMatrix.get(position.row-1).get(position.column+1).occupyingPiece
 
                     if(leftDiagonalPiece != null){
-                        if(leftDiagonalPiece.color != this.color){
 
-                            newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column+1))
-                        }
-                    }else if(enPassantEdiblePiece != null){
+                        newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column+1))
+
+                    }else{
+                        if(enPassantEdiblePiece != null) {
 
 
-                        //Check if enPassant edible piece is on its left
-                        if(enPassantEdiblePiece.position.row == this.position.row
-                            && enPassantEdiblePiece.position.column == this.position.column+1){
+                            //Check if enPassant edible piece is on its left
+                            if (enPassantEdiblePiece.position.row == this.position.row
+                                && enPassantEdiblePiece.position.column == this.position.column + 1
+                                && enPassantEdiblePiece.color != this.color
+                            ) {
 
-                            newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column+1))
+                                newPossiblePositions.add(PiecePosition(row = this.position.row - 1, column = this.position.column + 1))
+                            }
                         }
                     }
                 }
@@ -179,12 +185,33 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
 
             }
 
-            
         }
 
 
 
         return newPossiblePositions
+    }
+
+    override fun getAllLegalNewPositions(
+        chessBoard: ChessBoard,
+        enPassantEdiblePiece: Pawn?
+    ): List<PiecePosition> {
+
+
+        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
+            val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
+
+            if(currentPiece != null){
+                if(currentPiece.color != this.color){
+                    true
+                }else{
+                   false
+                }
+
+            }else{
+                true
+            }
+        }
     }
 
     override fun checkIfPieceMoveIsLegal(
@@ -193,6 +220,6 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
         enPassantEdiblePiece: Pawn?,
     ): Boolean {
 
-        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 }

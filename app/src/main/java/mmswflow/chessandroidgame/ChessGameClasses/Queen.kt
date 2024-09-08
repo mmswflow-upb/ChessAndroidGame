@@ -11,18 +11,12 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
     ): List<PiecePosition>{
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
-        //Go up the same column as this queen
-        var offset = 0
-
         for(row in this.position.row..7){
 
             val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-
-                    newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
-                }
+                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
             }else{
 
@@ -30,17 +24,13 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
             }
         }
 
-        //Go down the same column as this queen
 
         for(row in this.position.row downTo 0){
 
             val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-
-                    newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
-                }
+                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
             }else{
 
@@ -48,16 +38,13 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
             }
         }
 
-        //Go right on the same row as this queen
         for(column in this.position.column .. 7){
 
             val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
 
             }else{
@@ -65,22 +52,22 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
             }
         }
 
-        //Go left on the same row as this queen
         for(column in this.position.column downTo 0){
 
             val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
 
             }else{
                 newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
             }
         }
+
+
+        var offset = 0
 
         while(this.position.row + offset < 7 && this.position.column + offset < 7){
 
@@ -91,9 +78,7 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column+offset))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column+offset))
                 break
 
             }else{
@@ -109,9 +94,7 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column-offset))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column-offset))
                 break
 
             }else{
@@ -129,9 +112,8 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column+offset))
-                }
+
+                newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column+offset))
                 break
 
             }else{
@@ -151,9 +133,7 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column-offset))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column-offset))
                 break
 
             }else{
@@ -165,12 +145,33 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
         return newPossiblePositions
     }
 
+    override fun getAllLegalNewPositions(
+        chessBoard: ChessBoard,
+        enPassantEdiblePiece: Pawn?
+    ): List<PiecePosition> {
+
+
+        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
+            val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
+
+            if(currentPiece != null){
+                if(currentPiece.color != this.color){
+                    true
+                }else{
+                    false
+                }
+
+            }else{
+                true
+            }
+        }
+    }
     override fun checkIfPieceMoveIsLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 }

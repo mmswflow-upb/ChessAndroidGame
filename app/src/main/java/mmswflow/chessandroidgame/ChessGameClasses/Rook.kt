@@ -12,17 +12,13 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, val canCastle: 
 
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
-        //Go up the same column as this rook
 
         for(row in this.position.row..7){
 
             val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-
-                    newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
-                }
+                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
             }else{
 
@@ -30,17 +26,13 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, val canCastle: 
             }
         }
 
-        //Go down the same column as this rook
 
         for(row in this.position.row downTo 0){
 
             val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-
-                    newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
-                }
+                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
             }else{
 
@@ -48,16 +40,13 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, val canCastle: 
             }
         }
 
-        //Go right on the same row as this rook
         for(column in this.position.column .. 7){
 
             val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
 
             }else{
@@ -65,16 +54,13 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, val canCastle: 
             }
         }
 
-        //Go left on the same row as this rook
         for(column in this.position.column downTo 0){
 
             val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
 
             }else{
@@ -87,12 +73,33 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, val canCastle: 
 
     }
 
+    override fun getAllLegalNewPositions(
+        chessBoard: ChessBoard,
+        enPassantEdiblePiece: Pawn?
+    ): List<PiecePosition> {
+
+
+        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
+            val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
+
+            if(currentPiece != null){
+                if(currentPiece.color != this.color){
+                    true
+                }else{
+                    false
+                }
+
+            }else{
+                true
+            }
+        }
+    }
     override fun checkIfPieceMoveIsLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 }

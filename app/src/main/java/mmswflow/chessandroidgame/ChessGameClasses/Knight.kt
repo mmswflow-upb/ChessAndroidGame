@@ -26,14 +26,8 @@ class Knight(val kColor: PieceColor, val kPosition: PiecePosition): ChessPiece(k
 
        newPossiblePositions.filter {
            if(it.row in 0..7 && it.column in 0..7){
-               val targetPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
-               if(targetPiece != null){
 
-                    targetPiece.color != this.color
-               }else{
-                   true
-               }
-
+               true
            }else{
                false
            }
@@ -43,13 +37,34 @@ class Knight(val kColor: PieceColor, val kPosition: PiecePosition): ChessPiece(k
         return newPossiblePositions
     }
 
+    override fun getAllLegalNewPositions(
+        chessBoard: ChessBoard,
+        enPassantEdiblePiece: Pawn?
+    ): List<PiecePosition> {
+
+
+        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
+            val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
+
+            if(currentPiece != null){
+                if(currentPiece.color != this.color){
+                    true
+                }else{
+                    false
+                }
+
+            }else{
+                true
+            }
+        }
+    }
     override fun checkIfPieceMoveIsLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 
 }

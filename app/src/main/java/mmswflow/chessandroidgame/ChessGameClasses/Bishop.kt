@@ -16,7 +16,6 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
         var offset = 0
 
-
         while(this.position.row + offset < 7 && this.position.column + offset < 7){
 
             offset++
@@ -26,9 +25,7 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column+offset))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column+offset))
                 break
 
             }else{
@@ -44,9 +41,7 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column-offset))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row+offset, column= this.position.column-offset))
                 break
 
             }else{
@@ -64,9 +59,8 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column+offset))
-                }
+
+                newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column+offset))
                 break
 
             }else{
@@ -86,9 +80,7 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
             if(currentPiece != null){
 
-                if(currentPiece.color != this.color){
-                    newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column-offset))
-                }
+                newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column-offset))
                 break
 
             }else{
@@ -100,12 +92,33 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
         return newPossiblePositions
     }
 
+    override fun getAllLegalNewPositions(
+        chessBoard: ChessBoard,
+        enPassantEdiblePiece: Pawn?
+    ): List<PiecePosition> {
+
+
+        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
+            val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
+
+            if(currentPiece != null){
+                if(currentPiece.color != this.color){
+                    true
+                }else{
+                    false
+                }
+
+            }else{
+                true
+            }
+        }
+    }
     override fun checkIfPieceMoveIsLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 }

@@ -24,7 +24,10 @@ abstract class ChessPiece(var color: PieceColor, @DrawableRes var icon: Int, var
     //This checks whether the move would be legal excluding the check/checkmate condition
 
     abstract fun checkIfPieceMoveIsLegal(chessBoard: ChessBoard, newPosition: PiecePosition, enPassantEdiblePiece: Pawn?): Boolean
+    //Return all possible moves (even the ones in which in the new position there's a piece of the same color)
     abstract fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?): List<PiecePosition>
+    //Return all legal moves in which we exclude the positions in which the occupying pieces are of the same color
+    abstract fun getAllLegalNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?): List<PiecePosition>
 
 }
 
