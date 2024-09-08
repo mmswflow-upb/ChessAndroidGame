@@ -20,17 +20,8 @@ class Knight(val kColor: PieceColor, val kPosition: PiecePosition): ChessPiece(k
             PiecePosition(row= this.position.row-1, column= this.position.column-2),
             PiecePosition(row= this.position.row-2, column= this.position.column+1),
             PiecePosition(row= this.position.row-2, column= this.position.column-1)
-        )
-
-
-
-       newPossiblePositions.filter {
-           if(it.row in 0..7 && it.column in 0..7){
-
-               true
-           }else{
-               false
-           }
+        ).filter {
+            it.row in 0..7 && it.column in 0..7
        }
 
 
@@ -47,11 +38,7 @@ class Knight(val kColor: PieceColor, val kPosition: PiecePosition): ChessPiece(k
             val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
 
             if(currentPiece != null){
-                if(currentPiece.color != this.color){
-                    true
-                }else{
-                    false
-                }
+                currentPiece.color != this.color
 
             }else{
                 true
@@ -67,4 +54,10 @@ class Knight(val kColor: PieceColor, val kPosition: PiecePosition): ChessPiece(k
         return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 
+    override fun protectsPiece(
+        chessBoard: ChessBoard,
+        protectedPiecePosition: PiecePosition
+    ): Boolean {
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
+    }
 }

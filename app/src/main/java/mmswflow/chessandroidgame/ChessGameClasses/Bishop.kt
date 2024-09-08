@@ -102,11 +102,7 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
             val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
 
             if(currentPiece != null){
-                if(currentPiece.color != this.color){
-                    true
-                }else{
-                    false
-                }
+                currentPiece.color != this.color
 
             }else{
                 true
@@ -120,5 +116,12 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
     ): Boolean {
 
         return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+    }
+
+    override fun protectsPiece(
+        chessBoard: ChessBoard,
+        protectedPiecePosition: PiecePosition
+    ): Boolean {
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
     }
 }

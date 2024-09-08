@@ -155,11 +155,7 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
             val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
 
             if(currentPiece != null){
-                if(currentPiece.color != this.color){
-                    true
-                }else{
-                    false
-                }
+                currentPiece.color != this.color
 
             }else{
                 true
@@ -173,5 +169,12 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
     ): Boolean {
 
         return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+    }
+
+    override fun protectsPiece(
+        chessBoard: ChessBoard,
+        protectedPiecePosition: PiecePosition
+    ): Boolean {
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
     }
 }

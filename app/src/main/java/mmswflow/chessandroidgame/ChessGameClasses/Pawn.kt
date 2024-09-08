@@ -202,11 +202,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
             val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
 
             if(currentPiece != null){
-                if(currentPiece.color != this.color){
-                    true
-                }else{
-                   false
-                }
+                currentPiece.color != this.color
 
             }else{
                 true
@@ -221,5 +217,12 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
     ): Boolean {
 
         return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+    }
+
+    override fun protectsPiece(
+        chessBoard: ChessBoard,
+        protectedPiecePosition: PiecePosition
+    ): Boolean {
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
     }
 }

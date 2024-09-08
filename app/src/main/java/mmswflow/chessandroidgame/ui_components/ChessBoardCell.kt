@@ -5,7 +5,8 @@ import mmswflow.chessandroidgame.data.BoardCell
 
 @Composable
 fun ChessBoardCell(
-    cell: BoardCell
+    cell: BoardCell,
+    upsideDown: Boolean
 ){
 
 }

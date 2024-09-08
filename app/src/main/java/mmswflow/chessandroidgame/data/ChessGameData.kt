@@ -17,7 +17,10 @@ sealed class GameMode(
     object Bullet: GameMode(name = R.string.bullet_game_mode, timeLimit = 1)
 }
 
-data class BoardCell(val position: PiecePosition, val occupyingPiece: ChessPiece?)
+data class BoardCell(val position: PiecePosition, var occupyingPiece: ChessPiece?)
+
+//Might use later for online implementation
+//data class Player(val color: PieceColor, val pieces: MutableList<ChessPiece>)
 
 data class ChessBoard(
     val boardMatrix: Array<Array<BoardCell>> =
@@ -25,16 +28,18 @@ data class ChessBoard(
             row -> Array(8) {
             column -> BoardCell(position= PiecePosition(row= row,column= column), null)
         }
-        }
+        },
+    val whitePieces: List<ChessPiece>,
+    val blackPieces: List<ChessPiece>
 )
 
 data class Move(
-    val player: PieceColor,
+    val playerToMove: PieceColor,
     val whiteTime: Long,
     val blackTime: Long,
     val movedPiece: ChessPiece,
     val oldPosition: PiecePosition,
-    val newPosition: PiecePosition
+    val newPosition: PiecePosition,
 )
 
-data class HistoryOfGameMoves(val moves: Array<Move>, val gameMode: GameMode)
+data class HistoryOfGameMoves(val moves: MutableList<Move>, val gameMode: GameMode)
