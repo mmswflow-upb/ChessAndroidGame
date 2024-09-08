@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">ChessAndroidGame</string>
+    <string name="app_name" translatable="false">ChessAndroidGame</string>
+    <string name="app_title">Crazy Chess</string>
+    <string name="play_button_text">Play</string>
+    <string name="edit_mode_button_text">Edit Mode</string>
+    <string name="author_title">Created By MMSWFLOW</string>
+    <string name="classic_game_mode">Classic</string>
+    <string name="rapid_game_mode">Rapid</string>
+    <string name="bullet_game_mode">Bullet</string>
+    <string name="home_screen_title">Home</string>
+    <string name="game_screen_title">Game</string>
+    <string name="game_mode_selection_screen_title">Game Mode Selection</string>
+    <string name="history_screen_title">History</string>
 </resources>
