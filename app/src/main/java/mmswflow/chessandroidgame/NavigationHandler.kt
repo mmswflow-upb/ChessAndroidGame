@@ -24,7 +24,7 @@ fun NavigationHandler(){
 
         composable(route= Screen.Home.route){
 
-            HomeScreen()
+            HomeScreen(navHost= navHost)
         }
 
         composable(route= Screen.GameModeSelection.route){

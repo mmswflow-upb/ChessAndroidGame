@@ -32,10 +32,8 @@ fun TimerUI(
 ){
     Box(modifier = Modifier.fillMaxSize()){
 
-        LinearProgressIndicator(progress=  time.toFloat()/maxTime.toFloat() , modifier= Modifier.fillMaxWidth().background(
-            if(active) Color.Green else Color.Red
-        ))
-        Text(text = convertTimeToMinsAndSec(timeSec= time), modifier = Modifier.size(16.dp), color= Color.White)
+        LinearProgressIndicator(progress=  time.toFloat()/maxTime.toFloat() , modifier= Modifier.fillMaxWidth())
+        Text(text = convertTimeToMinsAndSec(timeSec= time), modifier = Modifier.size(16.dp))
     }
 
 }

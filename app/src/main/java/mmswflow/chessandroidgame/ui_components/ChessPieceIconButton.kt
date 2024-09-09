@@ -17,7 +17,7 @@ fun ChessPieceIconButton(chessPiece: ChessPiece, upsideDown: Boolean, onPieceSel
             onPieceSelect(chessPiece)
         }
     ){
-        Icon(painter= painterResource(chessPiece.icon),tint= if(chessPiece.color == PieceColor.White) Color.White else Color.DarkGray, contentDescription = null)
+        Icon(painter= painterResource(chessPiece.icon), contentDescription = null)
     }
 
 }
