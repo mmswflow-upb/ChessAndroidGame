@@ -12,4 +12,5 @@
     <string name="game_mode_selection_screen_title">Game Mode Selection</string>
     <string name="history_screen_title">History</string>
     <string name="version">Version: 1</string>
+    <string name="games_history_button_text">Games History</string>
 </resources>

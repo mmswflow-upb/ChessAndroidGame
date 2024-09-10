@@ -12,7 +12,6 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, var firstMove: 
 
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
-
         for(row in this.position.row..7){
 
             val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -22,12 +23,12 @@ import mmswflow.chessandroidgame.data.Screen
 import mmswflow.chessandroidgame.ui_components.SmallActionButton
 import mmswflow.chessandroidgame.ui_components.SmallInfoText
 import mmswflow.chessandroidgame.ui_components.TextHeader
+import mmswflow.chessandroidgame.ui_components.SizingValue.*
 
 @Composable
 fun HomeScreen(
     navHost: NavHostController
 ){
-
 
     Surface(
         modifier= Modifier.fillMaxSize(),
@@ -44,9 +45,21 @@ fun HomeScreen(
 
             SmallActionButton(
                 clickAction = {navHost.navigate(Screen.GameModeSelection.route)},
-                buttonText = R.string.play_button_text
+                buttonText = R.string.play_button_text,
+                modifier= Modifier.width(SmallActionButtonWidth.value.dp)
             )
 
+            SmallActionButton(
+                clickAction = {navHost.navigate(Screen.GameModeSelection.route)},
+                buttonText = R.string.edit_mode_button_text,
+                modifier= Modifier.width(SmallActionButtonWidth.value.dp)
+            )
+
+            SmallActionButton(
+                clickAction = {navHost.navigate(Screen.GameModeSelection.route)},
+                buttonText = R.string.games_history_button_text,
+                modifier= Modifier.width(SmallActionButtonWidth.value.dp)
+            )
         }
         Row(
             modifier= Modifier.fillMaxWidth(),
@@ -57,9 +70,4 @@ fun HomeScreen(
             SmallInfoText(text = R.string.version)
         }
     }
-
-
-
-
-
 }

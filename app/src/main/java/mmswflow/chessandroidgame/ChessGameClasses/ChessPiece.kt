@@ -29,8 +29,6 @@ abstract class ChessPiece(var color: PieceColor, @DrawableRes var icon: Int, var
     //Return all legal moves in which we exclude the positions in which the occupying pieces are of the same color
     abstract fun getAllLegalNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?): List<PiecePosition>
 
-
-
     //Returns whether an enemy piece is protected by another enemy piece
     abstract fun protectsPiece(chessBoard: ChessBoard, protectedPiecePosition: PiecePosition): Boolean
 }
