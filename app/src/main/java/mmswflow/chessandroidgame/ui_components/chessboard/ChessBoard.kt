@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components
+package mmswflow.chessandroidgame.ui_components.chessboard
 
 import androidx.compose.runtime.Composable
 import mmswflow.chessandroidgame.ChessGameViewModel

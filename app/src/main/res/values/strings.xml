@@ -21,4 +21,5 @@
     <string name="settings_button_text">Settings</string>
     <string name="offline_mode_description">In offline mode, you can play with another person using the same phone.</string>
     <string name="online_mode_description">In online mode, you can connect with other players who are currently looking for a match.</string>
+    <string name="blitz_game_mode">Blitz</string>
 </resources>

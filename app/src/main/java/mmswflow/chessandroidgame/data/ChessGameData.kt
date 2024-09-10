@@ -15,6 +15,7 @@ sealed class GameMode(
 
     object Classic : GameMode(name = R.string.classic_game_mode, timeLimit = 30 * 60)
     object Rapid: GameMode(name = R.string.rapid_game_mode, timeLimit = 10 * 60)
+    object Blitz: GameMode(name=R.string.blitz_game_mode, timeLimit= 5 * 60)
     object Bullet: GameMode(name = R.string.bullet_game_mode, timeLimit = 1 * 60)
 }
 

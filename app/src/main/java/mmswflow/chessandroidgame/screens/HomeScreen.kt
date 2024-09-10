@@ -1,29 +1,25 @@
 package mmswflow.chessandroidgame.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.data.Screen
-import mmswflow.chessandroidgame.ui_components.SmallActionButton
-import mmswflow.chessandroidgame.ui_components.SmallInfoText
-import mmswflow.chessandroidgame.ui_components.TextHeader
-import mmswflow.chessandroidgame.ui_components.SizingValue.*
+import mmswflow.chessandroidgame.ui_components.button.MediumActionButton
+import mmswflow.chessandroidgame.ui_components.text.SmallInfoText
+import mmswflow.chessandroidgame.ui_components.text.TextHeader
+import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
 @Composable
 fun HomeScreen(
@@ -35,32 +31,42 @@ fun HomeScreen(
         color= MaterialTheme.colorScheme.background,
     ){
 
-        Column(
+        LazyColumn(
             modifier= Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
 
-            TextHeader(text = stringResource(id = R.string.app_title))
+            item{
 
-            SmallActionButton(
-                clickAction = {navHost.navigate(Screen.GameMultiplayerSelection.route)},
-                buttonText = R.string.play_button_text,
-                modifier= Modifier.width(SmallActionButtonWidth.value.dp)
-            )
+                TextHeader(text = stringResource(id = R.string.app_title))
+            }
+
+            item {
+                MediumActionButton(
+                    clickAction = {navHost.navigate(Screen.GameMultiplayerSelection.route)},
+                    buttonText = R.string.play_button_text,
+                    modifier= Modifier.width(MediumActionButtonWidth.value.dp)
+                )
+            }
 
 
-            SmallActionButton(
-                clickAction = {navHost.navigate(Screen.GamesHistoryList.route)},
-                buttonText = R.string.games_history_button_text,
-                modifier= Modifier.width(SmallActionButtonWidth.value.dp)
-            )
+            item{
+                MediumActionButton(
+                    clickAction = {navHost.navigate(Screen.GamesHistoryList.route)},
+                    buttonText = R.string.games_history_button_text,
+                    modifier= Modifier.width(MediumActionButtonWidth.value.dp)
+                )
+            }
 
-            SmallActionButton(
-                clickAction = {navHost.navigate(Screen.GameSettings.route)},
-                buttonText = R.string.settings_button_text,
-                modifier = Modifier.width(SmallActionButtonWidth.value.dp)
-            )
+            item{
+                MediumActionButton(
+                    clickAction = {navHost.navigate(Screen.GameSettings.route)},
+                    buttonText = R.string.settings_button_text,
+                    modifier = Modifier.width(MediumActionButtonWidth.value.dp)
+                )
+            }
+
         }
         Row(
             modifier= Modifier.fillMaxWidth(),

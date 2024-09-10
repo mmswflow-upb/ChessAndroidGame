@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components
+package mmswflow.chessandroidgame.ui_components.text
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import mmswflow.chessandroidgame.ui_components.SizingValue.*
+import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
 @Composable
 fun TextHeader(

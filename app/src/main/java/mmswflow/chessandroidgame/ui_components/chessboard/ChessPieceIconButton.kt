@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components
+package mmswflow.chessandroidgame.ui_components.chessboard
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

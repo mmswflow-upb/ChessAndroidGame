@@ -1,7 +1,8 @@
-package mmswflow.chessandroidgame.ui_components
+package mmswflow.chessandroidgame.ui_components.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,37 +14,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import mmswflow.chessandroidgame.ui_components.SizingValue.*
+import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 @Composable
-fun SmallActionButton(
+fun MediumActionButton(
     clickAction: () -> Unit,
     buttonText: Int,
     modifier: Modifier
 ){
     Box(
         modifier= modifier
-            .padding(SmallActionButtonBoxPadding.value.dp)
-            .clip(RoundedCornerShape(SmallActionButtonRoundedCornerShapeSize.value.dp))
+            .padding(MediumActionButtonBoxPadding.value.dp)
+            .clip(RoundedCornerShape(MediumActionButtonRoundedCornerShapeSize.value.dp))
             .background(MaterialTheme.colorScheme.primary)
             .border(
-                width= SmallActionButtonBorderWidth.value.dp,
+                width= MediumActionButtonBorderWidth.value.dp,
                 color= MaterialTheme.colorScheme.outline,
-                shape= RoundedCornerShape(SmallActionButtonRoundedCornerShapeSize.value.dp)
-            ),
+                shape= RoundedCornerShape(MediumActionButtonRoundedCornerShapeSize.value.dp)
+            )
+            .clickable { clickAction() },
             contentAlignment = Alignment.Center
     ){
         Button(
-            modifier= Modifier.padding(SmallActionButtonPadding.value.dp),
+            modifier= Modifier.padding(MediumActionButtonPadding.value.dp),
             onClick= { clickAction() },
         ){
             Text(
                 text= stringResource(id= buttonText),
                 color= MaterialTheme.colorScheme.onPrimary,
-                fontSize= SmallActionButtonTextFontSize.value.sp,
+                fontSize= MediumActionButtonTextFontSize.value.sp,
             )
         }
     }
