@@ -9,13 +9,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mmswflow.chessandroidgame.ui_components.SizingValue.*
+
 @Composable
-fun SmallInfoText(text: Int){
+fun MediumInfoText(text: Int){
 
     Text(
         text= stringResource(id = text),
         color= MaterialTheme.colorScheme.onSecondary,
-        fontSize= SmallInfoTextFontSize.value.sp,
-        modifier= Modifier.padding(SmallInfoTextPadding.value.dp)
+        fontSize= MediumInfoTextFontSize.value.sp,
+        modifier= Modifier.padding(MediumInfoTextPadding.value.dp)
     )
 }

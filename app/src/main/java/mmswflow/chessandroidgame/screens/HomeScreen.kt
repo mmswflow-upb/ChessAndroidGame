@@ -57,7 +57,7 @@ fun HomeScreen(
             )
 
             SmallActionButton(
-                clickAction = {},
+                clickAction = {navHost.navigate(Screen.GameSettings.route)},
                 buttonText = R.string.settings_button_text,
                 modifier = Modifier.width(SmallActionButtonWidth.value.dp)
             )

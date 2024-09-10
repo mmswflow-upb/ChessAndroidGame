@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ChessGameClasses
+package mmswflow.chessandroidgame.chess_game_classes
 
 import androidx.annotation.DrawableRes
 import mmswflow.chessandroidgame.data.ChessBoard

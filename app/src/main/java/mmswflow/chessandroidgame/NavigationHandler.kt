@@ -31,7 +31,7 @@ fun NavigationHandler(){
 
         composable(route= Screen.GameMultiplayerSelection.route){
 
-            GameMultiplayerSelectionScreen()
+            GameMultiplayerSelectionScreen(gameViewModel= chessGameViewModel, navHost= navHost)
         }
 
         composable(route= Screen.GameModeSelection.route){

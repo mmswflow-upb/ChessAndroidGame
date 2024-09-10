@@ -1,71 +1,16 @@
-package mmswflow.chessandroidgame.ChessGameClasses
+package mmswflow.chessandroidgame.chess_game_classes
 
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.data.ChessBoard
 
-class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qColor, R.drawable.ic_launcher_background , qPosition) {
+class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(bColor, R.drawable.ic_launcher_background , bPosition) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
         enPassantEdiblePiece: Pawn?
     ): List<PiecePosition>{
+
         val newPossiblePositions = mutableListOf<PiecePosition>()
-
-        for(row in this.position.row..7){
-
-            val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
-            if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
-                break //We cant go past this position since the path is blocked
-            }else{
-
-                newPossiblePositions.add(PiecePosition(row= row, column= this.position.column))
-            }
-        }
-
-
-        for(row in this.position.row downTo 0){
-
-            val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
-            if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
-                break //We cant go past this position since the path is blocked
-            }else{
-
-                newPossiblePositions.add(PiecePosition(row= row, column= this.position.column))
-            }
-        }
-
-        for(column in this.position.column .. 7){
-
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
-
-            if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-                break
-
-            }else{
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-            }
-        }
-
-        for(column in this.position.column downTo 0){
-
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
-
-            if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-                break
-
-            }else{
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
-            }
-        }
-
 
         var offset = 0
 

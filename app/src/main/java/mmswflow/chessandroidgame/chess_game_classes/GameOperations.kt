@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ChessGameClasses
+package mmswflow.chessandroidgame.chess_game_classes
 
 /*
 *   Check if the piece is still blocked due to a potential check

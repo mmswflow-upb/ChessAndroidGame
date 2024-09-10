@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import mmswflow.chessandroidgame.ChessGameClasses.ChessPiece
+import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
 import mmswflow.chessandroidgame.data.BoardCell
 
 @Composable

@@ -1,6 +1,7 @@
 package mmswflow.chessandroidgame
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import mmswflow.chessandroidgame.data.ChessBoard
@@ -13,12 +14,13 @@ class ChessGameViewModel: ViewModel(){
 
     val gameMode: MutableState<GameMode?> = mutableStateOf<GameMode?>(null)
     val currentScreen: MutableState<Screen> = mutableStateOf<Screen>(Screen.Home)
+    val onlineMode: MutableState<Boolean> = mutableStateOf<Boolean>(false)
 
     val uiTheme: MutableState<GameTheme> = mutableStateOf(GameTheme.Normal)
 
     //In seconds
-    val whiteTimeRemaining: MutableState<Int> = mutableStateOf(0)
-    val blackTimeRemaining: MutableState<Int> = mutableStateOf(0)
+    val whiteTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
+    val blackTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
 
 
 

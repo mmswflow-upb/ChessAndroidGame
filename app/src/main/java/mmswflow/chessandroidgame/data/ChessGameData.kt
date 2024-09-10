@@ -1,9 +1,9 @@
 package mmswflow.chessandroidgame.data
 
 import androidx.compose.ui.graphics.Color
-import mmswflow.chessandroidgame.ChessGameClasses.ChessPiece
-import mmswflow.chessandroidgame.ChessGameClasses.PieceColor
-import mmswflow.chessandroidgame.ChessGameClasses.PiecePosition
+import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
+import mmswflow.chessandroidgame.chess_game_classes.PieceColor
+import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
 import mmswflow.chessandroidgame.R
 
 

@@ -27,9 +27,13 @@ fun SmallActionButton(
     Box(
         modifier= modifier
             .padding(SmallActionButtonBoxPadding.value.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(SmallActionButtonRoundedCornerShapeSize.value.dp))
             .background(MaterialTheme.colorScheme.primary)
-            .border(width= SmallActionButtonBorderWidth.value.dp, color= MaterialTheme.colorScheme.outline, shape= RoundedCornerShape(16.dp)),
+            .border(
+                width= SmallActionButtonBorderWidth.value.dp,
+                color= MaterialTheme.colorScheme.outline,
+                shape= RoundedCornerShape(SmallActionButtonRoundedCornerShapeSize.value.dp)
+            ),
             contentAlignment = Alignment.Center
     ){
         Button(
