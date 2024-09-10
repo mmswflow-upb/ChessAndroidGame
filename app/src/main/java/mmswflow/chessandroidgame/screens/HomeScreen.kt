@@ -44,21 +44,22 @@ fun HomeScreen(
             TextHeader(text = stringResource(id = R.string.app_title))
 
             SmallActionButton(
-                clickAction = {navHost.navigate(Screen.GameModeSelection.route)},
+                clickAction = {navHost.navigate(Screen.GameMultiplayerSelection.route)},
                 buttonText = R.string.play_button_text,
                 modifier= Modifier.width(SmallActionButtonWidth.value.dp)
             )
 
+
             SmallActionButton(
-                clickAction = {navHost.navigate(Screen.GameModeSelection.route)},
-                buttonText = R.string.edit_mode_button_text,
+                clickAction = {navHost.navigate(Screen.GamesHistoryList.route)},
+                buttonText = R.string.games_history_button_text,
                 modifier= Modifier.width(SmallActionButtonWidth.value.dp)
             )
 
             SmallActionButton(
-                clickAction = {navHost.navigate(Screen.GameModeSelection.route)},
-                buttonText = R.string.games_history_button_text,
-                modifier= Modifier.width(SmallActionButtonWidth.value.dp)
+                clickAction = {},
+                buttonText = R.string.settings_button_text,
+                modifier = Modifier.width(SmallActionButtonWidth.value.dp)
             )
         }
         Row(
