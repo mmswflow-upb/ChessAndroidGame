@@ -54,7 +54,7 @@ fun GameModeSelectionScreen(
                 flingBehavior = CarouselDefaults.singleAdvanceFlingBehavior(state = gameViewModel.carouselState),
                 itemSpacing= CarouselItemSpacing.value.dp,
                 maxSmallItemWidth= CarouselItemMaxWidth.value.dp,
-                minSmallItemWidth= CarouselItemMinWidth.value.dp
+                minSmallItemWidth= CarouselItemMinWidth.value.dp,
             ) {
                 indx ->
 

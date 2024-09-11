@@ -19,7 +19,6 @@ import mmswflow.chessandroidgame.screens.HomeScreen
 fun NavigationHandler(){
 
 
-
     val navHost = rememberNavController()
     val chessGameViewModel : ChessGameViewModel = viewModel()
     NavHost(navController= navHost, startDestination= Screen.Home.route){
@@ -41,7 +40,7 @@ fun NavigationHandler(){
 
         composable(route= Screen.Game.route){
 
-            GameScreen()
+            GameScreen(gameViewModel= chessGameViewModel, navHost= navHost)
         }
 
         composable(route= Screen.GamesHistoryList.route){

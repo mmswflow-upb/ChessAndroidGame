@@ -27,7 +27,7 @@ sealed class UISizingValue(val value: Int) {
     data object SelectionCardRoundedCornerShapeSize: UISizingValue(16)
     data object SelectionCardBorderWidth : UISizingValue(2)
     data object SelectionCardElevation: UISizingValue(4)
-    data object SelectionCardMinHeight: UISizingValue(300)
+    data object SelectionCardMinHeight: UISizingValue(350)
     data object SelectionCardMaxHeight : UISizingValue(450)
 
     data object SelectionIconIdentifierPadding : UISizingValue(24)
