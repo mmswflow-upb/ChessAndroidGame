@@ -22,4 +22,10 @@
     <string name="offline_mode_description">In offline mode, you can play with another person using the same phone.</string>
     <string name="online_mode_description">In online mode, you can connect with other players who are currently looking for a match.</string>
     <string name="blitz_game_mode">Blitz</string>
+    <string name="edit_game_mode">Edit</string>
+    <string name="classic_game_mode_description">The classic starting board, with a 30-minute limit for each side</string>
+    <string name="rapid_game_mode_description">Just like classic mode, but each side has a 10-minute time limit</string>
+    <string name="blitz_game_mode_description">Fast-paced game mode, with 5 minutes for each side only</string>
+    <string name="bullet_game_mode_description">Are you ready to take on this challenge? Only one minute for each side!</string>
+    <string name="edit_game_mode_description">In edit mode you can create your own starting board then resume the game from there!</string>
 </resources>

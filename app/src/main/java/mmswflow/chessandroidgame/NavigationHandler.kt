@@ -36,7 +36,7 @@ fun NavigationHandler(){
 
         composable(route= Screen.GameModeSelection.route){
 
-            GameModeSelectionScreen()
+            GameModeSelectionScreen(gameViewModel= chessGameViewModel, navHost= navHost)
         }
 
         composable(route= Screen.Game.route){

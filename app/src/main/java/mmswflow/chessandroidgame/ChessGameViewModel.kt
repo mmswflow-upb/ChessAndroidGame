@@ -1,5 +1,7 @@
 package mmswflow.chessandroidgame
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -22,11 +24,12 @@ class ChessGameViewModel: ViewModel(){
     val whiteTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
     val blackTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
 
-
+    val currentAvailableGameModes: MutableState<List<GameMode>> = mutableStateOf(listOf(GameMode.Classic, GameMode.Rapid,GameMode.Blitz, GameMode.Bullet,GameMode.Edit) )
 
     val chessBoard: MutableState<ChessBoard?> = mutableStateOf<ChessBoard?>(null)
     val historyOfGameMoves: MutableState<HistoryOfGameMoves?> = mutableStateOf(null)
 
-
+    @OptIn(ExperimentalMaterial3Api::class)
+    val carouselState = CarouselState(itemCount= {currentAvailableGameModes.value.count()})
 
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 import mmswflow.chessandroidgame.ui_components.text.SmallInfoText
@@ -27,7 +28,10 @@ fun SelectionCard(
     identifier: @Composable () -> Unit,
     description: Int,
     actionOnSelection: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    scale: Float = 1f,
+    minHeight: Int = SelectionCardMinHeight.value,
+    maxHeight: Int = SelectionCardMaxHeight.value
 ){
 
     Card(
@@ -40,7 +44,11 @@ fun SelectionCard(
                 color = MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(SelectionCardRoundedCornerShapeSize.value.dp)
             )
-            .heightIn(min= SelectionCardMinHeight.value.dp, max= SelectionCardMaxHeight.value.dp )
+            .graphicsLayer {
+                scaleX = scale // Apply scaling based on focus
+                scaleY = scale
+            }
+            .heightIn(min= minHeight.dp, max= maxHeight.dp )
             .clickable { actionOnSelection() },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
