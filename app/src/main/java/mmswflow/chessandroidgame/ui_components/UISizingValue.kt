@@ -22,7 +22,7 @@ sealed class UISizingValue(val value: Int) {
     data object LargeInfoTextPadding : UISizingValue(42)
 
     data object ScreenTitleTextFontSize : UISizingValue(24)
-
+    data object ScreenTitleTextBottomPadding : UISizingValue(30)
     data object SelectionCardPadding : UISizingValue(16)
     data object SelectionCardRoundedCornerShapeSize: UISizingValue(16)
     data object SelectionCardBorderWidth : UISizingValue(2)
@@ -38,5 +38,5 @@ sealed class UISizingValue(val value: Int) {
     data object CarouselItemSpacing: UISizingValue(30)
     data object CarouselItemMinWidth: UISizingValue(35)
     data object CarouselItemMaxWidth: UISizingValue(100)
-    data object CarouselSelectionCardHeight: UISizingValue(350)
+    data object CarouselSelectionCardHeight: UISizingValue(380)
 }

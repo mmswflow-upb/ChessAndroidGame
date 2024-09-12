@@ -8,13 +8,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
+import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.data.BoardCell
 
 @Composable
 fun ChessBoardCell(
     cell: BoardCell,
     upsideDown: Boolean,
-    onPieceSelect: (ChessPiece) -> Unit
+    onPieceSelect: (ChessPiece) -> Unit,
+    whoPlays: PieceColor
 ){
 
     Box(modifier = Modifier
@@ -22,7 +24,7 @@ fun ChessBoardCell(
         .background(cell.cellColor), contentAlignment = Alignment.Center,){
 
             if(cell.occupyingPiece != null){
-                ChessPieceIconButton(chessPiece = cell.occupyingPiece!!, upsideDown = upsideDown, onPieceSelect)
+                ChessPieceIconButton(chessPiece = cell.occupyingPiece!!, zAngle= if(whoPlays == PieceColor.White) 0f else 180f , onPieceSelect)
             }
     }
 

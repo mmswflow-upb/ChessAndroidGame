@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">ChessAndroidGame</string>
+    <string name="app_name" translatable="false">Crazy Chess</string>
     <string name="app_title">Crazy Chess</string>
     <string name="play_button_text">Play</string>
     <string name="edit_mode_button_text">Edit Mode</string>

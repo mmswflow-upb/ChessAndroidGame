@@ -23,6 +23,9 @@ import mmswflow.chessandroidgame.ui_components.selection_option.SelectionCard
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionIconIdentifier
 import mmswflow.chessandroidgame.ui_components.utility.ScreenTopBar
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
+import mmswflow.chessandroidgame.ui_components.text.LargeInfoText
+import mmswflow.chessandroidgame.ui_components.text.ScreenTitleText
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameModeSelectionScreen(
@@ -66,7 +69,10 @@ fun GameModeSelectionScreen(
 
                 val currentGameMode = gameViewModel.currentAvailableGameModes.value.get(indx)
                 SelectionCard(
-                    identifier = {  SelectionIconIdentifier(icon= currentGameMode.logo, tint= currentGameMode.tint)},
+                    identifier = {  
+                        SelectionIconIdentifier(icon= currentGameMode.logo, tint= currentGameMode.tint)
+                        ScreenTitleText(text = currentGameMode.name, modifier= Modifier.padding(bottom=ScreenTitleTextBottomPadding.value.dp))
+                                 },
                     description = currentGameMode.description,
                     actionOnSelection = {
                             gameViewModel.gameMode.value = currentGameMode

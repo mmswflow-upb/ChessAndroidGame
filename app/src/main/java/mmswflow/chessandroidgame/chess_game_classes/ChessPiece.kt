@@ -35,6 +35,8 @@ abstract class ChessPiece(var color: PieceColor, @DrawableRes var icon: Int, var
 
 val startingWhitePieces = mutableListOf<ChessPiece>(
 
+
+
 )
 
 val startingBlackPieces = mutableListOf<ChessPiece>(
