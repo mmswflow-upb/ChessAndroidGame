@@ -38,7 +38,7 @@ fun ScreenTopBar(
             .clip(RoundedCornerShape(bottomStart= ScreenTopBarBorderWidth.value.dp, bottomEnd= ScreenTopBarBorderWidth.value.dp)),
         navigationIcon= {
 
-            IconButton(onClick = { navHost.navigateUp() }) {
+            IconButton(onClick = { navHost.popBackStack() }) {
                 Icon(
                     imageVector= navIcon,
                     contentDescription = null,

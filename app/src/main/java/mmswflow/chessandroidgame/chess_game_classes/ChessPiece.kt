@@ -33,3 +33,10 @@ abstract class ChessPiece(var color: PieceColor, @DrawableRes var icon: Int, var
     abstract fun protectsPiece(chessBoard: ChessBoard, protectedPiecePosition: PiecePosition): Boolean
 }
 
+val startingWhitePieces = mutableListOf<ChessPiece>(
+
+)
+
+val startingBlackPieces = mutableListOf<ChessPiece>(
+
+)

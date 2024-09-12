@@ -20,6 +20,8 @@ package mmswflow.chessandroidgame.chess_game_classes
 
 class GameOperations {
 
+
+
     fun eatPiece(){
 
     }

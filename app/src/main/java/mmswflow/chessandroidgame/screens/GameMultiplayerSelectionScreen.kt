@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
+import mmswflow.chessandroidgame.data.GameMode
 import mmswflow.chessandroidgame.data.Screen
 import mmswflow.chessandroidgame.ui_components.utility.ScreenTopBar
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionCard
@@ -26,6 +28,11 @@ fun GameMultiplayerSelectionScreen(
     gameViewModel: ChessGameViewModel,
     navHost: NavHostController
 ){
+
+    //Ensure that back stack doesn't get filled for no reason
+    BackHandler {
+        navHost.popBackStack()
+    }
 
     Surface(
         modifier= Modifier.fillMaxSize(),
@@ -44,12 +51,12 @@ fun GameMultiplayerSelectionScreen(
             paddingValues->
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-
-
 
                 item{
                     Row(
@@ -60,6 +67,7 @@ fun GameMultiplayerSelectionScreen(
                             description = R.string.offline_mode_description,
                             actionOnSelection = {
                                 gameViewModel.onlineMode.value = false
+                                gameViewModel.currentAvailableGameModes.value = listOf(GameMode.Classic, GameMode.Rapid,GameMode.Blitz, GameMode.Bullet,GameMode.Edit)
                                 navHost.navigate(Screen.GameModeSelection.route)
                             },
                             modifier= Modifier.weight(1f)
@@ -70,7 +78,8 @@ fun GameMultiplayerSelectionScreen(
                             description = R.string.online_mode_description,
                             actionOnSelection = {
                                 gameViewModel.onlineMode.value = true
-                                //TODO Add navigation to next screen
+                                gameViewModel.currentAvailableGameModes.value = listOf(GameMode.Classic, GameMode.Rapid,GameMode.Blitz, GameMode.Bullet)
+                                navHost.navigate(Screen.GameModeSelection.route)
                             },
                             modifier= Modifier.weight(1f)
                         )

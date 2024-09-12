@@ -28,4 +28,8 @@
     <string name="blitz_game_mode_description">Fast-paced game mode, with 5 minutes for each side only</string>
     <string name="bullet_game_mode_description">Are you ready to take on this challenge? Only one minute for each side!</string>
     <string name="edit_game_mode_description">In edit mode you can create your own starting board then resume the game from there!</string>
+    <string name="game_ending_dialog">%1s Won!</string>
+    <string name="white_color">White</string>
+    <string name="black_color">Black</string>
+    <string name="game_ending_tie_dialog">It\'s a Draw!</string>
 </resources>

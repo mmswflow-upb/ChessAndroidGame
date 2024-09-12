@@ -6,10 +6,15 @@ import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
 import mmswflow.chessandroidgame.R
+import mmswflow.chessandroidgame.chess_game_classes.startingBlackPieces
+import mmswflow.chessandroidgame.chess_game_classes.startingWhitePieces
 import mmswflow.chessandroidgame.ui.theme.BrightRed
+import mmswflow.chessandroidgame.ui.theme.DarkGray
 import mmswflow.chessandroidgame.ui.theme.LightBlue
+import mmswflow.chessandroidgame.ui.theme.LightGray
 import mmswflow.chessandroidgame.ui.theme.LightGreen
 import mmswflow.chessandroidgame.ui.theme.WarningOrange
+import mmswflow.chessandroidgame.ui.theme.White
 
 
 sealed class GameMode(
@@ -65,21 +70,49 @@ data class BoardCell(val position: PiecePosition, val cellColor: Color, var occu
 //Might use later for online implementation
 //data class Player(val color: PieceColor, val pieces: MutableList<ChessPiece>)
 
-data class ChessBoard(
-    val boardMatrix: Array<Array<BoardCell>> =
-        Array(8){
-            row -> Array(8) {
-            column ->
-                BoardCell(
-                    position = PiecePosition(row= row,column= column),
-                    cellColor = if((row+column) % 2 == 0) Color.Black else Color.White,
-                    null
-                )
+
+
+//Generating the standard board with standard number of pieces and positions
+fun generateStandardBoard(): Array<Array<BoardCell>> {
+    val standardStartingBoard = Array(8){
+            row ->
+        Array(8) {
+                column ->
+            BoardCell(
+                position = PiecePosition(row= row,column= column),
+                cellColor = if((row+column) % 2 == 0) DarkGray else LightGray,
+                occupyingPiece = null
+            )
         }
-        },
-    val whitePieces: List<ChessPiece>,
-    val blackPieces: List<ChessPiece>
+    }
+
+    for(whitePiece in startingWhitePieces){
+
+        val row= whitePiece.position.row
+        val column = whitePiece.position.column
+
+        standardStartingBoard[row][column].occupyingPiece = whitePiece
+    }
+
+    for(blackPiece in startingBlackPieces){
+
+        val row= blackPiece.position.row
+        val column = blackPiece.position.column
+
+        standardStartingBoard[row][column].occupyingPiece = blackPiece
+    }
+
+    return standardStartingBoard
+}
+
+data class ChessBoard(
+    val boardMatrix: Array<Array<BoardCell>> = generateStandardBoard()
+        ,
+    val whitePieces: MutableList<ChessPiece> = startingWhitePieces,
+    val blackPieces: MutableList<ChessPiece> = startingBlackPieces
 )
+
+
 
 data class Move(
     val playerToMove: PieceColor,

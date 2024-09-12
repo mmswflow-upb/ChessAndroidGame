@@ -6,6 +6,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import mmswflow.chessandroidgame.chess_game_classes.GameOperations
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.data.ChessBoard
 import mmswflow.chessandroidgame.data.GameMode
@@ -23,6 +24,10 @@ class ChessGameViewModel: ViewModel(){
     val whoPlays: MutableState<PieceColor?> = mutableStateOf<PieceColor?>(null)
     val whiteTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
     val blackTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
+    val gameOperations: MutableState<GameOperations?> = mutableStateOf<GameOperations?>(null)
+    val displayGameEndedDialog: MutableState<Boolean> = mutableStateOf(false)
+    val winnerColor : MutableState<PieceColor?> = mutableStateOf(null)
+    val gameEnded: MutableState<Boolean> = mutableStateOf(false)
 
     //Selections Related
     val currentAvailableGameModes: MutableState<List<GameMode>> = mutableStateOf(listOf(GameMode.Classic, GameMode.Rapid,GameMode.Blitz, GameMode.Bullet,GameMode.Edit) )

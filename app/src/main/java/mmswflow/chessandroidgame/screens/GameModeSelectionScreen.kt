@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.gestures.TargetedFlingBehavior
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,11 @@ fun GameModeSelectionScreen(
     navHost: NavHostController,
     gameViewModel: ChessGameViewModel
 ){
+
+    //Ensure that back stack doesn't get filled for no reason
+    BackHandler {
+        navHost.popBackStack()
+    }
 
     Surface(
         modifier= Modifier.fillMaxSize(),
