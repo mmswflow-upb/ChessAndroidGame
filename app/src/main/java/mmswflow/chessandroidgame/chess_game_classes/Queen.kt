@@ -3,7 +3,7 @@ package mmswflow.chessandroidgame.chess_game_classes
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.data.ChessBoard
 
-class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qColor, R.drawable.ic_launcher_background , qPosition) {
+class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qColor, R.drawable.queen , qPosition) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,

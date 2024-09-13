@@ -3,7 +3,7 @@ package mmswflow.chessandroidgame.chess_game_classes
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.data.ChessBoard
 
-class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(bColor, R.drawable.ic_launcher_background , bPosition) {
+class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(bColor, R.drawable.bishop, bPosition) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,

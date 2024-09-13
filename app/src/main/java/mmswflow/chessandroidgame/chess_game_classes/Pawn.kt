@@ -3,7 +3,7 @@ package mmswflow.chessandroidgame.chess_game_classes
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.data.ChessBoard
 
-class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: Boolean): ChessPiece(pColor,R.drawable.ic_launcher_background , pPosition){
+class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: Boolean = true): ChessPiece(pColor,R.drawable.pawn , pPosition){
 
     override fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn? ): List<PiecePosition>{
 

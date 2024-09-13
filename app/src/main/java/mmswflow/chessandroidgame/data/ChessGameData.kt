@@ -106,10 +106,9 @@ fun generateStandardBoard(): Array<Array<BoardCell>> {
 }
 
 data class ChessBoard(
-    val boardMatrix: Array<Array<BoardCell>> = generateStandardBoard()
-        ,
-    val whitePieces: MutableList<ChessPiece> = startingWhitePieces,
-    val blackPieces: MutableList<ChessPiece> = startingBlackPieces
+    val boardMatrix: Array<Array<BoardCell>> = generateStandardBoard(),
+    val whitePieces: MutableList<ChessPiece> = startingWhitePieces.toMutableList(),
+    val blackPieces: MutableList<ChessPiece> = startingBlackPieces.toMutableList()
 )
 
 
