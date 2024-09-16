@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
 @Composable
 fun BoardNotationCell(
@@ -23,7 +24,7 @@ fun BoardNotationCell(
     Text(text= notation,
         color= MaterialTheme.colorScheme.onSecondary,
 
-        modifier= Modifier.size(8.dp).background( if(notation.length > 0) MaterialTheme.colorScheme.background else Color.Transparent)
+        modifier= Modifier.size(ChessBoardCellSize.value.dp).background( if(notation.isNotEmpty()) MaterialTheme.colorScheme.background else Color.Transparent)
             .graphicsLayer{ rotationZ= zAngle },
 
         textAlign = TextAlign.Center

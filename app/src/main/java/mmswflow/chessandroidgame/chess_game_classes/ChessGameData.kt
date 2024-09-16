@@ -3,6 +3,7 @@ package mmswflow.chessandroidgame.chess_game_classes
 import androidx.compose.ui.graphics.Color
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.ui.theme.BrightRed
+import mmswflow.chessandroidgame.ui.theme.DarkBlueGray
 import mmswflow.chessandroidgame.ui.theme.DarkGray
 import mmswflow.chessandroidgame.ui.theme.LightBlue
 import mmswflow.chessandroidgame.ui.theme.LightGray
@@ -69,7 +70,7 @@ fun generateStandardBoard(): Array<Array<BoardCell>> {
                 column ->
             BoardCell(
                 position = PiecePosition(row= row,column= column),
-                cellColor = if((row+column) % 2 == 0) DarkGray else LightGray,
+                cellColor = if((row+column) % 2 == 0) DarkGray else DarkBlueGray,
                 occupyingPiece = null
             )
         }
@@ -115,5 +116,6 @@ data class Player(
     val color: PieceColor,
     val remainingTime: Int, val wins: Int,
     val losses: Int,
-    val remainingPieces: MutableList<ChessPiece>
+    val remainingPieces: MutableList<ChessPiece>,
+    val online: Boolean
 )

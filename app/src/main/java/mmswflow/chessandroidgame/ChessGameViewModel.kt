@@ -14,6 +14,7 @@ import mmswflow.chessandroidgame.app_data.GameTheme
 import mmswflow.chessandroidgame.chess_game_classes.HistoryOfGameMoves
 import mmswflow.chessandroidgame.chess_game_classes.Player
 import mmswflow.chessandroidgame.app_data.Screen
+import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
 
 class ChessGameViewModel: ViewModel(){
 
@@ -31,6 +32,7 @@ class ChessGameViewModel: ViewModel(){
     val gameEnded: MutableState<Boolean> = mutableStateOf(false)
     val player1: MutableState<Player?> = mutableStateOf(null)
     val player2: MutableState<Player?> = mutableStateOf(null)
+    val selectedChessPiece: MutableState<ChessPiece?> = mutableStateOf(null)
 
     //Selections Related
     val currentAvailableGameModes: MutableState<List<GameMode>> = mutableStateOf(listOf(
