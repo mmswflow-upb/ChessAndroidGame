@@ -1,9 +1,6 @@
 package mmswflow.chessandroidgame.chess_game_classes
 
 import androidx.annotation.DrawableRes
-import androidx.compose.ui.graphics.Color
-import mmswflow.chessandroidgame.R
-import mmswflow.chessandroidgame.data.ChessBoard
 
 
 enum class PieceColor{

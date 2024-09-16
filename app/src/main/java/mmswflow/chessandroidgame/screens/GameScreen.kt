@@ -1,7 +1,10 @@
 package mmswflow.chessandroidgame.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -28,13 +31,39 @@ fun GameScreen(
             }
         }
 
-        if(gameViewModel.displayGameEndedDialog.value){
-            
-            GameEndDialog(
-                gameViewModel = gameViewModel,
-                navHost = navHost
-            )
+        Column(
+            modifier= Modifier.fillMaxSize()
+        ) {
+
+            if(gameViewModel.displayGameEndedDialog.value){
+
+                GameEndDialog(
+                    gameViewModel = gameViewModel,
+                    navHost = navHost
+                )
+            }
+
+            //Player 2 info
+            Row(
+                modifier= Modifier.fillMaxWidth()
+            ) {
+
+            }
+            //Row for Board and current game menu
+            Row(
+                modifier= Modifier.fillMaxWidth()
+            ) {
+
+            }
+
+            //Player 1 Info
+            Row(
+                modifier= Modifier.fillMaxWidth()
+            ) {
+
+            }
         }
+
 
 
     }

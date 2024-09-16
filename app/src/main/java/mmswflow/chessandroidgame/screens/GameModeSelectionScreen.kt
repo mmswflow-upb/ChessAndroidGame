@@ -1,7 +1,6 @@
 package mmswflow.chessandroidgame.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.gestures.TargetedFlingBehavior
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,12 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
-import mmswflow.chessandroidgame.data.Screen
+import mmswflow.chessandroidgame.app_data.Screen
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionCard
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionIconIdentifier
 import mmswflow.chessandroidgame.ui_components.utility.ScreenTopBar
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
-import mmswflow.chessandroidgame.ui_components.text.LargeInfoText
 import mmswflow.chessandroidgame.ui_components.text.ScreenTitleText
 
 @OptIn(ExperimentalMaterial3Api::class)

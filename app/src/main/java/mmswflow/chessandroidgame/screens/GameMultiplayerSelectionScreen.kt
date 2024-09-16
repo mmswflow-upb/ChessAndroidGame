@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
-import mmswflow.chessandroidgame.data.GameMode
-import mmswflow.chessandroidgame.data.Screen
+import mmswflow.chessandroidgame.chess_game_classes.GameMode
+import mmswflow.chessandroidgame.app_data.Screen
 import mmswflow.chessandroidgame.ui_components.utility.ScreenTopBar
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionCard
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionIconIdentifier
@@ -67,7 +67,10 @@ fun GameMultiplayerSelectionScreen(
                             description = R.string.offline_mode_description,
                             actionOnSelection = {
                                 gameViewModel.onlineMode.value = false
-                                gameViewModel.currentAvailableGameModes.value = listOf(GameMode.Classic, GameMode.Rapid,GameMode.Blitz, GameMode.Bullet,GameMode.Edit)
+                                gameViewModel.currentAvailableGameModes.value = listOf(
+                                    GameMode.Classic, GameMode.Rapid,
+                                    GameMode.Blitz, GameMode.Bullet,
+                                    GameMode.Edit)
                                 navHost.navigate(Screen.GameModeSelection.route)
                             },
                             modifier= Modifier.weight(1f)
@@ -78,7 +81,9 @@ fun GameMultiplayerSelectionScreen(
                             description = R.string.online_mode_description,
                             actionOnSelection = {
                                 gameViewModel.onlineMode.value = true
-                                gameViewModel.currentAvailableGameModes.value = listOf(GameMode.Classic, GameMode.Rapid,GameMode.Blitz, GameMode.Bullet)
+                                gameViewModel.currentAvailableGameModes.value = listOf(
+                                    GameMode.Classic, GameMode.Rapid,
+                                    GameMode.Blitz, GameMode.Bullet)
                                 navHost.navigate(Screen.GameModeSelection.route)
                             },
                             modifier= Modifier.weight(1f)

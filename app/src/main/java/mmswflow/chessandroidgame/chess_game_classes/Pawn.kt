@@ -1,7 +1,6 @@
 package mmswflow.chessandroidgame.chess_game_classes
 
 import mmswflow.chessandroidgame.R
-import mmswflow.chessandroidgame.data.ChessBoard
 
 class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: Boolean = true): ChessPiece(pColor,R.drawable.pawn , pPosition){
 

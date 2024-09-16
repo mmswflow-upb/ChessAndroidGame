@@ -9,12 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
-import mmswflow.chessandroidgame.data.BoardCell
+import mmswflow.chessandroidgame.chess_game_classes.BoardCell
 
 @Composable
 fun ChessBoardCell(
     cell: BoardCell,
-    upsideDown: Boolean,
     onPieceSelect: (ChessPiece) -> Unit,
     whoPlays: PieceColor
 ){

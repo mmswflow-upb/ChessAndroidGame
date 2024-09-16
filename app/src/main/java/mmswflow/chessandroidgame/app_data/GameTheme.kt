@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.data
+package mmswflow.chessandroidgame.app_data
 
 enum class GameTheme {
 

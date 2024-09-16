@@ -1,7 +1,6 @@
 package mmswflow.chessandroidgame.chess_game_classes
 
 import mmswflow.chessandroidgame.R
-import mmswflow.chessandroidgame.data.ChessBoard
 
 class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove: Boolean  = true): ChessPiece(kgColor, R.drawable.king , kgPosition) {
 

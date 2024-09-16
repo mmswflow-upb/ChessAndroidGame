@@ -1,20 +1,13 @@
-package mmswflow.chessandroidgame.data
+package mmswflow.chessandroidgame.chess_game_classes
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
-import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
-import mmswflow.chessandroidgame.chess_game_classes.PieceColor
-import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
 import mmswflow.chessandroidgame.R
-import mmswflow.chessandroidgame.chess_game_classes.startingBlackPieces
-import mmswflow.chessandroidgame.chess_game_classes.startingWhitePieces
 import mmswflow.chessandroidgame.ui.theme.BrightRed
 import mmswflow.chessandroidgame.ui.theme.DarkGray
 import mmswflow.chessandroidgame.ui.theme.LightBlue
 import mmswflow.chessandroidgame.ui.theme.LightGray
 import mmswflow.chessandroidgame.ui.theme.LightGreen
 import mmswflow.chessandroidgame.ui.theme.WarningOrange
-import mmswflow.chessandroidgame.ui.theme.White
 
 
 sealed class GameMode(
@@ -22,7 +15,7 @@ sealed class GameMode(
     val timeLimit: Int ,//in Seconds
     val logo: Int,
     val description: Int,
-    val tint: Color
+    val tint: Color //Icon color
 ){
 
     object Classic : GameMode(
@@ -62,14 +55,10 @@ sealed class GameMode(
     )
 }
 
-val listOfGameModes = listOf(GameMode.Classic,GameMode.Rapid,GameMode.Blitz,GameMode.Bullet)
+val listOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet)
 
 //Cell's color depends on the sum of the row and column, if it's even it's black, otherwise it's white
 data class BoardCell(val position: PiecePosition, val cellColor: Color, var occupyingPiece: ChessPiece?)
-
-//Might use later for online implementation
-//data class Player(val color: PieceColor, val pieces: MutableList<ChessPiece>)
-
 
 
 //Generating the standard board with standard number of pieces and positions
@@ -111,8 +100,6 @@ data class ChessBoard(
     val blackPieces: MutableList<ChessPiece> = startingBlackPieces.toMutableList()
 )
 
-
-
 data class Move(
     val playerToMove: PieceColor,
     val whiteTime: Int,
@@ -122,4 +109,11 @@ data class Move(
 )
 
 //The starting board is needed because a player could choose to use the "edit" mode and then play with the setup they've created
-data class HistoryOfGameMoves(val startingBoard: ChessBoard,val moves: MutableList<Move>, val gameMode: GameMode)
+data class HistoryOfGameMoves(val startingBoard: ChessBoard, val moves: MutableList<Move>, val gameMode: GameMode)
+
+data class Player(
+    val color: PieceColor,
+    val remainingTime: Int, val wins: Int,
+    val losses: Int,
+    val remainingPieces: MutableList<ChessPiece>
+)
