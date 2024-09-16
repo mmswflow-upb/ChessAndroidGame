@@ -1,5 +1,7 @@
 package mmswflow.chessandroidgame.chess_game_classes
 
+import kotlin.random.Random
+
 /*
 *   Check if the piece is still blocked due to a potential check
 *  Check first if the move is legal
@@ -18,12 +20,22 @@ package mmswflow.chessandroidgame.chess_game_classes
 
 //If none of these options are available then its a checkmate
 
-class GameOperations {
 
+fun chooseRandomColorOffline() : Pair<PieceColor,PieceColor>{
 
+    val randomBinary = Random.nextInt(0,2)
 
-    fun eatPiece(){
+    var firstColor = PieceColor.White
+    var secondColor = PieceColor.Black
 
+    if(randomBinary == 0){
+        firstColor = PieceColor.Black
+        secondColor = PieceColor.White
     }
+
+    return Pair(firstColor, secondColor)
+}
+
+fun eatPiece(){
 
 }

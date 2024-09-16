@@ -110,12 +110,21 @@ data class Move(
 )
 
 //The starting board is needed because a player could choose to use the "edit" mode and then play with the setup they've created
-data class HistoryOfGameMoves(val startingBoard: ChessBoard, val moves: MutableList<Move>, val gameMode: GameMode)
+data class HistoryOfGameMoves(
+    val startingBoard: ChessBoard,
+    val moves: MutableList<Move>,
+    val gameMode: GameMode,
+    val player1: Player,
+    val player2: Player
+)
 
 data class Player(
+    val name: String,
     val color: PieceColor,
-    val remainingTime: Int, val wins: Int,
+    val remainingTime: Int,
+    val wins: Int,
     val losses: Int,
+    val draws: Int,
     val remainingPieces: MutableList<ChessPiece>,
     val online: Boolean
 )

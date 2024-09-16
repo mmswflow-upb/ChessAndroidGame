@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
+import mmswflow.chessandroidgame.ui_components.chessboard.ChessBoard
+import mmswflow.chessandroidgame.ui_components.chessboard.PlayerInfoCard
 import mmswflow.chessandroidgame.ui_components.utility.GameEndDialog
 
 @Composable
@@ -47,25 +49,22 @@ fun GameScreen(
             Row(
                 modifier= Modifier.fillMaxWidth()
             ) {
-
+                PlayerInfoCard(player = gameViewModel.player2.value!!)
             }
             //Row for Board and current game menu
             Row(
                 modifier= Modifier.fillMaxWidth()
             ) {
-
+                ChessBoard(gameViewModel= gameViewModel, modifier= Modifier.weight(4f))
             }
 
             //Player 1 Info
             Row(
                 modifier= Modifier.fillMaxWidth()
             ) {
-
+                PlayerInfoCard(player= gameViewModel.player1.value!!)
             }
         }
-
-
-
     }
 
 
