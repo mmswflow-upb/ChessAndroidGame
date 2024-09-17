@@ -40,9 +40,7 @@ fun NavigationHandler(){
 
         composable(route= Screen.Game.route){
 
-            if(!chessGameViewModel.onlineMode.value){
-                chessGameViewModel.setPlayers()
-            }
+
             GameScreen(gameViewModel= chessGameViewModel, navHost= navHost)
         }
 

@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame.chess_game_classes
 
+import android.util.Log
 import kotlin.random.Random
 
 /*
@@ -23,7 +24,7 @@ import kotlin.random.Random
 
 fun chooseRandomColorOffline() : Pair<PieceColor,PieceColor>{
 
-    val randomBinary = Random.nextInt(0,2)
+    val randomBinary = if(Math.random() < 0.5) 0 else 1
 
     var firstColor = PieceColor.White
     var secondColor = PieceColor.Black
@@ -32,6 +33,8 @@ fun chooseRandomColorOffline() : Pair<PieceColor,PieceColor>{
         firstColor = PieceColor.Black
         secondColor = PieceColor.White
     }
+
+    Log.d("GAME_OPERATIONS_TEST", "Player 1's Color: $firstColor with Random Binary: $randomBinary")
 
     return Pair(firstColor, secondColor)
 }

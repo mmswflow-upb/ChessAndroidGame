@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame.screens
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,10 +15,14 @@ import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.app_data.Screen
+import mmswflow.chessandroidgame.chess_game_classes.ChessBoard
+import mmswflow.chessandroidgame.chess_game_classes.GameMode
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionCard
 import mmswflow.chessandroidgame.ui_components.selection_option.SelectionIconIdentifier
 import mmswflow.chessandroidgame.ui_components.utility.ScreenTopBar
@@ -65,7 +70,7 @@ fun GameModeSelectionScreen(
             ) {
                 indx ->
 
-                val currentGameMode = gameViewModel.currentAvailableGameModes.value.get(indx)
+                val currentGameMode = gameViewModel.currentAvailableGameModes.value[indx]
                 SelectionCard(
                     identifier = {  
                         SelectionIconIdentifier(icon= currentGameMode.logo, tint= currentGameMode.tint)
@@ -74,7 +79,17 @@ fun GameModeSelectionScreen(
                     description = currentGameMode.description,
                     actionOnSelection = {
                             gameViewModel.gameMode.value = currentGameMode
-                            navHost.navigate(Screen.Game.route) },
+                            if(gameViewModel.gameMode.value != GameMode.Edit){
+                                gameViewModel.chessBoard.value = ChessBoard()
+                            }
+                            gameViewModel.viewModelScope.launch {
+                                if(!gameViewModel.onlineMode.value){
+                                    gameViewModel.setPlayers()
+                                    Log.d("GAME_MODE_SELECTION_TEST","Finished Setting Up Players")
+                                }
+                                navHost.navigate(Screen.Game.route)
+                                Log.d("GAME_MODE_SELECTION_TEST","Navigation Requested")
+                            } },
                     modifier = Modifier,
                     minHeight = CarouselSelectionCardHeight.value,
                     maxHeight = CarouselSelectionCardHeight.value,

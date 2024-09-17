@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame
 
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.MutableState
@@ -58,7 +59,8 @@ class ChessGameViewModel: ViewModel(){
 
         return result
     }
-    fun setPlayers(){
+    suspend fun setPlayers(){
+
 
         whiteTimeRemaining.value = gameMode.value!!.timeLimit
         blackTimeRemaining.value = gameMode.value!!.timeLimit
@@ -79,8 +81,8 @@ class ChessGameViewModel: ViewModel(){
             colorPair = chooseRandomColorOffline()
             player1Name = "Player 1"
             player2Name = "Player 2"
-
         }
+
 
         val player1Stats = getPlayerStats(player1Name)
         val player2Stats = getPlayerStats(player2Name)
@@ -108,6 +110,13 @@ class ChessGameViewModel: ViewModel(){
             remainingPieces = player2Pieces,
             online= true
         )
+        if(player1.value!!.color == PieceColor.White){
+            whoPlays.value = player1.value
+        }else{
+            whoPlays.value = player2.value
+
+        }
+        Log.d("VIEWMODEL TEST","Player who plays first: " + whoPlays.value!!.name)
 
     }
 }

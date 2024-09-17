@@ -40,5 +40,5 @@ sealed class UISizingValue(val value: Int) {
     data object CarouselItemMaxWidth: UISizingValue(100)
     data object CarouselSelectionCardHeight: UISizingValue(380)
 
-    data object ChessBoardCellSize: UISizingValue(8)
+    data object ChessBoardCellSize: UISizingValue(40)
 }
