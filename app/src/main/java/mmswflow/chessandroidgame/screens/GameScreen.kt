@@ -1,6 +1,5 @@
 package mmswflow.chessandroidgame.screens
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,13 +11,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
-import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.ui_components.chessboard.ChessBoard
-import mmswflow.chessandroidgame.ui_components.chessboard.PlayerInfoCard
-import mmswflow.chessandroidgame.ui_components.utility.GameEndDialog
+import mmswflow.chessandroidgame.ui_components.screens_utils.PlayerInfoCard
+import mmswflow.chessandroidgame.ui_components.dialogs.GameEndDialog
 
 @Composable
 fun GameScreen(
@@ -26,7 +23,6 @@ fun GameScreen(
     navHost: NavHostController
 ){
 
-    Log.d("GAME_SCREEN_TEST","Game Screen Loaded")
 
     Surface(
         modifier= Modifier.fillMaxSize(),

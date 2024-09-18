@@ -1,7 +1,5 @@
-package mmswflow.chessandroidgame.ui_components.utility
+package mmswflow.chessandroidgame.ui_components.screens_utils
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,12 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
-import mmswflow.chessandroidgame.ui_components.text.ScreenTitleText
+import mmswflow.chessandroidgame.ui_components.texts.ScreenTitleText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

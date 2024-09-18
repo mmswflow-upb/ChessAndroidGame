@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components.text
+package mmswflow.chessandroidgame.ui_components.texts
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -10,16 +10,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
-
 @Composable
-fun MediumInfoText(text: Int){
+fun SmallInfoText(text: Int){
 
     Text(
         text= stringResource(id = text),
         color= MaterialTheme.colorScheme.onSecondary,
-        fontSize= MediumInfoTextFontSize.value.sp,
-        modifier= Modifier.padding(MediumInfoTextPadding.value.dp),
+        fontSize= SmallInfoTextFontSize.value.sp,
+        modifier= Modifier.padding(SmallInfoTextPadding.value.dp),
         textAlign = TextAlign.Center
-
     )
 }

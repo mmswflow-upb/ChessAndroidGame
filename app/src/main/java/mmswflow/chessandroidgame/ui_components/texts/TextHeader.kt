@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components.text
+package mmswflow.chessandroidgame.ui_components.texts
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

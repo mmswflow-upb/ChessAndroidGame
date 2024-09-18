@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.app_data
+package mmswflow.chessandroidgame.screens
 
 import mmswflow.chessandroidgame.R
 

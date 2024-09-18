@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components.selection_option
+package mmswflow.chessandroidgame.ui_components.selectable_options
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.padding

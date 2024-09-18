@@ -1,6 +1,5 @@
 package mmswflow.chessandroidgame
 
-import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.MutableState
@@ -13,7 +12,7 @@ import mmswflow.chessandroidgame.chess_game_classes.GameMode
 import mmswflow.chessandroidgame.app_data.GameTheme
 import mmswflow.chessandroidgame.chess_game_classes.HistoryOfGameMoves
 import mmswflow.chessandroidgame.chess_game_classes.Player
-import mmswflow.chessandroidgame.app_data.Screen
+import mmswflow.chessandroidgame.screens.Screen
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
 import mmswflow.chessandroidgame.chess_game_classes.chooseRandomColorOffline
 
@@ -116,7 +115,6 @@ class ChessGameViewModel: ViewModel(){
             whoPlays.value = player2.value
 
         }
-        Log.d("VIEWMODEL TEST","Player who plays first: " + whoPlays.value!!.name)
 
     }
 }

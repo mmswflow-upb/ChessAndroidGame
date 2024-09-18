@@ -18,10 +18,9 @@ import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.chess_game_classes.GameMode
-import mmswflow.chessandroidgame.app_data.Screen
-import mmswflow.chessandroidgame.ui_components.utility.ScreenTopBar
-import mmswflow.chessandroidgame.ui_components.selection_option.SelectionCard
-import mmswflow.chessandroidgame.ui_components.selection_option.SelectionIconIdentifier
+import mmswflow.chessandroidgame.ui_components.screens_utils.ScreenTopBar
+import mmswflow.chessandroidgame.ui_components.selectable_options.SelectableCard
+import mmswflow.chessandroidgame.ui_components.selectable_options.SelectionIconIdentifier
 
 @Composable
 fun GameMultiplayerSelectionScreen(
@@ -62,7 +61,7 @@ fun GameMultiplayerSelectionScreen(
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        SelectionCard(
+                        SelectableCard(
                             identifier = { SelectionIconIdentifier(icon = R.drawable.offline, tint= MaterialTheme.colorScheme.error) },
                             description = R.string.offline_mode_description,
                             actionOnSelection = {
@@ -76,7 +75,7 @@ fun GameMultiplayerSelectionScreen(
                             modifier= Modifier.weight(1f)
                         )
 
-                        SelectionCard(
+                        SelectableCard(
                             identifier = { SelectionIconIdentifier(icon = R.drawable.online, tint= MaterialTheme.colorScheme.onPrimary) },
                             description = R.string.online_mode_description,
                             actionOnSelection = {

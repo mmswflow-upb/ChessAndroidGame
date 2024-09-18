@@ -15,10 +15,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.R
-import mmswflow.chessandroidgame.app_data.Screen
-import mmswflow.chessandroidgame.ui_components.button.MediumActionButton
-import mmswflow.chessandroidgame.ui_components.text.SmallInfoText
-import mmswflow.chessandroidgame.ui_components.text.TextHeader
+import mmswflow.chessandroidgame.ui_components.buttons.MediumActionButton
+import mmswflow.chessandroidgame.ui_components.texts.SmallInfoText
+import mmswflow.chessandroidgame.ui_components.texts.TextHeader
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
 @Composable

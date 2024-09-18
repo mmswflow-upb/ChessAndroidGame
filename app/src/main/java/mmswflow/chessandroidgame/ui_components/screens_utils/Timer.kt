@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components.chessboard
+package mmswflow.chessandroidgame.ui_components.screens_utils
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -34,7 +34,6 @@ fun chooseRandomColorOffline() : Pair<PieceColor,PieceColor>{
         secondColor = PieceColor.White
     }
 
-    Log.d("GAME_OPERATIONS_TEST", "Player 1's Color: $firstColor with Random Binary: $randomBinary")
 
     return Pair(firstColor, secondColor)
 }

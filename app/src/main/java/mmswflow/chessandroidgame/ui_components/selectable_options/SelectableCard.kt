@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components.selection_option
+package mmswflow.chessandroidgame.ui_components.selectable_options
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,32 +17,32 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
-import mmswflow.chessandroidgame.ui_components.text.SmallInfoText
+import mmswflow.chessandroidgame.ui_components.texts.SmallInfoText
 
 //The identifier is a picture or a big piece of text
 //that gives the user an idea of what they're going to select
 //without needing to read the description
 
 @Composable
-fun SelectionCard(
+fun SelectableCard(
     identifier: @Composable () -> Unit,
     description: Int,
     actionOnSelection: () -> Unit,
     modifier: Modifier,
     scale: Float = 1f,
-    minHeight: Int = SelectionCardMinHeight.value,
-    maxHeight: Int = SelectionCardMaxHeight.value
+    minHeight: Int = SelectableCardMinHeight.value,
+    maxHeight: Int = SelectableCardMaxHeight.value
 ){
 
     Card(
         shape= RoundedCornerShape(8.dp),
         modifier= modifier
-            .padding(SelectionCardPadding.value.dp)
-            .clip(RoundedCornerShape(SelectionCardRoundedCornerShapeSize.value.dp))
+            .padding(SelectableCardPadding.value.dp)
+            .clip(RoundedCornerShape(SelectableCardRoundedCornerShapeSize.value.dp))
             .border(
-                width = SelectionCardBorderWidth.value.dp,
+                width = SelectableCardBorderWidth.value.dp,
                 color = MaterialTheme.colorScheme.outline,
-                shape = RoundedCornerShape(SelectionCardRoundedCornerShapeSize.value.dp)
+                shape = RoundedCornerShape(SelectableCardRoundedCornerShapeSize.value.dp)
             )
             .graphicsLayer {
                 scaleX = scale // Apply scaling based on focus
@@ -53,7 +53,7 @@ fun SelectionCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
         ),
-        elevation = CardDefaults.cardElevation(SelectionCardElevation.value.dp)
+        elevation = CardDefaults.cardElevation(SelectableCardElevation.value.dp)
     ) {
 
         Column(

@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components.utility
+package mmswflow.chessandroidgame.ui_components.dialogs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
-import mmswflow.chessandroidgame.ui_components.text.TextHeader
+import mmswflow.chessandroidgame.ui_components.texts.TextHeader
 
 @Composable
 fun GameEndDialog(

@@ -23,12 +23,12 @@ sealed class UISizingValue(val value: Int) {
 
     data object ScreenTitleTextFontSize : UISizingValue(24)
     data object ScreenTitleTextBottomPadding : UISizingValue(30)
-    data object SelectionCardPadding : UISizingValue(16)
-    data object SelectionCardRoundedCornerShapeSize: UISizingValue(16)
-    data object SelectionCardBorderWidth : UISizingValue(2)
-    data object SelectionCardElevation: UISizingValue(4)
-    data object SelectionCardMinHeight: UISizingValue(350)
-    data object SelectionCardMaxHeight : UISizingValue(450)
+    data object SelectableCardPadding : UISizingValue(16)
+    data object SelectableCardRoundedCornerShapeSize: UISizingValue(16)
+    data object SelectableCardBorderWidth : UISizingValue(2)
+    data object SelectableCardElevation: UISizingValue(4)
+    data object SelectableCardMinHeight: UISizingValue(350)
+    data object SelectableCardMaxHeight : UISizingValue(450)
 
     data object SelectionIconIdentifierPadding : UISizingValue(24)
 
@@ -38,7 +38,8 @@ sealed class UISizingValue(val value: Int) {
     data object CarouselItemSpacing: UISizingValue(30)
     data object CarouselItemMinWidth: UISizingValue(35)
     data object CarouselItemMaxWidth: UISizingValue(100)
-    data object CarouselSelectionCardHeight: UISizingValue(380)
+    data object CarouselSelectableCardHeight: UISizingValue(380)
 
     data object ChessBoardCellSize: UISizingValue(40)
+    data object ChessPieceIconSize: UISizingValue(32)
 }

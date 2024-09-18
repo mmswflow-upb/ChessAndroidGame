@@ -5,7 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import mmswflow.chessandroidgame.app_data.Screen
+import mmswflow.chessandroidgame.screens.Screen
 import mmswflow.chessandroidgame.screens.GameModeSelectionScreen
 import mmswflow.chessandroidgame.screens.GameMovesHistoryScreen
 import mmswflow.chessandroidgame.screens.GameMultiplayerSelectionScreen

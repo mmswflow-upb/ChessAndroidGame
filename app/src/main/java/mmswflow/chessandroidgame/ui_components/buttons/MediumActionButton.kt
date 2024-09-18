@@ -1,4 +1,4 @@
-package mmswflow.chessandroidgame.ui_components.button
+package mmswflow.chessandroidgame.ui_components.buttons
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
