@@ -42,4 +42,17 @@ sealed class UISizingValue(val value: Int) {
 
     data object ChessBoardCellSize: UISizingValue(40)
     data object ChessPieceIconSize: UISizingValue(32)
+
+
+
+    data object PlayerInfoCardPadding: UISizingValue(8)
+    data object PlayerInfoCardBorderStroke: UISizingValue(2)
+    data object PlayerInfoCardRoundedCornerShapeSize: UISizingValue(16)
+    data object PlayerInfoCardIconSize: UISizingValue(128)
+    data object PlayerInfoCardIconPadding: UISizingValue(8)
+
+
+    data object TimerSize: UISizingValue(64)
+    data object TimerIndicatorStrokeWidth: UISizingValue(4)
+    data object TimerTextFontSize : UISizingValue(16)
 }

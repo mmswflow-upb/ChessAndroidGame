@@ -15,7 +15,8 @@ import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 @Composable
 fun ChessBoard(
     gameViewModel: ChessGameViewModel,
-    modifier: Modifier
+    modifier: Modifier,
+    zAngle: Float
 ){
 
     if(gameViewModel.chessBoard.value != null){
@@ -23,11 +24,10 @@ fun ChessBoard(
         val rowNotation = listOf("1", "2", "3", "4", "5", "6", "7", "8")
         var columnNotation = listOf("","a", "b", "c", "d", "e", "f", "g", "h","")
         val whoPlays = gameViewModel.whoPlays.value
-        val player1 = gameViewModel.player1.value
 
-        val zAngle = if(whoPlays == player1) 0f else 180f
 
         val paddingMod= if(zAngle==0f) Modifier.padding(top=4.dp) else Modifier.padding(bottom=4.dp)
+
         LazyVerticalGrid(
             modifier= modifier,
             columns = GridCells.Fixed(10)

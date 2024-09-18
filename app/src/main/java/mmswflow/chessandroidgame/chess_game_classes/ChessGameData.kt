@@ -121,10 +121,11 @@ data class HistoryOfGameMoves(
 data class Player(
     val name: String,
     val color: PieceColor,
-    val remainingTime: Int,
+    var remainingTime: Int,
     val wins: Int,
     val losses: Int,
     val draws: Int,
     val remainingPieces: MutableList<ChessPiece>,
-    val online: Boolean
+    var online: Boolean,
+    var active: Boolean = false//It's this player's turn
 )

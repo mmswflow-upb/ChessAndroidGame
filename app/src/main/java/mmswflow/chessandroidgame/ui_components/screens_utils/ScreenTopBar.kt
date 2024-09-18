@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
@@ -28,7 +29,7 @@ fun ScreenTopBar(
 
     TopAppBar(
         title = {
-            ScreenTitleText(text= screenTitle)
+            ScreenTitleText(text= stringResource(screenTitle))
         },
         colors= TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         modifier= Modifier

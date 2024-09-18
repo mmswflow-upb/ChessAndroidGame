@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.chess_game_classes.ChessBoard
 import mmswflow.chessandroidgame.chess_game_classes.GameMode
-import mmswflow.chessandroidgame.app_data.GameTheme
+import mmswflow.chessandroidgame.app_ui_data.GameTheme
 import mmswflow.chessandroidgame.chess_game_classes.HistoryOfGameMoves
 import mmswflow.chessandroidgame.chess_game_classes.Player
 import mmswflow.chessandroidgame.screens.Screen
@@ -58,7 +58,7 @@ class ChessGameViewModel: ViewModel(){
 
         return result
     }
-    suspend fun setPlayers(){
+    fun setPlayers(){
 
 
         whiteTimeRemaining.value = gameMode.value!!.timeLimit
@@ -97,7 +97,7 @@ class ChessGameViewModel: ViewModel(){
             losses = player1Stats[1],
             draws= player1Stats[2],
             remainingPieces= player1Pieces,
-            online= true
+            online= true,
         )
         player2.value = Player(
             name= player2Name,
@@ -110,10 +110,13 @@ class ChessGameViewModel: ViewModel(){
             online= true
         )
         if(player1.value!!.color == PieceColor.White){
+
             whoPlays.value = player1.value
+            player1.value!!.active = true
+
         }else{
             whoPlays.value = player2.value
-
+            player2.value!!.active = true
         }
 
     }

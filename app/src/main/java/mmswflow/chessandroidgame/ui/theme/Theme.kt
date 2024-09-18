@@ -37,7 +37,7 @@ private val DarkColorScheme = darkColorScheme(
     onSecondaryContainer = LightBlue,
 
     //Chess Pieces & Board
-    tertiary = Blue,
+    tertiary = DarkBlueGray,
     onTertiary = Black,
     tertiaryContainer = LightBlue,
     onTertiaryContainer = DarkGray,

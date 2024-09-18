@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 import mmswflow.chessandroidgame.ui_components.texts.SmallInfoText
@@ -63,7 +64,7 @@ fun SelectableCard(
 
             identifier()
 
-            SmallInfoText(text = description)
+            SmallInfoText(text = stringResource(id= description))
 
         }
 

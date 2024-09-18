@@ -6,23 +6,29 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.ui_components.chessboard.ChessBoard
 import mmswflow.chessandroidgame.ui_components.screens_utils.PlayerInfoCard
 import mmswflow.chessandroidgame.ui_components.dialogs.GameEndDialog
+import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
 @Composable
 fun GameScreen(
     gameViewModel: ChessGameViewModel,
     navHost: NavHostController
 ){
-
+    val player1 = gameViewModel.player1.value
+    val whoPlays = gameViewModel.whoPlays.value
+    val zAngle = if(whoPlays == player1) 0f else 180f
 
     Surface(
         modifier= Modifier.fillMaxSize(),
@@ -39,7 +45,7 @@ fun GameScreen(
         Column(
             modifier= Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
 
             if(gameViewModel.displayGameEndedDialog.value){
@@ -50,28 +56,36 @@ fun GameScreen(
                 )
             }
 
-            //Player 2 info
-            Row(
-                modifier= Modifier.fillMaxWidth()
+            Row(modifier= Modifier
+                .padding(PlayerInfoCardPadding.value.dp)
+                .graphicsLayer{ rotationZ= zAngle }
             ) {
-                PlayerInfoCard(player = gameViewModel.player2.value!!)
+                //Player 2 info
+                PlayerInfoCard(
+                    player = gameViewModel.player2.value!!,
+                    gameMode= gameViewModel.gameMode.value!!
+                )
             }
+
             //Row for Board and current game menu
             Row(
                 modifier= Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ChessBoard(gameViewModel= gameViewModel, modifier= Modifier)
+                ChessBoard(gameViewModel= gameViewModel, modifier= Modifier, zAngle= zAngle)
             }
 
-            //Player 1 Info
-            Row(
-                modifier= Modifier.fillMaxWidth()
+            Row(modifier= Modifier
+                .padding(PlayerInfoCardPadding.value.dp)
+                .graphicsLayer{ rotationZ= zAngle }
             ) {
-                PlayerInfoCard(player= gameViewModel.player1.value!!)
+                //Player 1 Info
+                PlayerInfoCard(
+                    player= gameViewModel.player1.value!!,
+                    gameMode= gameViewModel.gameMode.value!!
+                )
             }
+
         }
     }
-
-
 }

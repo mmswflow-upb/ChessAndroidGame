@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +27,7 @@ fun HomeScreen(
 ){
 
     Surface(
-        modifier= Modifier.fillMaxSize(),
+        modifier= Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
         color= MaterialTheme.colorScheme.background,
     ){
 
@@ -72,8 +73,8 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
         ){
-            SmallInfoText(text = R.string.author_title)
-            SmallInfoText(text = R.string.version)
+            SmallInfoText(text = stringResource(id=R.string.author_title))
+            SmallInfoText(text = stringResource(id =R.string.version))
         }
     }
 }

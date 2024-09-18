@@ -12,10 +12,10 @@ import androidx.compose.ui.unit.sp
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
 @Composable
-fun LargeInfoText(text: Int){
+fun LargeInfoText(text: String){
 
     Text(
-        text= stringResource(id = text),
+        text= text,
         color= MaterialTheme.colorScheme.onSecondary,
         fontSize= LargeInfoTextFontSize.value.sp,
         modifier= Modifier.padding(LargeInfoTextPadding.value.dp),

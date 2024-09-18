@@ -10,10 +10,10 @@ import androidx.compose.ui.unit.sp
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 
 @Composable
-fun ScreenTitleText(text: Int, modifier: Modifier = Modifier){
+fun ScreenTitleText(text: String, modifier: Modifier = Modifier){
 
     Text(
-        text= stringResource(id = text),
+        text= text,
         color= MaterialTheme.colorScheme.onSecondary,
         fontSize= ScreenTitleTextFontSize.value.sp,
         modifier= modifier

@@ -13,6 +13,7 @@ import androidx.compose.material3.carousel.CarouselDefaults
 import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -72,7 +73,7 @@ fun GameModeSelectionScreen(
                 SelectableCard(
                     identifier = {  
                         SelectionIconIdentifier(icon= currentGameMode.logo, tint= currentGameMode.tint)
-                        ScreenTitleText(text = currentGameMode.name, modifier= Modifier.padding(bottom=ScreenTitleTextBottomPadding.value.dp))
+                        ScreenTitleText(text = stringResource(id = currentGameMode.name), modifier= Modifier.padding(bottom=ScreenTitleTextBottomPadding.value.dp))
                                  },
                     description = currentGameMode.description,
                     actionOnSelection = {
