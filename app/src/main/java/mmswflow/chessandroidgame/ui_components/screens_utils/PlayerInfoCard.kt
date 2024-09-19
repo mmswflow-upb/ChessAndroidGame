@@ -42,8 +42,11 @@ fun PlayerInfoCard(
         modifier= Modifier
             .fillMaxWidth()
             .border(
-                    border= BorderStroke(width= PlayerInfoCardBorderStroke.value.dp, color= MaterialTheme.colorScheme.outline),
-                    shape= RoundedCornerShape(PlayerInfoCardRoundedCornerShapeSize.value.dp)
+                border = BorderStroke(
+                    width = PlayerInfoCardBorderStroke.value.dp,
+                    color = MaterialTheme.colorScheme.outline
+                ),
+                shape = RoundedCornerShape(PlayerInfoCardRoundedCornerShapeSize.value.dp)
             )
             .clip(shape = RoundedCornerShape(PlayerInfoCardRoundedCornerShapeSize.value.dp))
             .background(MaterialTheme.colorScheme.primary)
@@ -54,7 +57,10 @@ fun PlayerInfoCard(
         ) {
 
 
-            Row(verticalAlignment = Alignment.CenterVertically){
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier= Modifier.weight(2f)
+            ){
                 Icon(
                     painter= painterResource(id = R.drawable.king),
                     contentDescription = null,
@@ -76,7 +82,14 @@ fun PlayerInfoCard(
                     )
                 }
             }
-            TimerUI(time = player.remainingTime, maxTime = gameMode.timeLimit, active = player.active)
+
+            TimerUI(
+                time = player.remainingTime,
+                maxTime = gameMode.timeLimit,
+                active = player.active,
+                modifier= Modifier.weight(1f)
+            )
+
         }
 
     }

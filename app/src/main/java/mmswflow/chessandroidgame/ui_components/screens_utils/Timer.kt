@@ -2,8 +2,8 @@ package mmswflow.chessandroidgame.ui_components.screens_utils
 
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,12 +59,16 @@ fun getTimerColors(progress : Float) : Pair<Color,Color> {
 fun TimerUI(
     time: Int,
     maxTime: Int,
-    active: Boolean
+    active: Boolean,
+    modifier: Modifier = Modifier
 ){
     val progress= time.toFloat()/maxTime.toFloat()
     val colorsPair = if(active) getTimerColors(progress) else Pair(DarkBlueGray,LightGray)
 
-    Box(contentAlignment = Alignment.Center){
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier= modifier
+    ){
 
         CircularProgressIndicator(
             progress = { progress },

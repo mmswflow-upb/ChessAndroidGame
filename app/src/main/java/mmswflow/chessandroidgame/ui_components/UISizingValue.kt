@@ -45,7 +45,7 @@ sealed class UISizingValue(val value: Int) {
 
 
 
-    data object PlayerInfoCardPadding: UISizingValue(8)
+    data object PlayerInfoCardPadding: UISizingValue(16)
     data object PlayerInfoCardBorderStroke: UISizingValue(2)
     data object PlayerInfoCardRoundedCornerShapeSize: UISizingValue(16)
     data object PlayerInfoCardIconSize: UISizingValue(128)
