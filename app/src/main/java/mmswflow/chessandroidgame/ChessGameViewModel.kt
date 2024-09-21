@@ -52,8 +52,9 @@ class ChessGameViewModel: ViewModel(){
     val player2: MutableState<Player?> = mutableStateOf(null)
     val playerInTurn: MutableState<Player?> = mutableStateOf(null)
     val selectedChessPiece: MutableState<ChessPiece?> = mutableStateOf(null)
-    private var currentTimerJob : Job? = null
-
+    private var currentTimerJob : MutableState<Job?> = mutableStateOf(null)
+    val player1RemainingTime: MutableState<Int> = mutableStateOf(0)
+    val player2RemainingTime: MutableState<Int> = mutableStateOf(0)
 
     //Game ending Stats
     val winnerColor : MutableState<PieceColor?> = mutableStateOf(null)
@@ -150,6 +151,8 @@ class ChessGameViewModel: ViewModel(){
             remainingPieces= player1Pieces,
             online= true,
         )
+        player1RemainingTime.value = gameMode.value!!.timeLimit
+
         player2.value = Player(
             name= player2Name,
             color= colorPair.second,
@@ -160,21 +163,21 @@ class ChessGameViewModel: ViewModel(){
             remainingPieces = player2Pieces,
             online= true
         )
+        player2RemainingTime.value = gameMode.value!!.timeLimit
 
-        val playerInTurn: Player
 
         if(player1.value!!.color == PieceColor.White){
 
             player1.value!!.active = true
-            playerInTurn = player1.value!!
+            playerInTurn.value = player1.value!!
         }else{
             player2.value!!.active = true
-            playerInTurn = player2.value!!
+            playerInTurn.value = player2.value!!
         }
 
         //Turn on the timer for the current player
-        currentTimerJob = viewModelScope.launch {
-            runTimer(playerInTurn)
+        currentTimerJob.value = viewModelScope.launch {
+            runTimer(playerInTurn.value!!)
         }
 
         //Initialize the object that will contain all the moves made throughout the game
@@ -193,8 +196,15 @@ class ChessGameViewModel: ViewModel(){
 
         //Each second subtract from the current player's time
         while(player.remainingTime > 0){
+            Log.d("TIMER RUNNER TEST","Remaining Time of ${player.name} is: ${player.remainingTime} seconds")
             delay(1000)
             player.remainingTime -= 1
+
+            if(player == player1.value){
+                player1RemainingTime.value -= 1
+            }else{
+                player2RemainingTime.value -= 1
+            }
         }
 
         //Game should end if this while loop is terminated, meaning that the current player ran out of time
@@ -213,7 +223,7 @@ class ChessGameViewModel: ViewModel(){
     private fun stopTimer(){
 
         try{
-            currentTimerJob?.cancel()
+            currentTimerJob.value?.cancel()
         }catch(error: CancellationException){
             Log.e("GAME FLOW TEST", "Timer Error: ${error.message}")
         }
@@ -278,7 +288,7 @@ class ChessGameViewModel: ViewModel(){
         stopTimer()
 
         //Start a new coroutine to resume the timer for the next player
-        currentTimerJob = viewModelScope.launch {
+        currentTimerJob.value = viewModelScope.launch {
             runTimer(playerInTurn.value!!)
         }
 

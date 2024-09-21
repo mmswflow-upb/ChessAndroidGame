@@ -35,7 +35,8 @@ import mmswflow.chessandroidgame.ui_components.texts.ScreenTitleText
 @Composable
 fun PlayerInfoCard(
     player: Player,
-    gameMode: GameMode
+    gameMode: GameMode,
+    remainingTime: Int
 ){
 
     Box(
@@ -84,7 +85,7 @@ fun PlayerInfoCard(
             }
 
             TimerUI(
-                time = player.remainingTime,
+                time = remainingTime,
                 maxTime = gameMode.timeLimit,
                 active = player.active,
                 modifier= Modifier.weight(1f)

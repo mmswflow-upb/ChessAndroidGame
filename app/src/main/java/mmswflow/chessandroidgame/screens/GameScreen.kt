@@ -27,8 +27,8 @@ fun GameScreen(
     navHost: NavHostController
 ){
     val player1 = gameViewModel.player1.value
-    val playerInTurn = gameViewModel.playerInTurn.value
-    val zAngle = if(playerInTurn == player1) 0f else 180f
+    val whoPlays = gameViewModel.playerInTurn.value
+    val zAngle = if(whoPlays == player1) 0f else 180f
 
     Surface(
         modifier= Modifier.fillMaxSize(),
@@ -63,7 +63,8 @@ fun GameScreen(
                 //Player 2 info
                 PlayerInfoCard(
                     player = gameViewModel.player2.value!!,
-                    gameMode= gameViewModel.gameMode.value!!
+                    gameMode= gameViewModel.gameMode.value!!,
+                    gameViewModel.player2RemainingTime.value
                 )
             }
 
@@ -82,7 +83,8 @@ fun GameScreen(
                 //Player 1 Info
                 PlayerInfoCard(
                     player= gameViewModel.player1.value!!,
-                    gameMode= gameViewModel.gameMode.value!!
+                    gameMode= gameViewModel.gameMode.value!!,
+                    remainingTime = gameViewModel.player1RemainingTime.value
                 )
             }
 

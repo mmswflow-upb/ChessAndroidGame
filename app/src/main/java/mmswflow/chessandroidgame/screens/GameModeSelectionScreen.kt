@@ -76,16 +76,13 @@ fun GameModeSelectionScreen(
                                  },
                     description = currentGameMode.description,
                     actionOnSelection = {
-                            gameViewModel.gameMode.value = currentGameMode
-                            if(gameViewModel.gameMode.value != GameMode.Edit){
-                                gameViewModel.chessBoard.value = ChessBoard()
-                            }
+                                gameViewModel.gameMode.value = currentGameMode
+                                if(gameViewModel.gameMode.value != GameMode.Edit){
+                                    gameViewModel.chessBoard.value = ChessBoard()
+                                }
 
-                            if(!gameViewModel.onlineMode.value){
                                 gameViewModel.setPlayers()
-                            }
-                            Log.d("BEFORE NAV","SETTING UP PLAYERS DONE")
-                            navHost.navigate(Screen.Game.route)
+                                navHost.navigate(Screen.Game.route)
                             },
                     modifier = Modifier,
                     minHeight = CarouselSelectableCardHeight.value,
