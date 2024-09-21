@@ -1,6 +1,8 @@
 package mmswflow.chessandroidgame.chess_game_classes
 
+import android.util.Log
 import mmswflow.chessandroidgame.R
+import java.util.stream.Collectors
 
 class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: Boolean = true): ChessPiece(pColor,R.drawable.pawn , pPosition){
 
@@ -15,7 +17,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
             if(this.position.row+1 <= 7){
 
                 //Check if there's a piece directly above this pawn
-                val firstBlockingPiece: ChessPiece? = chessBoard.boardMatrix.get(position.row+1).get(position.column).occupyingPiece
+                val firstBlockingPiece: ChessPiece? = chessBoard.boardMatrix[position.row+1][position.column].occupyingPiece
 
                 if(firstBlockingPiece == null){
                     newPossiblePositions.add(PiecePosition(row= this.position.row+1, column= this.position.column))
@@ -28,7 +30,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
 
                 if(this.position.column +1 <= 7){
 
-                    val rightDiagonalPiece : ChessPiece? = chessBoard.boardMatrix.get(position.row+1).get(position.column+1).occupyingPiece
+                    val rightDiagonalPiece : ChessPiece? = chessBoard.boardMatrix[position.row+1][position.column+1].occupyingPiece
 
                     //Check whether there's a piece on the right diagonal or not, if there is we move there
                     //If there isn't, there might be a pawn that can be eaten using en passant
@@ -52,7 +54,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
                 //Check whether there's a piece on the left diagonal or not, if there is we move there
                 if(this.position.column-1 >= 0){
 
-                    val leftDiagonalPiece : ChessPiece? = chessBoard.boardMatrix.get(position.row+1).get(position.column-1).occupyingPiece
+                    val leftDiagonalPiece : ChessPiece? = chessBoard.boardMatrix[position.row+1][position.column-1].occupyingPiece
 
                     if(leftDiagonalPiece != null){
 
@@ -79,7 +81,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
                 //If the second upward piece exists, we can't move upward two squares
 
                 val secondBlockingPiece: ChessPiece? =
-                    chessBoard.boardMatrix.get(position.row + 2).get(position.column).occupyingPiece
+                    chessBoard.boardMatrix[position.row + 2][position.column].occupyingPiece
 
 
                 if (secondBlockingPiece == null) {
@@ -103,7 +105,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
             if(this.position.row -1 >= 0){
 
                 //Check if there's a piece directly below this pawn
-                val firstBlockingPiece: ChessPiece? = chessBoard.boardMatrix.get(this.position.row-1).get(this.position.column).occupyingPiece
+                val firstBlockingPiece: ChessPiece? = chessBoard.boardMatrix[this.position.row-1][this.position.column].occupyingPiece
 
                 if(firstBlockingPiece == null){
                     newPossiblePositions.add(PiecePosition(row= this.position.row-1, column= this.position.column))
@@ -116,7 +118,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
 
                 if(this.position.column -1 >= 0){
 
-                    val rightDiagonalPiece : ChessPiece? = chessBoard.boardMatrix.get(position.row-1).get(position.column-1).occupyingPiece
+                    val rightDiagonalPiece : ChessPiece? = chessBoard.boardMatrix[position.row-1][position.column-1].occupyingPiece
 
                     //Check whether there's a piece on the right diagonal or not, if there is we move there
                     //If there isn't, there might be a pawn that can be eaten using en passant
@@ -140,7 +142,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
 
                 if(this.position.column+1 <= 7){
 
-                    val leftDiagonalPiece : ChessPiece? = chessBoard.boardMatrix.get(position.row-1).get(position.column+1).occupyingPiece
+                    val leftDiagonalPiece : ChessPiece? = chessBoard.boardMatrix[position.row-1][position.column+1].occupyingPiece
 
                     if(leftDiagonalPiece != null){
 
@@ -169,7 +171,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
                 //If the second downward piece exists, we can't move downward
 
                 val secondBlockingPiece: ChessPiece? =
-                    chessBoard.boardMatrix.get(position.row - 2).get(position.column).occupyingPiece
+                    chessBoard.boardMatrix[position.row - 2][position.column].occupyingPiece
 
 
                 if (secondBlockingPiece == null) {
@@ -186,7 +188,8 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
 
         }
 
-
+        val stringPossiblePositions = newPossiblePositions.stream().map{ position-> "(${position.row}, ${position.column})"}.collect(Collectors.toList())
+        Log.v("PAWN POSSIBLE MOVES", "$stringPossiblePositions")
 
         return newPossiblePositions
     }
@@ -198,7 +201,7 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
 
 
         return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
-            val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[it.row][it.column].occupyingPiece
 
             if(currentPiece != null){
                 currentPiece.color != this.color
@@ -209,19 +212,20 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
         }
     }
 
-    override fun checkIfPieceMoveIsLegal(
+    override fun isPieceMoveLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
         enPassantEdiblePiece: Pawn?,
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).any{it.row == newPosition.row && it.column == newPosition.column}
     }
 
-    override fun protectsPiece(
+    override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
+        return getAllPossibleNewPositions(chessBoard, null)
+            .any{ it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
 }

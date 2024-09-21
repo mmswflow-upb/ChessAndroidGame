@@ -44,19 +44,19 @@ class Knight(val kColor: PieceColor, val kPosition: PiecePosition): ChessPiece(k
             }
         }
     }
-    override fun checkIfPieceMoveIsLegal(
+    override fun isPieceMoveLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).any{it.row == newPosition.row && it.column == newPosition.column}
     }
 
-    override fun protectsPiece(
+    override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
+        return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
 }

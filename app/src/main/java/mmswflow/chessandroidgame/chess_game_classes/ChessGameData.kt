@@ -56,7 +56,8 @@ sealed class GameMode(
     )
 }
 
-val listOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet)
+val offlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet, GameMode.Edit)
+val onlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet)
 
 //Cell's color depends on the sum of the row and column, if it's even it's black, otherwise it's white
 data class BoardCell(val position: PiecePosition, val cellColor: Color, var occupyingPiece: ChessPiece?)

@@ -22,22 +22,4 @@ import kotlin.random.Random
 //If none of these options are available then its a checkmate
 
 
-fun chooseRandomColorOffline() : Pair<PieceColor,PieceColor>{
 
-    val randomBinary = if(Math.random() < 0.5) 0 else 1
-
-    var firstColor = PieceColor.White
-    var secondColor = PieceColor.Black
-
-    if(randomBinary == 0){
-        firstColor = PieceColor.Black
-        secondColor = PieceColor.White
-    }
-
-
-    return Pair(firstColor, secondColor)
-}
-
-fun eatPiece(){
-
-}

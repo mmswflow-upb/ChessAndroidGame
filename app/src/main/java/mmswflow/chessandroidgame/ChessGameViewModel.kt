@@ -1,50 +1,86 @@
 package mmswflow.chessandroidgame
 
+import android.media.SoundPool
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.chess_game_classes.ChessBoard
 import mmswflow.chessandroidgame.chess_game_classes.GameMode
 import mmswflow.chessandroidgame.app_ui_data.GameTheme
 import mmswflow.chessandroidgame.chess_game_classes.HistoryOfGameMoves
 import mmswflow.chessandroidgame.chess_game_classes.Player
-import mmswflow.chessandroidgame.screens.Screen
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
-import mmswflow.chessandroidgame.chess_game_classes.chooseRandomColorOffline
+import mmswflow.chessandroidgame.chess_game_classes.Move
+import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
+import mmswflow.chessandroidgame.chess_game_classes.offlineListOfGameModes
 
 class ChessGameViewModel: ViewModel(){
 
-
-    //Current Game Related
-    val onlineMode: MutableState<Boolean> = mutableStateOf(false)
-    val gameMode: MutableState<GameMode?> = mutableStateOf(null)
-    val chessBoard: MutableState<ChessBoard?> = mutableStateOf(null)
-    val whoPlays: MutableState<Player?> = mutableStateOf(null)
-    val whiteTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
-    val blackTimeRemaining: MutableState<Int> = mutableIntStateOf(0)
-    val displayGameEndedDialog: MutableState<Boolean> = mutableStateOf(false)
-    val winnerColor : MutableState<PieceColor?> = mutableStateOf(null)
-    val gameEnded: MutableState<Boolean> = mutableStateOf(false)
-    val player1: MutableState<Player?> = mutableStateOf(null)
-    val player2: MutableState<Player?> = mutableStateOf(null)
-    val selectedChessPiece: MutableState<ChessPiece?> = mutableStateOf(null)
-
-    //Selections Related
-    val currentAvailableGameModes: MutableState<List<GameMode>> = mutableStateOf(listOf(
-        GameMode.Classic, GameMode.Rapid,
-        GameMode.Blitz, GameMode.Bullet,
-        GameMode.Edit) )
-    val currentScreen: MutableState<Screen> = mutableStateOf(Screen.Home)
+    //Game UI Options
     val uiTheme: MutableState<GameTheme> = mutableStateOf(GameTheme.Normal)
+    val showPiecePath : MutableState<Boolean> = mutableStateOf(true)
+    val inGameSoundEffects: MutableState<Boolean> = mutableStateOf(true)
+
+    //Game sound effects
+    private lateinit var soundPool: SoundPool
+    private var pieceSlideSound : Int = R.raw.chess_piece_slide
+    private var pieceCaptureSound: Int = R.raw.piece_capture
+    private var invalidMoveSound = R.raw.chess_piece_bounce
+
+
+    //Selectable Game Options
+    val currentAvailableGameModes: MutableState<List<GameMode>> = mutableStateOf(offlineListOfGameModes)
     @OptIn(ExperimentalMaterial3Api::class)
     val carouselState = CarouselState(itemCount= {currentAvailableGameModes.value.count()})
+    val onlineMode: MutableState<Boolean> = mutableStateOf(false)
+    val gameMode: MutableState<GameMode?> = mutableStateOf(null)
 
 
+    //Current Game Related
+    val chessBoard: MutableState<ChessBoard?> = mutableStateOf(null)
+    private val testChessBoard: MutableState<ChessBoard?> = mutableStateOf(null) //Use this to simulate moves in cases of checks
+    val player1: MutableState<Player?> = mutableStateOf(null)
+    val player2: MutableState<Player?> = mutableStateOf(null)
+    val playerInTurn: MutableState<Player?> = mutableStateOf(null)
+    val selectedChessPiece: MutableState<ChessPiece?> = mutableStateOf(null)
+    private var currentTimerJob : Job? = null
+
+
+    //Game ending Stats
+    val winnerColor : MutableState<PieceColor?> = mutableStateOf(null)
+    val gameEnded: MutableState<Boolean> = mutableStateOf(false)
+    val displayGameEndedDialog: MutableState<Boolean> = mutableStateOf(false)
+
+    //Game History Related
     val historyOfGameMoves: MutableState<HistoryOfGameMoves?> = mutableStateOf(null)
+
+    //Resources Related
+    fun initializeResources(){
+        soundPool = SoundPool.Builder().setMaxStreams(1).build()
+    }
+    private fun playSoundEffect(sound: Int){
+
+        if(::soundPool.isInitialized){
+            soundPool.play(sound, 1f, 1f, 1, 0, 1f)
+        }
+    }
+
+    // Release the resources when the view-model is cleared
+    override fun onCleared() {
+        super.onCleared()
+        if (::soundPool.isInitialized) {
+            soundPool.release()
+        }
+    }
 
     private fun getPlayerStats(name: String): List<Int>{
 
@@ -52,17 +88,32 @@ class ChessGameViewModel: ViewModel(){
 
         if(onlineMode.value){
 
+            //Fetch from server
         }else{
 
+            //Fetch from storage
         }
 
         return result
     }
+
+    private fun chooseRandomColorOffline() : Pair<PieceColor,PieceColor>{
+
+        val randomBinary = if(Math.random() < 0.5) 0 else 1
+
+        var firstColor = PieceColor.White
+        var secondColor = PieceColor.Black
+
+        if(randomBinary == 0){
+            firstColor = PieceColor.Black
+            secondColor = PieceColor.White
+        }
+
+
+        return Pair(firstColor, secondColor)
+    }
+
     fun setPlayers(){
-
-
-        whiteTimeRemaining.value = gameMode.value!!.timeLimit
-        blackTimeRemaining.value = gameMode.value!!.timeLimit
 
         val colorPair : Pair<PieceColor,PieceColor>
 
@@ -109,15 +160,128 @@ class ChessGameViewModel: ViewModel(){
             remainingPieces = player2Pieces,
             online= true
         )
+
+        val playerInTurn: Player
+
         if(player1.value!!.color == PieceColor.White){
 
-            whoPlays.value = player1.value
             player1.value!!.active = true
+            playerInTurn = player1.value!!
+        }else{
+            player2.value!!.active = true
+            playerInTurn = player2.value!!
+        }
+
+        //Turn on the timer for the current player
+        currentTimerJob = viewModelScope.launch {
+            runTimer(playerInTurn)
+        }
+
+        //Initialize the object that will contain all the moves made throughout the game
+        historyOfGameMoves.value = HistoryOfGameMoves(
+            startingBoard= chessBoard.value!!,
+            moves= mutableListOf<Move>(),
+            gameMode= gameMode.value!!,
+            player1= player1.value!!,
+            player2= player2.value!!
+        )
+
+    }
+
+    //A function that runs the timer for the current player
+    private suspend fun runTimer(player: Player){
+
+        //Each second subtract from the current player's time
+        while(player.remainingTime > 0){
+            delay(1000)
+            player.remainingTime -= 1
+        }
+
+        //Game should end if this while loop is terminated, meaning that the current player ran out of time
+        if(playerInTurn.value == player1.value){
+
+            //Winner is player 2, since player 1 ran out of time
+            endGame(player2.value!!)
 
         }else{
-            whoPlays.value = player2.value
-            player2.value!!.active = true
+            //Winner is player 1, since player 2 ran out of time
+            endGame(player1.value!!)
         }
+    }
+
+    //A function that cancels the current coroutine which is running the timer
+    private fun stopTimer(){
+
+        try{
+            currentTimerJob?.cancel()
+        }catch(error: CancellationException){
+            Log.e("GAME FLOW TEST", "Timer Error: ${error.message}")
+        }
+    }
+
+
+    //It ends the game by setting the states to their appropriate values.
+    private fun endGame(winningPlayer: Player){
+
+        if(onlineMode.value){
+
+            //TODO Online mode
+
+        }else{
+
+            //Offline mode
+            stopTimer()
+            addGameToHistory()
+            saveStats()
+
+            gameMode.value = null
+            winnerColor.value = winningPlayer.color
+            gameEnded.value = true
+            displayGameEndedDialog.value = true
+            player1.value!!.active = false
+            player2.value!!.active = false
+            playerInTurn.value = null
+        }
+    }
+
+    //Save the game into the storage of the device or cloud (account-based)
+    private fun addGameToHistory(){}
+
+    //Save stats to cloud (account-based) or on device's storage
+    private fun saveStats(){}
+
+    // Simulate a move to check whether it's legal or not, and return true if it's valid
+    private fun simulateMove(newPosition: PiecePosition): Boolean{
+
+        var result = false
+
+        return result
+    }
+
+    fun movePiece(newPosition : PiecePosition){
+
+        //Check whether move is legal
+        if(!simulateMove(newPosition)){
+
+            //Move is invalid, so we play the invalid sound effect
+
+            playSoundEffect(invalidMoveSound)
+            return
+        }
+        //TODO Save the move to the history object after validating it
+
+
+        //Find out which player has to play next after the move was validated
+        playerInTurn.value = if(player1.value!!.active) player2.value else player1.value
+
+        //Stop the current Timer if it exists
+        stopTimer()
+
+        //Start a new coroutine to resume the timer for the next player
+        currentTimerJob = viewModelScope.launch {
+            runTimer(playerInTurn.value!!)
+        }
+
 
     }
 }

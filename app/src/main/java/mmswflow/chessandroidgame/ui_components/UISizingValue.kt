@@ -43,7 +43,7 @@ sealed class UISizingValue(val value: Int) {
     data object ChessBoardCellSize: UISizingValue(40)
     data object ChessPieceIconSize: UISizingValue(32)
 
-
+    data object SelectableBoardCellBorderStrokeWidth: UISizingValue(1)
 
     data object PlayerInfoCardPadding: UISizingValue(16)
     data object PlayerInfoCardBorderStroke: UISizingValue(2)

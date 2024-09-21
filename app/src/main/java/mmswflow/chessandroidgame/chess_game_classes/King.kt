@@ -37,7 +37,7 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove:
                     if(closeRook.firstMove){
 
                         //Check if the path is clear for the castling
-                        if(closeRook.protectsPiece(chessBoard, this.position)){
+                        if(closeRook.protectsPosition(chessBoard, this.position)){
 
                             newPossiblePositions.add(PiecePosition(this.position.row, this.position.column+2))
 
@@ -54,7 +54,7 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove:
                     if(farRook.firstMove){
 
                         //Check if the path is clear for the castling
-                        if(farRook.protectsPiece(chessBoard, this.position)) {
+                        if(farRook.protectsPosition(chessBoard, this.position)) {
 
                             newPossiblePositions.add(PiecePosition(this.position.row, this.position.column-2))
                         }
@@ -89,7 +89,7 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove:
                         for(enemyPiece in chessBoard.blackPieces){
                             if(enemyPiece != currentPiece){
 
-                                if(enemyPiece.protectsPiece(chessBoard,currentPiece.position)){
+                                if(enemyPiece.protectsPosition(chessBoard,currentPiece.position)){
                                     return@filter false
                                 }
                             }
@@ -97,7 +97,7 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove:
                         return@filter true
                     }else{
                         for(enemyPiece in chessBoard.whitePieces){
-                            if(enemyPiece.protectsPiece(chessBoard, currentPiece.position)){
+                            if(enemyPiece.protectsPosition(chessBoard, currentPiece.position)){
                                 return@filter false
                             }
                         }
@@ -112,20 +112,20 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove:
             }
         }
     }
-    override fun checkIfPieceMoveIsLegal(
+    override fun isPieceMoveLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).any{it.row == newPosition.row && it.column == newPosition.column}
     }
 
-    override fun protectsPiece(
+    override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
+        return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
 
 }

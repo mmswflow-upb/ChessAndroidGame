@@ -16,11 +16,10 @@ import mmswflow.chessandroidgame.screens.HomeScreen
 
 
 @Composable
-fun NavigationHandler(){
+fun NavigationHandler(chessGameViewModel: ChessGameViewModel){
 
 
     val navHost = rememberNavController()
-    val chessGameViewModel : ChessGameViewModel = viewModel()
     NavHost(navController= navHost, startDestination= Screen.Home.route){
 
         composable(route= Screen.Home.route){
