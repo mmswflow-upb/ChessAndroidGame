@@ -39,11 +39,11 @@ fun getTimerColors(progress : Float) : Pair<Color,Color> {
 
     val color = if(progress > 0.75f){
         Pair(DarkGreen,LightGreen)
-    }else if(0.5f <= progress){
+    }else if(0.5f < progress){
 
         Pair(DarkYellow, LightYellow)
 
-    }else if(progress >= 0.25) {
+    }else if(progress > 0.25) {
 
         Pair(DarkOrange,WarningOrange)
 

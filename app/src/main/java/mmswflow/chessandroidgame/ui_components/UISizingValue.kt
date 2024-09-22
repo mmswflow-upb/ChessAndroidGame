@@ -55,4 +55,9 @@ sealed class UISizingValue(val value: Int) {
     data object TimerSize: UISizingValue(64)
     data object TimerIndicatorStrokeWidth: UISizingValue(4)
     data object TimerTextFontSize : UISizingValue(16)
+
+    data object GameEndDialogBorderStrokeWidth: UISizingValue(2)
+    data object GameEndDialogRoundedCornerSize: UISizingValue(16)
+    data object GameEndDialogIconSize: UISizingValue(32)
+    data object GameEndDialogIconPadding: UISizingValue(4)
 }

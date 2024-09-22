@@ -26,9 +26,10 @@ fun GameScreen(
     gameViewModel: ChessGameViewModel,
     navHost: NavHostController
 ){
+
     val player1 = gameViewModel.player1.value
-    val whoPlays = gameViewModel.playerInTurn.value
-    val zAngle = if(whoPlays == player1) 0f else 180f
+    val playerInTurn = gameViewModel.playerInTurn.value
+    val zAngle = if(playerInTurn == player1) 0f else 180f
 
     Surface(
         modifier= Modifier.fillMaxSize(),
@@ -52,7 +53,8 @@ fun GameScreen(
 
                 GameEndDialog(
                     gameViewModel = gameViewModel,
-                    navHost = navHost
+                    navHost = navHost,
+                    zAngle= zAngle
                 )
             }
 
@@ -90,4 +92,5 @@ fun GameScreen(
 
         }
     }
+    gameViewModel.startTimer()
 }

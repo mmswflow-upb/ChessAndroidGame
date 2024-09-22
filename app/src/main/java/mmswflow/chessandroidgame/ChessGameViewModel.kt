@@ -57,7 +57,7 @@ class ChessGameViewModel: ViewModel(){
     val player2RemainingTime: MutableState<Int> = mutableStateOf(0)
 
     //Game ending Stats
-    val winnerColor : MutableState<PieceColor?> = mutableStateOf(null)
+    val winnerPlayer : MutableState<Player?> = mutableStateOf(null)
     val gameEnded: MutableState<Boolean> = mutableStateOf(false)
     val displayGameEndedDialog: MutableState<Boolean> = mutableStateOf(false)
 
@@ -175,10 +175,6 @@ class ChessGameViewModel: ViewModel(){
             playerInTurn.value = player2.value!!
         }
 
-        //Turn on the timer for the current player
-        currentTimerJob.value = viewModelScope.launch {
-            runTimer(playerInTurn.value!!)
-        }
 
         //Initialize the object that will contain all the moves made throughout the game
         historyOfGameMoves.value = HistoryOfGameMoves(
@@ -191,12 +187,24 @@ class ChessGameViewModel: ViewModel(){
 
     }
 
+    //Turn on the timer for the current player
+    fun startTimer(){
+
+        if(currentTimerJob.value != null){
+            return
+        }
+
+        currentTimerJob.value = viewModelScope.launch {
+            runTimer(playerInTurn.value!!)
+        }
+    }
+
+
     //A function that runs the timer for the current player
     private suspend fun runTimer(player: Player){
 
         //Each second subtract from the current player's time
         while(player.remainingTime > 0){
-            Log.d("TIMER RUNNER TEST","Remaining Time of ${player.name} is: ${player.remainingTime} seconds")
             delay(1000)
             player.remainingTime -= 1
 
@@ -233,6 +241,8 @@ class ChessGameViewModel: ViewModel(){
     //It ends the game by setting the states to their appropriate values.
     private fun endGame(winningPlayer: Player){
 
+        Log.d("GAME ENDING TEST", "winning player: ${winningPlayer.name}")
+
         if(onlineMode.value){
 
             //TODO Online mode
@@ -244,13 +254,11 @@ class ChessGameViewModel: ViewModel(){
             addGameToHistory()
             saveStats()
 
-            gameMode.value = null
-            winnerColor.value = winningPlayer.color
+            winnerPlayer.value = winningPlayer
             gameEnded.value = true
             displayGameEndedDialog.value = true
             player1.value!!.active = false
             player2.value!!.active = false
-            playerInTurn.value = null
         }
     }
 
@@ -261,6 +269,7 @@ class ChessGameViewModel: ViewModel(){
     private fun saveStats(){}
 
     // Simulate a move to check whether it's legal or not, and return true if it's valid
+    //this method will also look for checks or checkmates
     private fun simulateMove(newPosition: PiecePosition): Boolean{
 
         var result = false
