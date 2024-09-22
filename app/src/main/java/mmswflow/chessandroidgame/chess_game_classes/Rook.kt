@@ -11,61 +11,46 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, var firstMove: 
 
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
-        for(row in this.position.row..7){
+        for(row in this.position.row+1..7){
 
-            val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[row][this.position.column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
+
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
-            }else{
-
-                newPossiblePositions.add(PiecePosition(row= row, column= this.position.column))
             }
         }
 
 
-        for(row in this.position.row downTo 0){
+        for(row in this.position.row-1 downTo 0){
 
-            val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[row][this.position.column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
+
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
-            }else{
-
-                newPossiblePositions.add(PiecePosition(row= row, column= this.position.column))
             }
         }
 
-        for(column in this.position.column .. 7){
+        for(column in this.position.column+1 .. 7){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[this.position.row][column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
 
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
-
-            }else{
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
             }
         }
 
-        for(column in this.position.column downTo 0){
+        for(column in this.position.column-1 downTo 0){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[this.position.row][column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
 
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
-
-            }else{
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
             }
         }
-
 
         return newPossiblePositions
 
@@ -78,7 +63,7 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, var firstMove: 
 
 
         return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
-            val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[it.row][it.column].occupyingPiece
 
             if(currentPiece != null){
                 currentPiece.color != this.color

@@ -34,7 +34,9 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
         while(this.position.row +offset < 7 && this.position.column - offset > 0){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row+offset).get(this.position.column-offset).occupyingPiece
+            offset++
+
+            val currentPiece = chessBoard.boardMatrix[this.position.row+offset][this.position.column-offset].occupyingPiece
 
             if(currentPiece != null){
 
@@ -52,7 +54,10 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
 
         while(this.position.row - offset > 0 && this.position.column + offset < 7){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row-offset).get(this.position.column+offset).occupyingPiece
+            offset++
+
+
+            val currentPiece = chessBoard.boardMatrix[this.position.row-offset][this.position.column+offset].occupyingPiece
 
             if(currentPiece != null){
 

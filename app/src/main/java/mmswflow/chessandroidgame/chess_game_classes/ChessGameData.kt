@@ -108,6 +108,7 @@ data class Move(
     val blackTime: Int,
     val movedPiece: ChessPiece,
     val newPosition: PiecePosition,
+    val soundPlayed: Int
 )
 
 //The starting board is needed because a player could choose to use the "edit" mode and then play with the setup they've created

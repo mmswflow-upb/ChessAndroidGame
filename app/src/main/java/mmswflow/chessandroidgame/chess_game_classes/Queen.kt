@@ -10,58 +10,44 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
     ): List<PiecePosition>{
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
-        for(row in this.position.row..7){
+        for(row in this.position.row+1..7){
 
-            val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[row][this.position.column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
+
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
-            }else{
-
-                newPossiblePositions.add(PiecePosition(row= row, column= this.position.column))
             }
         }
 
 
-        for(row in this.position.row downTo 0){
+        for(row in this.position.row-1 downTo 0){
 
-            val currentPiece = chessBoard.boardMatrix.get(row).get(this.position.column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[row][this.position.column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
+
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= row, column = this.position.column))
                 break //We cant go past this position since the path is blocked
-            }else{
-
-                newPossiblePositions.add(PiecePosition(row= row, column= this.position.column))
             }
         }
 
-        for(column in this.position.column .. 7){
+        for(column in this.position.column+1 .. 7){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[this.position.row][column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
 
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
-
-            }else{
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
             }
         }
 
-        for(column in this.position.column downTo 0){
+        for(column in this.position.column-1 downTo 0){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row).get(column).occupyingPiece
+            val currentPiece = chessBoard.boardMatrix[this.position.row][column].occupyingPiece
+            newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
 
             if(currentPiece != null){
-
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
                 break
-
-            }else{
-                newPossiblePositions.add(PiecePosition(row= this.position.row, column= column))
             }
         }
 
@@ -89,7 +75,9 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
 
         while(this.position.row +offset < 7 && this.position.column - offset > 0){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row+offset).get(this.position.column-offset).occupyingPiece
+            offset++
+
+            val currentPiece = chessBoard.boardMatrix[this.position.row+offset][this.position.column-offset].occupyingPiece
 
             if(currentPiece != null){
 
@@ -107,7 +95,10 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
 
         while(this.position.row - offset > 0 && this.position.column + offset < 7){
 
-            val currentPiece = chessBoard.boardMatrix.get(this.position.row-offset).get(this.position.column+offset).occupyingPiece
+            offset++
+
+
+            val currentPiece = chessBoard.boardMatrix[this.position.row-offset][this.position.column+offset].occupyingPiece
 
             if(currentPiece != null){
 
@@ -140,6 +131,7 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
                 newPossiblePositions.add(PiecePosition(row= this.position.row-offset, column= this.position.column-offset))
             }
         }
+
 
         return newPossiblePositions
     }

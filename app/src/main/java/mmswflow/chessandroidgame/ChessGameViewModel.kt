@@ -33,9 +33,9 @@ class ChessGameViewModel: ViewModel(){
 
     //Game sound effects
     private lateinit var soundPool: SoundPool
-    private var pieceSlideSound : Int = R.raw.chess_piece_slide
-    private var pieceCaptureSound: Int = R.raw.piece_capture
-    private var invalidMoveSound : Int = R.raw.chess_piece_bounce
+    private var pieceSlideSound : Int = 0
+    private var pieceCaptureSound: Int = 0
+    private var invalidMoveSound : Int = 0
 
 
     //Selectable Game Options
@@ -64,14 +64,17 @@ class ChessGameViewModel: ViewModel(){
 
     //Game History Related
     val historyOfGameMoves: MutableState<HistoryOfGameMoves?> = mutableStateOf(null)
+    val currentMove : MutableState<Move?> = mutableStateOf(null)
 
     //Resources Related
     fun initializeResources(context: Context){
+
         soundPool = SoundPool.Builder().setMaxStreams(1).build()
-        invalidMoveSound = soundPool.load(context, invalidMoveSound, 1)
-        pieceCaptureSound = soundPool.load(context, pieceCaptureSound, 1)
-        pieceSlideSound = soundPool.load(context, pieceSlideSound, 1)
+        invalidMoveSound = soundPool.load(context, R.raw.chess_piece_bounce, 1)
+        pieceCaptureSound = soundPool.load(context, R.raw.piece_capture, 1)
+        pieceSlideSound = soundPool.load(context, R.raw.chess_piece_slide, 1)
     }
+
     private fun playSoundEffect(sound: Int){
 
 
@@ -119,6 +122,7 @@ class ChessGameViewModel: ViewModel(){
         return Pair(firstColor, secondColor)
     }
 
+    //Setup players at the start of the game
     fun setPlayers(){
 
         val colorPair : Pair<PieceColor,PieceColor>
@@ -289,6 +293,9 @@ class ChessGameViewModel: ViewModel(){
             playSoundEffect(invalidMoveSound)
             return
         }
+
+
+
         //TODO Save the move to the history object after validating it
 
 

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Simply Chess.</string>
-    <string name="app_title">Crazy Chess</string>
+    <string name="app_title">Simply Chess.</string>
     <string name="play_button_text">Play</string>
     <string name="edit_mode_button_text">Edit Mode</string>
     <string name="author_title" translatable="false">Created By MMSWFLOW</string>
