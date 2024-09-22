@@ -53,7 +53,6 @@ fun GameScreen(
 
                 GameEndDialog(
                     gameViewModel = gameViewModel,
-                    navHost = navHost,
                     zAngle= zAngle
                 )
             }

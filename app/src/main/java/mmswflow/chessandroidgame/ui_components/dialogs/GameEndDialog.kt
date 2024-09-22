@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
@@ -40,7 +38,6 @@ import mmswflow.chessandroidgame.ui_components.texts.MultiColoredInfoText
 @Composable
 fun GameEndDialog(
     gameViewModel: ChessGameViewModel,
-    navHost: NavHostController,
     zAngle: Float
 ){
     val winner = gameViewModel.winnerPlayer.value
@@ -98,8 +95,7 @@ fun GameEndDialog(
                     }
                 }
 
-                Row(
-                ) {
+                Row{
 
                     LargeInfoText(text = "${winner!!.name} " + stringResource(id =  R.string.game_ending_dialog))
                 }
@@ -112,7 +108,7 @@ fun GameEndDialog(
 
                     //Player 1 side
                     Row(
-                        horizontalArrangement = Arrangement.Start,
+                        horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(
@@ -133,7 +129,7 @@ fun GameEndDialog(
 
                     //Player 2 side
                     Row(
-                        horizontalArrangement = Arrangement.End,
+                        horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(

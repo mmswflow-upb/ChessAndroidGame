@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame
 
+import android.content.Context
 import android.media.SoundPool
 import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,7 +35,7 @@ class ChessGameViewModel: ViewModel(){
     private lateinit var soundPool: SoundPool
     private var pieceSlideSound : Int = R.raw.chess_piece_slide
     private var pieceCaptureSound: Int = R.raw.piece_capture
-    private var invalidMoveSound = R.raw.chess_piece_bounce
+    private var invalidMoveSound : Int = R.raw.chess_piece_bounce
 
 
     //Selectable Game Options
@@ -65,10 +66,14 @@ class ChessGameViewModel: ViewModel(){
     val historyOfGameMoves: MutableState<HistoryOfGameMoves?> = mutableStateOf(null)
 
     //Resources Related
-    fun initializeResources(){
+    fun initializeResources(context: Context){
         soundPool = SoundPool.Builder().setMaxStreams(1).build()
+        invalidMoveSound = soundPool.load(context, invalidMoveSound, 1)
+        pieceCaptureSound = soundPool.load(context, pieceCaptureSound, 1)
+        pieceSlideSound = soundPool.load(context, pieceSlideSound, 1)
     }
     private fun playSoundEffect(sound: Int){
+
 
         if(::soundPool.isInitialized){
             soundPool.play(sound, 1f, 1f, 1, 0, 1f)
@@ -241,8 +246,6 @@ class ChessGameViewModel: ViewModel(){
     //It ends the game by setting the states to their appropriate values.
     private fun endGame(winningPlayer: Player){
 
-        Log.d("GAME ENDING TEST", "winning player: ${winningPlayer.name}")
-
         if(onlineMode.value){
 
             //TODO Online mode
@@ -283,7 +286,6 @@ class ChessGameViewModel: ViewModel(){
         if(!simulateMove(newPosition)){
 
             //Move is invalid, so we play the invalid sound effect
-
             playSoundEffect(invalidMoveSound)
             return
         }

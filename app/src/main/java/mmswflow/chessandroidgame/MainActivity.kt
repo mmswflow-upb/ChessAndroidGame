@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
             ChessAndroidGameTheme {
 
                 val chessGameViewModel : ChessGameViewModel = viewModel()
-                chessGameViewModel.initializeResources()
+                chessGameViewModel.initializeResources(this)
                 // A surface container using the 'background' color from the theme
                 NavigationHandler(chessGameViewModel)
             }

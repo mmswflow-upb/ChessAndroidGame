@@ -188,9 +188,6 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
 
         }
 
-        val stringPossiblePositions = newPossiblePositions.stream().map{ position-> "(${position.row}, ${position.column})"}.collect(Collectors.toList())
-        Log.v("PAWN POSSIBLE MOVES", "$stringPossiblePositions")
-
         return newPossiblePositions
     }
 

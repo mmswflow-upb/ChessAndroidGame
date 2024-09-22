@@ -42,7 +42,7 @@ sealed class GameMode(
     )
     object Bullet: GameMode(
         name = R.string.bullet_game_mode,
-        timeLimit = 1 * 10,
+        timeLimit = 1 * 60,
         logo= R.drawable.bullet,
         description= R.string.bullet_game_mode_description,
         tint= BrightRed
