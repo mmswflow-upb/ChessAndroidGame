@@ -34,6 +34,7 @@ import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 import mmswflow.chessandroidgame.ui_components.texts.LargeInfoText
 import mmswflow.chessandroidgame.ui_components.texts.MediumInfoText
 import mmswflow.chessandroidgame.ui_components.texts.MultiColoredInfoText
+import mmswflow.chessandroidgame.ui_components.texts.SmallInfoText
 
 @Composable
 fun GameEndDialog(
@@ -46,7 +47,7 @@ fun GameEndDialog(
 
     var colorsLists : List<List<Color>>
     var textsLists : List<List<String>>
-
+    var reasonForWinning = ""
     Dialog(
 
         onDismissRequest = {gameViewModel.displayGameEndedDialog.value = false}
@@ -79,6 +80,7 @@ fun GameEndDialog(
                         //Player 1 won
                         textsLists = listOf(listOf(player1.name + " ", "+1"),listOf(player2.name + " ", "-1"))
                         colorsLists = listOf(listOf(White, LightGreen),listOf(White, BrightRed))
+                        reasonForWinning = "${player2.name} ${stringResource(id = gameViewModel.reasonForWinning.value)}" 
                     }
 
                     player2 -> {
@@ -86,6 +88,7 @@ fun GameEndDialog(
                         //Player 2 won
                         textsLists = listOf(listOf(player1.name + " ", "-1"),listOf(player2.name + " ", "+1"))
                         colorsLists = listOf(listOf(White, BrightRed),listOf(White, LightGreen))
+                        reasonForWinning = "${player1.name} ${stringResource(id = gameViewModel.reasonForWinning.value)}"
                     }
                     else -> {
 
@@ -95,9 +98,17 @@ fun GameEndDialog(
                     }
                 }
 
+                //Display winner and reason for winning
                 Row{
-
-                    LargeInfoText(text = "${winner!!.name} " + stringResource(id =  R.string.game_ending_dialog))
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        LargeInfoText(text = "${winner!!.name} " + stringResource(id =  R.string.game_ending_dialog))
+                        if(reasonForWinning.isNotEmpty()) {
+                            SmallInfoText(text = reasonForWinning)
+                        }
+                    }
                 }
 
                 //Display changes in stats here

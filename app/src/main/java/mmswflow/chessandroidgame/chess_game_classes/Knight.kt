@@ -59,4 +59,9 @@ class Knight(val kColor: PieceColor, val kPosition: PiecePosition): ChessPiece(k
     ): Boolean {
         return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
+
+    override fun deepClone(): ChessPiece {
+
+        return King(kColor, PiecePosition(kPosition.row,kPosition.column))
+    }
 }

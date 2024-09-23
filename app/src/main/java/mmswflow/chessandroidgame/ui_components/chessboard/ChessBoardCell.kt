@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
 import mmswflow.chessandroidgame.chess_game_classes.BoardCell
+import mmswflow.chessandroidgame.chess_game_classes.King
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
 import mmswflow.chessandroidgame.ui.theme.Black
@@ -34,7 +35,8 @@ fun ChessBoardCell(
     paddingMod: Modifier,
     playingColor: PieceColor,
     isVisibleToSelectedPiece: Boolean,
-    onPieceMove: (PiecePosition) -> Unit
+    onPieceMove: (PiecePosition) -> Unit,
+    gameActive: Boolean = true
 ){
     val chessPiece = cell.occupyingPiece
 
@@ -46,8 +48,14 @@ fun ChessBoardCell(
                     BorderStroke(color = LightGreen, width = SelectableBoardCellBorderStrokeWidth.value.dp)
                 }else if(isVisibleToSelectedPiece && it != null && it.color != selectedChessPiece.value?.color){
                     BorderStroke(color= LightRed, width= SelectableBoardCellBorderStrokeWidth.value.dp)
-                } else {
+
+                } else if(it is King && it.underCheck){
+
+                    BorderStroke(color= LightRed, width= SelectableBoardCellBorderStrokeWidth.value.dp)
+
+                }else{
                     BorderStroke(width=0.dp,Black)
+
                 }
             }),
                 shape= RectangleShape
@@ -55,6 +63,11 @@ fun ChessBoardCell(
             .clip(RectangleShape)
             .background(cell.cellColor)
             .clickable {
+
+                if(!gameActive){
+                    return@clickable
+                }
+
                 if (cell.occupyingPiece != null) {
                     if (chessPiece!!.color == playingColor) {
 
@@ -94,7 +107,7 @@ fun ChessBoardCell(
         }
 
         //When a player selects a piece, their paths should become visible, so we display green circles
-        if(isVisibleToSelectedPiece && cell.occupyingPiece == null){
+        if(isVisibleToSelectedPiece && cell.occupyingPiece == null && gameActive){
             Canvas(modifier = Modifier.fillMaxSize()){
                 drawCircle(
                     color= LightGreen,

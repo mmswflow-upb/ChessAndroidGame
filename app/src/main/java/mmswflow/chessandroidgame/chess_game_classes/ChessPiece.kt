@@ -15,6 +15,11 @@ class PiecePosition(val row: Int, val column: Int){
     fun getColumnLetter(): String{
        return('a' + column).toString()
     }
+
+    fun deepClone(): PiecePosition{
+        return PiecePosition(row, column)
+    }
+
 }
 
 
@@ -30,6 +35,20 @@ abstract class ChessPiece(var color: PieceColor, @DrawableRes var icon: Int, var
 
     //Returns whether an enemy piece is protected by another enemy piece
     abstract fun protectsPosition(chessBoard: ChessBoard, protectedPiecePosition: PiecePosition): Boolean
+
+    //Returns a deep clone of the chess piece object
+    abstract fun deepClone(): ChessPiece
+}
+
+fun deepCloneListOfPieces(listOfPieces: List<ChessPiece>) : MutableList<ChessPiece>{
+
+    val clonedList = mutableListOf<ChessPiece>()
+
+    for (piece in listOfPieces){
+        clonedList.add(piece.deepClone())
+    }
+
+    return clonedList
 }
 
 val startingWhitePieces = mutableListOf<ChessPiece>(

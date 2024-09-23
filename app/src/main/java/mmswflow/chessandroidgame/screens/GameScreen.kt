@@ -74,7 +74,7 @@ fun GameScreen(
                 modifier= Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ChessBoard(gameViewModel= gameViewModel, modifier= Modifier, zAngle= zAngle)
+                ChessBoard(gameViewModel= gameViewModel, modifier= Modifier.weight(1f), zAngle= zAngle)
             }
 
             Row(modifier= Modifier
@@ -91,5 +91,4 @@ fun GameScreen(
 
         }
     }
-    gameViewModel.startTimer()
 }

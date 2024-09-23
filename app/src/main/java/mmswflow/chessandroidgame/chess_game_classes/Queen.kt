@@ -168,4 +168,9 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
     ): Boolean {
         return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
+
+    override fun deepClone(): ChessPiece {
+
+        return King(qColor, PiecePosition(qPosition.row,qPosition.column))
+    }
 }

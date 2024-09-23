@@ -225,4 +225,9 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
         return getAllPossibleNewPositions(chessBoard, null)
             .any{ it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
+
+    override fun deepClone(): ChessPiece {
+
+        return King(pColor, PiecePosition(pPosition.row,pPosition.column), firstMove)
+    }
 }

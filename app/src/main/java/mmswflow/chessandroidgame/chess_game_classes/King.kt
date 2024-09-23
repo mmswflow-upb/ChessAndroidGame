@@ -2,7 +2,7 @@ package mmswflow.chessandroidgame.chess_game_classes
 
 import mmswflow.chessandroidgame.R
 
-class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove: Boolean  = true): ChessPiece(kgColor, R.drawable.king , kgPosition) {
+class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove: Boolean  = true, var underCheck: Boolean = false): ChessPiece(kgColor, R.drawable.king , kgPosition) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
@@ -128,4 +128,8 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove:
         return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
 
+    override fun deepClone(): ChessPiece {
+
+        return King(kgColor, PiecePosition(kgPosition.row,kgPosition.column), firstMove, underCheck)
+    }
 }

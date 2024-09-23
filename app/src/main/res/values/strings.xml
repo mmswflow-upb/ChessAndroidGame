@@ -32,4 +32,5 @@
     <string name="black_color">Black</string>
     <string name="game_ending_tie_dialog">It\'s a Draw!</string>
     <string name="game_ending_dialog">Won!</string>
+    <string name="out_of_time_reason_for_winning">ran out of time</string>
 </resources>

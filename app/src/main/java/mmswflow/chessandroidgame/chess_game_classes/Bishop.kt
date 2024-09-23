@@ -126,4 +126,9 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
     ): Boolean {
         return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
+
+    override fun deepClone(): ChessPiece {
+
+        return King(bColor, PiecePosition(bPosition.row,bPosition.column))
+    }
 }

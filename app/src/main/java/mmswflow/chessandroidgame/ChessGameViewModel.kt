@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
@@ -59,6 +60,7 @@ class ChessGameViewModel: ViewModel(){
 
     //Game ending Stats
     val winnerPlayer : MutableState<Player?> = mutableStateOf(null)
+    val reasonForWinning: MutableState<Int> = mutableStateOf(0)
     val gameEnded: MutableState<Boolean> = mutableStateOf(false)
     val displayGameEndedDialog: MutableState<Boolean> = mutableStateOf(false)
 
@@ -194,10 +196,11 @@ class ChessGameViewModel: ViewModel(){
             player2= player2.value!!
         )
 
+        startTimer()
     }
 
     //Turn on the timer for the current player
-    fun startTimer(){
+    private fun startTimer(){
 
         if(currentTimerJob.value != null){
             return
@@ -224,7 +227,11 @@ class ChessGameViewModel: ViewModel(){
             }
         }
 
+
+
         //Game should end if this while loop is terminated, meaning that the current player ran out of time
+        reasonForWinning.value = R.string.out_of_time_reason_for_winning
+
         if(playerInTurn.value == player1.value){
 
             //Winner is player 2, since player 1 ran out of time
@@ -239,11 +246,7 @@ class ChessGameViewModel: ViewModel(){
     //A function that cancels the current coroutine which is running the timer
     private fun stopTimer(){
 
-        try{
-            currentTimerJob.value?.cancel()
-        }catch(error: CancellationException){
-            Log.e("GAME FLOW TEST", "Timer Error: ${error.message}")
-        }
+        currentTimerJob.value?.cancel()
     }
 
 
@@ -280,6 +283,9 @@ class ChessGameViewModel: ViewModel(){
     private fun simulateMove(newPosition: PiecePosition): Boolean{
 
         var result = false
+
+        testChessBoard.value = chessBoard.value!!.deepClone()
+
 
         return result
     }

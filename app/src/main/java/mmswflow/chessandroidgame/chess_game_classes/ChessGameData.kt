@@ -42,7 +42,7 @@ sealed class GameMode(
     )
     object Bullet: GameMode(
         name = R.string.bullet_game_mode,
-        timeLimit = 1 * 60,
+        timeLimit = 1* 10,
         logo= R.drawable.bullet,
         description= R.string.bullet_game_mode_description,
         tint= BrightRed
@@ -60,12 +60,18 @@ val offlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.B
 val onlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet)
 
 //Cell's color depends on the sum of the row and column, if it's even it's black, otherwise it's white
-data class BoardCell(val position: PiecePosition, val cellColor: Color, var occupyingPiece: ChessPiece?)
+class BoardCell(val position: PiecePosition, val cellColor: Color, var occupyingPiece: ChessPiece?){
+
+    fun deepClone() : BoardCell{
+        return BoardCell(position.deepClone(), cellColor, occupyingPiece?.deepClone())
+    }
+}
+
 
 
 //Generating the standard board with standard number of pieces and positions
-fun generateStandardBoard(): Array<Array<BoardCell>> {
-    val standardStartingBoard = Array(8){
+fun generateBoard(whitePieces : List<ChessPiece> = startingWhitePieces, blackPieces : List<ChessPiece> = startingBlackPieces): Array<Array<BoardCell>> {
+    val board = Array(8){
             row ->
         Array(8) {
                 column ->
@@ -82,7 +88,7 @@ fun generateStandardBoard(): Array<Array<BoardCell>> {
         val row= whitePiece.position.row
         val column = whitePiece.position.column
 
-        standardStartingBoard[row][column].occupyingPiece = whitePiece
+        board[row][column].occupyingPiece = whitePiece
     }
 
     for(blackPiece in startingBlackPieces){
@@ -90,22 +96,38 @@ fun generateStandardBoard(): Array<Array<BoardCell>> {
         val row= blackPiece.position.row
         val column = blackPiece.position.column
 
-        standardStartingBoard[row][column].occupyingPiece = blackPiece
+        board[row][column].occupyingPiece = blackPiece
     }
 
-    return standardStartingBoard
+    return board
 }
 
-data class ChessBoard(
-    val boardMatrix: Array<Array<BoardCell>> = generateStandardBoard(),
-    val whitePieces: MutableList<ChessPiece> = startingWhitePieces.toMutableList(),
-    val blackPieces: MutableList<ChessPiece> = startingBlackPieces.toMutableList()
-)
+
+
+class ChessBoard(
+    val whitePieces: MutableList<ChessPiece> = deepCloneListOfPieces(startingWhitePieces),
+    val blackPieces: MutableList<ChessPiece> = deepCloneListOfPieces(startingBlackPieces),
+    val boardMatrix: Array<Array<BoardCell>> = generateBoard(whitePieces, blackPieces),
+){
+    //Creates a deep clone of this chessboard, this is necessary for simulating moves
+    fun deepClone(): ChessBoard{
+
+        val clonedWhitePieces = deepCloneListOfPieces(whitePieces)
+
+        val clonedBlackPieces = deepCloneListOfPieces(blackPieces)
+
+        val clonedBoardMatrix : Array<Array<BoardCell>> = generateBoard(whitePieces= clonedWhitePieces,blackPieces= clonedBlackPieces)
+
+        return ChessBoard(boardMatrix= clonedBoardMatrix, whitePieces=clonedWhitePieces, blackPieces=clonedBlackPieces)
+    }
+}
+
 
 data class Move(
     val playerToMove: PieceColor,
     val whiteTime: Int,
     val blackTime: Int,
+    val capturedPiece: ChessPiece?,
     val movedPiece: ChessPiece,
     val newPosition: PiecePosition,
     val soundPlayed: Int

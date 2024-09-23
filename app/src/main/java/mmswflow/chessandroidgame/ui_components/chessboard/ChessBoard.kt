@@ -70,7 +70,8 @@ fun ChessBoard(
                                 paddingMod= chessPieceIconPaddingMod,
                                 playingColor= playerInTurn!!.color,
                                 isVisibleToSelectedPiece = isVisibleToSelectedPiece,
-                                onPieceMove = onPieceMove
+                                onPieceMove = onPieceMove,
+                                gameActive= !gameViewModel.gameEnded.value
                             )
                         }
                     }
@@ -127,7 +128,8 @@ fun ChessBoard(
                                 paddingMod= chessPieceIconPaddingMod,
                                 playingColor= playerInTurn!!.color,
                                 isVisibleToSelectedPiece= isVisibleToSelectedPiece,
-                                onPieceMove = onPieceMove
+                                onPieceMove = onPieceMove,
+                                gameActive= !gameViewModel.gameEnded.value
                             )
                         }
                     }

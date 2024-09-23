@@ -44,7 +44,7 @@ fun PlayerInfoCard(
             .fillMaxWidth()
             .border(
                 border = BorderStroke(
-                    width = PlayerInfoCardBorderStroke.value.dp,
+                    width = PlayerInfoCardBorderStrokeWidth.value.dp,
                     color = MaterialTheme.colorScheme.outline
                 ),
                 shape = RoundedCornerShape(PlayerInfoCardRoundedCornerShapeSize.value.dp)

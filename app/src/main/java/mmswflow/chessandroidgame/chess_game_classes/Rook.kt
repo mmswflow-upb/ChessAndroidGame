@@ -88,4 +88,9 @@ class Rook(val rColor: PieceColor, val rPosition: PiecePosition, var firstMove: 
     ): Boolean {
         return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
     }
+
+    override fun deepClone(): ChessPiece {
+
+        return King(rColor, PiecePosition(rPosition.row,rPosition.column), firstMove)
+    }
 }
