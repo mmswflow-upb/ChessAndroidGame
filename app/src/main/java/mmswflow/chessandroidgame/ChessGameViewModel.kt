@@ -21,7 +21,9 @@ import mmswflow.chessandroidgame.app_ui_data.GameTheme
 import mmswflow.chessandroidgame.chess_game_classes.HistoryOfGameMoves
 import mmswflow.chessandroidgame.chess_game_classes.Player
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
+import mmswflow.chessandroidgame.chess_game_classes.King
 import mmswflow.chessandroidgame.chess_game_classes.Move
+import mmswflow.chessandroidgame.chess_game_classes.Pawn
 import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
 import mmswflow.chessandroidgame.chess_game_classes.offlineListOfGameModes
 
@@ -57,6 +59,13 @@ class ChessGameViewModel: ViewModel(){
     private var currentTimerJob : MutableState<Job?> = mutableStateOf(null)
     val player1RemainingTime: MutableState<Int> = mutableStateOf(0)
     val player2RemainingTime: MutableState<Int> = mutableStateOf(0)
+    val enemyPiecesCheckingPlayerInTurn: MutableState<MutableList<ChessPiece>> = mutableStateOf(mutableListOf())
+    val piecesAbleToSavePlayerInTurn: MutableState<MutableList<ChessPiece>> = mutableStateOf(mutableListOf())
+    val enPassantEdiblePiece : MutableState<Pawn?> = mutableStateOf(null)
+
+    //Game Small Menu Related
+    val displayResignConfirmation: MutableState<Boolean> = mutableStateOf(false)
+    val displayDrawDialog: MutableState<Boolean> = mutableStateOf(false)
 
     //Game ending Stats
     val winnerPlayer : MutableState<Player?> = mutableStateOf(null)
@@ -193,7 +202,8 @@ class ChessGameViewModel: ViewModel(){
             moves= mutableListOf<Move>(),
             gameMode= gameMode.value!!,
             player1= player1.value!!,
-            player2= player2.value!!
+            player2= player2.value!!,
+
         )
 
         startTimer()
@@ -266,6 +276,8 @@ class ChessGameViewModel: ViewModel(){
 
             winnerPlayer.value = winningPlayer
             gameEnded.value = true
+            displayResignConfirmation.value = false
+            displayDrawDialog.value = false
             displayGameEndedDialog.value = true
             player1.value!!.active = false
             player2.value!!.active = false
@@ -278,26 +290,121 @@ class ChessGameViewModel: ViewModel(){
     //Save stats to cloud (account-based) or on device's storage
     private fun saveStats(){}
 
-    // Simulate a move to check whether it's legal or not, and return true if it's valid
-    //this method will also look for checks or checkmates
-    private fun simulateMove(newPosition: PiecePosition): Boolean{
 
-        var result = false
+    //this method will look for checks or checkmates, if there's a check it's
+    //represented by 0, if there's a checkmate it's represented by 1, if none then it's 2
+    private fun findChecksOrCheckMates(): Int{
+
+        return 2
+    }
+
+
+
+    //Find who's the enemy, and loop through the pieces of the enemy to check whether they're checking our king or not
+    //and add the checking pieces to the appropriate list
+    private fun findPiecesThatCheck(chessBoard: ChessBoard, enemyColor: PieceColor){
+
+
+        if(enemyColor == PieceColor.White){
+
+            val blackKing = chessBoard.getKing(PieceColor.Black)
+
+            for(piece in chessBoard.whitePieces){
+
+                if(piece.protectsPosition(chessBoard,blackKing.position)){
+                    enemyPiecesCheckingPlayerInTurn.value.add(piece)
+                }
+            }
+
+        }else{
+
+            val whiteKing = chessBoard.getKing(PieceColor.White)
+
+            for(piece in chessBoard.whitePieces){
+
+                if(piece.protectsPosition(chessBoard,whiteKing.position)){
+                    enemyPiecesCheckingPlayerInTurn.value.add(piece)
+                }
+            }
+        }
+    }
+
+    //Gives the enemy of the current player in turn
+    private fun getEnemyPlayer(): Player{
+
+        if(playerInTurn.value == player1.value){
+            return player2.value!!
+        }
+        return player1.value!!
+    }
+
+    // Simulate a move to check whether it causes a check for player 1 or player 2
+    //True means it will cause a check, false means it won't
+    private fun simulateMoveCausingCheck(movingPiece: ChessPiece,newPosition: PiecePosition, enemyColor: PieceColor): Boolean{
+
 
         testChessBoard.value = chessBoard.value!!.deepClone()
 
+        val oldRow = movingPiece.position.row
+        val oldColumn = movingPiece.position.column
 
-        return result
+        val newRow = newPosition.row
+        val newColumn = newPosition.column
+
+        //Nullify the occupying piece after saving it temporarily
+        val tempPiece = testChessBoard.value!!.boardMatrix[oldRow][oldColumn].occupyingPiece
+        testChessBoard.value!!.boardMatrix[oldRow][oldColumn ].occupyingPiece = null
+
+        //Move piece to new position on test board
+        testChessBoard.value!!.boardMatrix[newRow][newColumn].occupyingPiece = tempPiece
+
+        findPiecesThatCheck(testChessBoard.value!!, enemyColor)
+
+        if(enemyPiecesCheckingPlayerInTurn.value.isNotEmpty()){
+            return true
+        }
+
+
+        return false
     }
 
     fun movePiece(newPosition : PiecePosition){
 
-        //Check whether move is legal
-        if(!simulateMove(newPosition)){
+        // Step 1: Check whether move is legal
+        if(!selectedChessPiece.value!!.isPieceMoveLegal(chessBoard.value!!,newPosition, enPassantEdiblePiece.value)){
 
             //Move is invalid, so we play the invalid sound effect
             playSoundEffect(invalidMoveSound)
             return
+        }
+
+        // Step 2: Check whether the selected piece is part of the list of pieces that can save the king (in case there's a check)
+        if(playerInTurn.value!!.underCheck){
+
+            //Piece can't be moved because it won't save the king from the check
+            if(!piecesAbleToSavePlayerInTurn.value.any { it == selectedChessPiece.value}){
+                playSoundEffect(invalidMoveSound)
+                return
+            }
+        }
+
+        // Step 3: Check whether moving the selected piece will cause a check for the king
+        if(simulateMoveCausingCheck(selectedChessPiece.value!!,newPosition,getEnemyPlayer().color)){
+
+            enemyPiecesCheckingPlayerInTurn.value.clear()
+            playSoundEffect(invalidMoveSound)
+            return
+        }
+
+        //Step 4: Check whether moving the selected piece will cause a check for the enemy king
+        if(simulateMoveCausingCheck(selectedChessPiece.value!!,newPosition,playerInTurn.value!!.color)){
+
+
+
+
+            //Step 5: Check if the enemy player can escape from the check we're causing (in case there exists one)
+
+
         }
 
 
@@ -306,7 +413,21 @@ class ChessGameViewModel: ViewModel(){
 
 
         //Find out which player has to play next after the move was validated
-        playerInTurn.value = if(player1.value!!.active) player2.value else player1.value
+        if(player1.value!!.active){
+
+            //Player 1 was in turn, next is player 2
+            player1.value!!.active = false
+            player2.value!!.active = true
+
+        }else{
+
+            //Player 2 was in turn, next is player 1
+            player2.value!!.active = false
+            player1.value!!.active = true
+
+        }
+
+        playerInTurn.value = getEnemyPlayer()
 
         //Stop the current Timer if it exists
         stopTimer()

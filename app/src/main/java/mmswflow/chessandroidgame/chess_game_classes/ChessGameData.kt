@@ -120,6 +120,17 @@ class ChessBoard(
 
         return ChessBoard(boardMatrix= clonedBoardMatrix, whitePieces=clonedWhitePieces, blackPieces=clonedBlackPieces)
     }
+
+    fun getKing(pieceColor: PieceColor) : King{
+
+        if(pieceColor == PieceColor.White){
+
+            return whitePieces.find { it is King } as King
+
+        }
+
+        return blackPieces.find { it is King } as King
+    }
 }
 
 
@@ -139,7 +150,9 @@ data class HistoryOfGameMoves(
     val moves: MutableList<Move>,
     val gameMode: GameMode,
     val player1: Player,
-    val player2: Player
+    val player2: Player,
+    var reasonForWinning: String = "",
+    var winner: Player? = null
 )
 
 data class Player(
@@ -151,5 +164,6 @@ data class Player(
     val draws: Int,
     val remainingPieces: MutableList<ChessPiece>,
     var online: Boolean,
-    var active: Boolean = false//It's this player's turn
+    var active: Boolean = false,//It's this player's turn
+    var underCheck : Boolean = false
 )
