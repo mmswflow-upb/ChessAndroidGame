@@ -2,7 +2,11 @@ package mmswflow.chessandroidgame.chess_game_classes
 
 import mmswflow.chessandroidgame.R
 
-class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(bColor, R.drawable.bishop, bPosition) {
+class Bishop(
+    val bColor: PieceColor,
+    val bPosition: PiecePosition,
+    val bListOfPositionsThatCanSaveKing :MutableList<PiecePosition> = mutableListOf()
+    ): ChessPiece(bColor, R.drawable.bishop, bPosition, bListOfPositionsThatCanSaveKing) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
@@ -117,18 +121,18 @@ class Bishop(val bColor: PieceColor, val bPosition: PiecePosition): ChessPiece(b
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).any{it.row == newPosition.row && it.column == newPosition.column}
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 
     override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
     }
 
     override fun deepClone(): ChessPiece {
 
-        return King(bColor, PiecePosition(bPosition.row,bPosition.column))
+        return Bishop(bColor, PiecePosition(bPosition.row,bPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 }

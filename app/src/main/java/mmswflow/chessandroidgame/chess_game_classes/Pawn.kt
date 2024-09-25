@@ -4,7 +4,12 @@ import android.util.Log
 import mmswflow.chessandroidgame.R
 import java.util.stream.Collectors
 
-class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: Boolean = true): ChessPiece(pColor,R.drawable.pawn , pPosition){
+class Pawn(
+    val pColor: PieceColor,
+    val pPosition: PiecePosition,
+    var firstMove: Boolean = true,
+    val pListOfPositionsThatCanSaveKing :MutableList<PiecePosition> = mutableListOf()
+): ChessPiece(pColor,R.drawable.pawn , pPosition, pListOfPositionsThatCanSaveKing){
 
     override fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn? ): List<PiecePosition>{
 
@@ -212,22 +217,21 @@ class Pawn(val pColor: PieceColor, val pPosition: PiecePosition, var firstMove: 
     override fun isPieceMoveLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
-        enPassantEdiblePiece: Pawn?,
+        enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).any{it.row == newPosition.row && it.column == newPosition.column}
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 
     override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null)
-            .any{ it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
     }
 
     override fun deepClone(): ChessPiece {
 
-        return King(pColor, PiecePosition(pPosition.row,pPosition.column), firstMove)
+        return Pawn(pColor, PiecePosition(pPosition.row,pPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 }

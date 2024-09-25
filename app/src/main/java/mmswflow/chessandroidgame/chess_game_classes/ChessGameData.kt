@@ -6,7 +6,6 @@ import mmswflow.chessandroidgame.ui.theme.BrightRed
 import mmswflow.chessandroidgame.ui.theme.DarkBlueGray
 import mmswflow.chessandroidgame.ui.theme.DarkGray
 import mmswflow.chessandroidgame.ui.theme.LightBlue
-import mmswflow.chessandroidgame.ui.theme.LightGray
 import mmswflow.chessandroidgame.ui.theme.LightGreen
 import mmswflow.chessandroidgame.ui.theme.WarningOrange
 
@@ -19,35 +18,35 @@ sealed class GameMode(
     val tint: Color //Icon color
 ){
 
-    object Classic : GameMode(
+    data object Classic : GameMode(
         name = R.string.classic_game_mode,
         timeLimit = 30 * 60,
         logo= R.drawable.turtle,
         description= R.string.classic_game_mode_description,
         tint= LightGreen
     )
-    object Rapid: GameMode(
+    data object Rapid: GameMode(
         name = R.string.rapid_game_mode,
         timeLimit = 10 * 60,
         logo= R.drawable.rabbit,
         description= R.string.rapid_game_mode_description ,
         tint= LightBlue
     )
-    object Blitz: GameMode(
+    data object Blitz: GameMode(
         name=R.string.blitz_game_mode,
         timeLimit= 5 * 60,
         logo= R.drawable.blitz,
         description= R.string.blitz_game_mode_description,
         tint= WarningOrange
     )
-    object Bullet: GameMode(
+    data object Bullet: GameMode(
         name = R.string.bullet_game_mode,
         timeLimit = 1* 10,
         logo= R.drawable.bullet,
         description= R.string.bullet_game_mode_description,
         tint= BrightRed
     )
-    object Edit: GameMode(
+    data object Edit: GameMode(
         name=R.string.edit_game_mode,
         timeLimit= 0,
         logo= R.drawable.edit,
@@ -60,16 +59,11 @@ val offlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.B
 val onlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet)
 
 //Cell's color depends on the sum of the row and column, if it's even it's black, otherwise it's white
-class BoardCell(val position: PiecePosition, val cellColor: Color, var occupyingPiece: ChessPiece?){
-
-    fun deepClone() : BoardCell{
-        return BoardCell(position.deepClone(), cellColor, occupyingPiece?.deepClone())
-    }
-}
+data class BoardCell(val position: PiecePosition, val cellColor: Color, var occupyingPiece: ChessPiece?)
 
 
 
-//Generating the standard board with standard number of pieces and positions
+//Generates the board and populates it with given lists of pieces
 fun generateBoard(whitePieces : List<ChessPiece> = startingWhitePieces, blackPieces : List<ChessPiece> = startingBlackPieces): Array<Array<BoardCell>> {
     val board = Array(8){
             row ->
@@ -83,7 +77,7 @@ fun generateBoard(whitePieces : List<ChessPiece> = startingWhitePieces, blackPie
         }
     }
 
-    for(whitePiece in startingWhitePieces){
+    for(whitePiece in whitePieces){
 
         val row= whitePiece.position.row
         val column = whitePiece.position.column
@@ -91,7 +85,7 @@ fun generateBoard(whitePieces : List<ChessPiece> = startingWhitePieces, blackPie
         board[row][column].occupyingPiece = whitePiece
     }
 
-    for(blackPiece in startingBlackPieces){
+    for(blackPiece in blackPieces){
 
         val row= blackPiece.position.row
         val column = blackPiece.position.column
@@ -108,6 +102,7 @@ class ChessBoard(
     val whitePieces: MutableList<ChessPiece> = deepCloneListOfPieces(startingWhitePieces),
     val blackPieces: MutableList<ChessPiece> = deepCloneListOfPieces(startingBlackPieces),
     val boardMatrix: Array<Array<BoardCell>> = generateBoard(whitePieces, blackPieces),
+    val enPassantEdiblePiece: Pawn? = null
 ){
     //Creates a deep clone of this chessboard, this is necessary for simulating moves
     fun deepClone(): ChessBoard{
@@ -118,7 +113,20 @@ class ChessBoard(
 
         val clonedBoardMatrix : Array<Array<BoardCell>> = generateBoard(whitePieces= clonedWhitePieces,blackPieces= clonedBlackPieces)
 
-        return ChessBoard(boardMatrix= clonedBoardMatrix, whitePieces=clonedWhitePieces, blackPieces=clonedBlackPieces)
+        //From the newly cloned pieces, find the enPassantEdible pawn
+        val clonedEnPassantEdiblePiece : Pawn? = if(enPassantEdiblePiece == null){
+            null
+        }else{
+            if(enPassantEdiblePiece.color == PieceColor.White){
+
+                clonedWhitePieces.find{ it is Pawn && !it.firstMove } as? Pawn?
+
+            }else{
+                clonedBlackPieces.find{ it is Pawn && !it.firstMove } as? Pawn?
+            }
+        }
+
+        return ChessBoard(boardMatrix= clonedBoardMatrix, whitePieces=clonedWhitePieces, blackPieces=clonedBlackPieces, enPassantEdiblePiece = clonedEnPassantEdiblePiece)
     }
 
     fun getKing(pieceColor: PieceColor) : King{
@@ -162,7 +170,7 @@ data class Player(
     val wins: Int,
     val losses: Int,
     val draws: Int,
-    val remainingPieces: MutableList<ChessPiece>,
+    var remainingPieces: MutableList<ChessPiece>,
     var online: Boolean,
     var active: Boolean = false,//It's this player's turn
     var underCheck : Boolean = false

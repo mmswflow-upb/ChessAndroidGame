@@ -2,7 +2,12 @@ package mmswflow.chessandroidgame.chess_game_classes
 
 import mmswflow.chessandroidgame.R
 
-class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove: Boolean  = true): ChessPiece(kgColor, R.drawable.king , kgPosition) {
+class King(
+    val kgColor: PieceColor,
+    val kgPosition: PiecePosition,
+    var firstMove: Boolean  = true,
+    val kgListOfPositionsThatCanSaveKing :MutableList<PiecePosition> = mutableListOf()
+): ChessPiece(kgColor, R.drawable.king , kgPosition, kgListOfPositionsThatCanSaveKing) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
@@ -118,18 +123,18 @@ class King(val kgColor: PieceColor, val kgPosition: PiecePosition,var firstMove:
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).any{it.row == newPosition.row && it.column == newPosition.column}
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 
     override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
     }
 
     override fun deepClone(): ChessPiece {
 
-        return King(kgColor, PiecePosition(kgPosition.row,kgPosition.column), firstMove)
+        return King(kgColor, PiecePosition(kgPosition.row,kgPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 }

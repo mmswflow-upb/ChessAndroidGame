@@ -2,7 +2,11 @@ package mmswflow.chessandroidgame.chess_game_classes
 
 import mmswflow.chessandroidgame.R
 
-class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qColor, R.drawable.queen , qPosition) {
+class Queen(
+    val qColor: PieceColor,
+    val qPosition: PiecePosition,
+    val qListOfPositionsThatCanSaveKing :MutableList<PiecePosition> = mutableListOf()
+): ChessPiece(qColor, R.drawable.queen , qPosition, qListOfPositionsThatCanSaveKing) {
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
@@ -159,18 +163,18 @@ class Queen(val qColor: PieceColor, val qPosition: PiecePosition): ChessPiece(qC
         enPassantEdiblePiece: Pawn?
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).any{it.row == newPosition.row && it.column == newPosition.column}
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
     }
 
     override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).any{it.row == protectedPiecePosition.row && it.column == protectedPiecePosition.column}
+        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
     }
 
     override fun deepClone(): ChessPiece {
 
-        return King(qColor, PiecePosition(qPosition.row,qPosition.column))
+        return Queen(qColor, PiecePosition(qPosition.row,qPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 }

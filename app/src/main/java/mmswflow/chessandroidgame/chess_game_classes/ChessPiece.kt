@@ -20,10 +20,26 @@ class PiecePosition(val row: Int, val column: Int){
         return PiecePosition(row, column)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if(this === other) return true
+        if(other !is PiecePosition) return false
+        return row == other.row && column == other.column
+    }
+
+    //Sanity check 0_0
+    override fun hashCode(): Int {
+        return 31* row + column
+    }
+
 }
 
 
-abstract class ChessPiece(var color: PieceColor, @DrawableRes var icon: Int, var position: PiecePosition) {
+abstract class ChessPiece(
+    var color: PieceColor,
+    @DrawableRes var icon: Int,
+    var position: PiecePosition,
+    val listOfPositionsThatCanSaveKing : MutableList<PiecePosition>
+) {
 
     //This checks whether the move would be legal excluding the check/checkmate condition
 
@@ -38,6 +54,18 @@ abstract class ChessPiece(var color: PieceColor, @DrawableRes var icon: Int, var
 
     //Returns a deep clone of the chess piece object
     abstract fun deepClone(): ChessPiece
+
+}
+
+fun deepCloneListOfPositions(listOfPositions: List<PiecePosition>) : MutableList<PiecePosition>{
+
+    val clonedList = mutableListOf<PiecePosition>()
+
+    for(pos in listOfPositions){
+        clonedList.add(PiecePosition(pos.row,pos.column))
+    }
+
+    return clonedList
 }
 
 fun deepCloneListOfPieces(listOfPieces: List<ChessPiece>) : MutableList<ChessPiece>{
@@ -80,7 +108,6 @@ val startingWhitePieces = mutableListOf<ChessPiece>(
 
     // King
     King( kgColor= PieceColor.White, kgPosition= PiecePosition(0,4) ))
-
 
 val startingBlackPieces = mutableListOf<ChessPiece>(
 

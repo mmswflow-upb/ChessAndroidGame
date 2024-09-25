@@ -49,10 +49,6 @@ fun ChessBoardCell(
                 }else if(isVisibleToSelectedPiece && it != null && it.color != selectedChessPiece.value?.color){
                     BorderStroke(color= LightRed, width= SelectableBoardCellBorderStrokeWidth.value.dp)
 
-                } else if(it is King && it.underCheck){
-
-                    BorderStroke(color= LightRed, width= SelectableBoardCellBorderStrokeWidth.value.dp)
-
                 }else{
                     BorderStroke(width=0.dp,Black)
 

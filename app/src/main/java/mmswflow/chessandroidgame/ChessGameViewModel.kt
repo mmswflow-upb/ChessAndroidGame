@@ -7,10 +7,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,7 +19,6 @@ import mmswflow.chessandroidgame.app_ui_data.GameTheme
 import mmswflow.chessandroidgame.chess_game_classes.HistoryOfGameMoves
 import mmswflow.chessandroidgame.chess_game_classes.Player
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
-import mmswflow.chessandroidgame.chess_game_classes.King
 import mmswflow.chessandroidgame.chess_game_classes.Move
 import mmswflow.chessandroidgame.chess_game_classes.Pawn
 import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
@@ -59,9 +56,8 @@ class ChessGameViewModel: ViewModel(){
     private var currentTimerJob : MutableState<Job?> = mutableStateOf(null)
     val player1RemainingTime: MutableState<Int> = mutableStateOf(0)
     val player2RemainingTime: MutableState<Int> = mutableStateOf(0)
-    val enemyPiecesCheckingPlayerInTurn: MutableState<MutableList<ChessPiece>> = mutableStateOf(mutableListOf())
-    val piecesAbleToSavePlayerInTurn: MutableState<MutableList<ChessPiece>> = mutableStateOf(mutableListOf())
-    val enPassantEdiblePiece : MutableState<Pawn?> = mutableStateOf(null)
+    val enemyPiecesCheckingPlayer: MutableState<MutableList<ChessPiece>> = mutableStateOf(mutableListOf())
+    val piecesAbleToSavePlayer: MutableState<MutableList<ChessPiece>> = mutableStateOf(mutableListOf())
 
     //Game Small Menu Related
     val displayResignConfirmation: MutableState<Boolean> = mutableStateOf(false)
@@ -242,15 +238,7 @@ class ChessGameViewModel: ViewModel(){
         //Game should end if this while loop is terminated, meaning that the current player ran out of time
         reasonForWinning.value = R.string.out_of_time_reason_for_winning
 
-        if(playerInTurn.value == player1.value){
-
-            //Winner is player 2, since player 1 ran out of time
-            endGame(player2.value!!)
-
-        }else{
-            //Winner is player 1, since player 2 ran out of time
-            endGame(player1.value!!)
-        }
+        endGame(getEnemyPlayer())
     }
 
     //A function that cancels the current coroutine which is running the timer
@@ -261,7 +249,7 @@ class ChessGameViewModel: ViewModel(){
 
 
     //It ends the game by setting the states to their appropriate values.
-    private fun endGame(winningPlayer: Player){
+    private fun endGame(winningPlayer: Player?){
 
         if(onlineMode.value){
 
@@ -290,20 +278,97 @@ class ChessGameViewModel: ViewModel(){
     //Save stats to cloud (account-based) or on device's storage
     private fun saveStats(){}
 
+    //Gives the enemy of the current player in turn
+    private fun getEnemyPlayer(): Player{
 
-    //this method will look for checks or checkmates, if there's a check it's
-    //represented by 0, if there's a checkmate it's represented by 1, if none then it's 2
-    private fun findChecksOrCheckMates(): Int{
-
-        return 2
+        if(playerInTurn.value == player1.value){
+            return player2.value!!
+        }
+        return player1.value!!
     }
 
+    //Checks whether the enemy of the current player in turn has any moves left or not
+    private fun detectStalemate(chessBoard: ChessBoard, enemyColor: PieceColor): Boolean{
 
+        if(enemyColor == PieceColor.White){
+
+            for(blackPiece in chessBoard.blackPieces){
+                if(blackPiece.getAllLegalNewPositions(chessBoard, chessBoard.enPassantEdiblePiece).isNotEmpty()){
+                    return false
+                }
+            }
+
+        }else{
+
+            for(whitePiece in chessBoard.whitePieces){
+                if(whitePiece.getAllLegalNewPositions(chessBoard, chessBoard.enPassantEdiblePiece).isNotEmpty()){
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    //Find the enemy pieces that can save their king from a check, if there exist such pieces
+    //then the enemy player will be able to move when their turn comes, otherwise checkmate will be established
+    //and the current player in turn will win
+    //Returns true for possibility of escaping a check, false for checkmate
+    private fun canEscapeCheck(testChessBoard: ChessBoard, enemyColor: PieceColor): Boolean{
+
+        //Loop through all pieces of enemy, and loop through all their possible positions,
+        //and check in each case whether the check on their king can be stopped
+        //for each move we find, we add it the piece's list of positions that can save the king
+        //and we add that piece to the list of pieces that can save the enemy player
+
+
+        //get a list of the enemy's pieces
+        val listOfClonedPieces = if(enemyColor == PieceColor.White){
+            testChessBoard.whitePieces
+        }else{
+            testChessBoard.blackPieces
+        }
+
+        //loop through enemy's pieces
+        for(enemyPiece in listOfClonedPieces){
+
+            //loop through all possible positions of enemy's pieces (legal ones)
+            for(newPos in enemyPiece.getAllLegalNewPositions(testChessBoard, testChessBoard.enPassantEdiblePiece)){
+
+                //Save original position as we're going to revert the board to what it was before
+                val originalPos = enemyPiece.position
+
+                val occPieceInNewPos = testChessBoard.boardMatrix[newPos.row][newPos.column].occupyingPiece
+
+                //Apply the changes on test board
+                val capture = simulateMove(testChessBoard, originalPos, newPos)
+
+                //Create a temporary list where we'll store the pieces of the player in turn that are still going to check the enemy after
+                //we've simulated the current movement of the current piece & Find out if the enemy player is still under check
+                if(!findPiecesThatCheck(testChessBoard, playerInTurn.value!!.color, piecesAbleToSavePlayer.value)){
+                    enemyPiece.listOfPositionsThatCanSaveKing.add(newPos)
+                }
+
+                //Revert Movement (also there might have been a captured piece that we must put back)
+                if(capture){
+
+                    simulateMove(testChessBoard, newPos, originalPos, occPieceInNewPos)
+
+                }else{
+                    simulateMove(testChessBoard, newPos, originalPos)
+
+                }
+            }
+
+
+        }
+
+        return piecesAbleToSavePlayer.value.isNotEmpty()
+    }
 
     //Find who's the enemy, and loop through the pieces of the enemy to check whether they're checking our king or not
-    //and add the checking pieces to the appropriate list
-    private fun findPiecesThatCheck(chessBoard: ChessBoard, enemyColor: PieceColor){
-
+    //and add the checking pieces to the appropriate list, returns true if there are pieces checking the enemy and false otherwise
+    private fun findPiecesThatCheck(chessBoard: ChessBoard, enemyColor: PieceColor, listOfPiecesThatCheck: MutableList<ChessPiece>): Boolean{
 
         if(enemyColor == PieceColor.White){
 
@@ -312,7 +377,7 @@ class ChessGameViewModel: ViewModel(){
             for(piece in chessBoard.whitePieces){
 
                 if(piece.protectsPosition(chessBoard,blackKing.position)){
-                    enemyPiecesCheckingPlayerInTurn.value.add(piece)
+                    listOfPiecesThatCheck.add(piece)
                 }
             }
 
@@ -323,91 +388,190 @@ class ChessGameViewModel: ViewModel(){
             for(piece in chessBoard.whitePieces){
 
                 if(piece.protectsPosition(chessBoard,whiteKing.position)){
-                    enemyPiecesCheckingPlayerInTurn.value.add(piece)
+                    listOfPiecesThatCheck.add(piece)
                 }
             }
         }
+
+        return listOfPiecesThatCheck.isNotEmpty()
     }
 
-    //Gives the enemy of the current player in turn
-    private fun getEnemyPlayer(): Player{
 
-        if(playerInTurn.value == player1.value){
-            return player2.value!!
-        }
-        return player1.value!!
-    }
+    // Simulate a move, returns true if it's a capture or not, revertedPiece is a piece that we want to put back if it was captured previously
+    //especially when simulating multiple times for checkmate detection
+    private fun simulateMove(testChessBoard: ChessBoard, oldPosition: PiecePosition,newPosition: PiecePosition, revertedPiece: ChessPiece? = null): Boolean{
 
-    // Simulate a move to check whether it causes a check for player 1 or player 2
-    //True means it will cause a check, false means it won't
-    private fun simulateMoveCausingCheck(movingPiece: ChessPiece,newPosition: PiecePosition, enemyColor: PieceColor): Boolean{
+        var capture = false
 
-
-        testChessBoard.value = chessBoard.value!!.deepClone()
-
-        val oldRow = movingPiece.position.row
-        val oldColumn = movingPiece.position.column
+        val oldRow = oldPosition.row
+        val oldColumn = oldPosition.column
 
         val newRow = newPosition.row
         val newColumn = newPosition.column
 
-        //Nullify the occupying piece after saving it temporarily
-        val tempPiece = testChessBoard.value!!.boardMatrix[oldRow][oldColumn].occupyingPiece
-        testChessBoard.value!!.boardMatrix[oldRow][oldColumn ].occupyingPiece = null
+        val occPiece = testChessBoard.boardMatrix[newRow][newColumn].occupyingPiece
+        if(occPiece != null){
 
-        //Move piece to new position on test board
-        testChessBoard.value!!.boardMatrix[newRow][newColumn].occupyingPiece = tempPiece
+            if(occPiece.color == PieceColor.White){
+                testChessBoard.whitePieces.remove(occPiece)
+            }else{
+                testChessBoard.blackPieces.remove(occPiece)
+            }
 
-        findPiecesThatCheck(testChessBoard.value!!, enemyColor)
-
-        if(enemyPiecesCheckingPlayerInTurn.value.isNotEmpty()){
-            return true
+            capture = true
         }
 
+        //Nullify the occupying piece after saving it temporarily
+        val tempPiece = testChessBoard.boardMatrix[oldRow][oldColumn].occupyingPiece
+        testChessBoard.boardMatrix[oldRow][oldColumn ].occupyingPiece = null
 
-        return false
+        //Move piece to new position on test board
+        testChessBoard.boardMatrix[newRow][newColumn].occupyingPiece = tempPiece
+
+        //There is a piece that must be placed back on the board
+        if(revertedPiece != null){
+            val row = revertedPiece.position.row
+            val column = revertedPiece.position.column
+
+            testChessBoard.boardMatrix[row][column].occupyingPiece = revertedPiece
+
+            if(revertedPiece.color == PieceColor.White){
+                testChessBoard.whitePieces.add(revertedPiece)
+            }else{
+                testChessBoard.blackPieces.add(revertedPiece)
+            }
+        }
+
+        return capture
     }
+
+    private fun replaceChessBoard(){
+
+        //Also change the list of remaining pieces for each player to the newly cloned ones
+        if(playerInTurn.value!!.color == PieceColor.White){
+
+            playerInTurn.value!!.remainingPieces = testChessBoard.value!!.whitePieces
+            getEnemyPlayer().remainingPieces = testChessBoard.value!!.blackPieces
+        }else{
+
+            playerInTurn.value!!.remainingPieces = testChessBoard.value!!.blackPieces
+            getEnemyPlayer().remainingPieces = testChessBoard.value!!.whitePieces
+        }
+
+        chessBoard.value = testChessBoard.value
+        testChessBoard.value = null
+    }
+
 
     fun movePiece(newPosition : PiecePosition){
 
         // Step 1: Check whether move is legal
-        if(!selectedChessPiece.value!!.isPieceMoveLegal(chessBoard.value!!,newPosition, enPassantEdiblePiece.value)){
+        if(!selectedChessPiece.value!!.isPieceMoveLegal(chessBoard.value!!,newPosition, chessBoard.value!!.enPassantEdiblePiece)){
 
             //Move is invalid, so we play the invalid sound effect
             playSoundEffect(invalidMoveSound)
             return
         }
 
+        var tempPiecesAbleToSavePlayer :MutableList<ChessPiece> = mutableListOf()
+        var tempEnemyPiecesCheckingPlayer: MutableList<ChessPiece> = mutableListOf()
+
         // Step 2: Check whether the selected piece is part of the list of pieces that can save the king (in case there's a check)
         if(playerInTurn.value!!.underCheck){
 
             //Piece can't be moved because it won't save the king from the check
-            if(!piecesAbleToSavePlayerInTurn.value.any { it == selectedChessPiece.value}){
+            if(!piecesAbleToSavePlayer.value.any { it == selectedChessPiece.value}){
                 playSoundEffect(invalidMoveSound)
                 return
+            }else{
+                //Piece could potentially save king from check
+                if(selectedChessPiece.value!!.listOfPositionsThatCanSaveKing.contains(newPosition)){
+
+                    //This move can save the king from the check, so now we can clear all lists
+                    //containing the pieces that are checking the playerInTurn's king and
+                    //so on
+
+                    //Temporarily save these lists in case we can't get past step 3
+                    tempEnemyPiecesCheckingPlayer = enemyPiecesCheckingPlayer.value
+                    tempPiecesAbleToSavePlayer = piecesAbleToSavePlayer.value
+
+                    piecesAbleToSavePlayer.value = mutableListOf()
+                    enemyPiecesCheckingPlayer.value = mutableListOf()
+
+
+
+                }else{
+                    //Piece could potentially save the king but the user didn't choose the right move
+                    playSoundEffect(invalidMoveSound)
+                    return
+                }
             }
         }
 
-        // Step 3: Check whether moving the selected piece will cause a check for the king
-        if(simulateMoveCausingCheck(selectedChessPiece.value!!,newPosition,getEnemyPlayer().color)){
+        // Step 3: Check whether moving the selected piece will cause a new check for the king
 
-            enemyPiecesCheckingPlayerInTurn.value.clear()
+        //First create a clone of the current chessboard
+        testChessBoard.value = chessBoard.value!!.deepClone()
+
+        //Secondly simulate the move
+        val capture= simulateMove(testChessBoard.value!!,selectedChessPiece.value!!.position,newPosition)
+
+        //Then look for enemy pieces that might check king of the playerInTurn
+        if(findPiecesThatCheck(testChessBoard.value!!, getEnemyPlayer().color, enemyPiecesCheckingPlayer.value)){
+
+
+            enemyPiecesCheckingPlayer.value = tempEnemyPiecesCheckingPlayer
+            piecesAbleToSavePlayer.value = tempPiecesAbleToSavePlayer
+
             playSoundEffect(invalidMoveSound)
             return
         }
 
+
+        //Clear all lists of positions that can save the kings of these pieces, as we're going to update them in the next step
+        for(piece in testChessBoard.value!!.whitePieces){
+            piece.listOfPositionsThatCanSaveKing.clear()
+        }
+
+
+        for(piece in testChessBoard.value!!.blackPieces){
+            piece.listOfPositionsThatCanSaveKing.clear()
+        }
+
+        //By this point, the move has been validated and saved on the test chessboard, now we have to find out what are the side effects
+
         //Step 4: Check whether moving the selected piece will cause a check for the enemy king
-        if(simulateMoveCausingCheck(selectedChessPiece.value!!,newPosition,playerInTurn.value!!.color)){
+        if(findPiecesThatCheck(testChessBoard.value!!,playerInTurn.value!!.color, enemyPiecesCheckingPlayer.value)){
 
+            getEnemyPlayer().underCheck = true
 
+            //Step 5: Check if the enemy player can escape from the check we're causing
+            if(!canEscapeCheck(testChessBoard.value!!,getEnemyPlayer().color )){
 
+                //Checkmate detected
+                reasonForWinning.value = R.string.checkmate_reason_for_winning
+                endGame(winningPlayer= playerInTurn.value!!)
+            }
 
-            //Step 5: Check if the enemy player can escape from the check we're causing (in case there exists one)
+        }else if(detectStalemate(testChessBoard.value!!, getEnemyPlayer().color)){
 
+            //Detect stalemate when the enemy player can't move any of their pieces anymore
+            reasonForWinning.value = R.string.stalemate_reason_for_winning
+            endGame(null)
 
         }
 
 
+        //The testChessBoard will become the newly displayed chessboard after all checks are done
+        replaceChessBoard()
+
+
+        //Play sound according to capture var (slide if capture is false)
+        if(capture){
+            playSoundEffect(pieceCaptureSound)
+        }else{
+            playSoundEffect(pieceSlideSound)
+        }
 
         //TODO Save the move to the history object after validating it
 
