@@ -55,6 +55,15 @@ sealed class GameMode(
     )
 }
 
+sealed class GameEnding(
+    val reasonForGameEnding: Int,
+){
+    data object OutOfTime: GameEnding(R.string.out_of_time_reason_for_winning)
+    data object Stalemate: GameEnding(R.string.stalemate_reason_for_winning)
+
+    data object Checkmate: GameEnding(R.string.checkmate_reason_for_winning)
+}
+
 val offlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet, GameMode.Edit)
 val onlineListOfGameModes = listOf(GameMode.Classic, GameMode.Rapid, GameMode.Blitz, GameMode.Bullet)
 
@@ -99,10 +108,11 @@ fun generateBoard(whitePieces : List<ChessPiece> = startingWhitePieces, blackPie
 
 
 class ChessBoard(
+    val id: Int = 0,
     val whitePieces: MutableList<ChessPiece> = deepCloneListOfPieces(startingWhitePieces),
     val blackPieces: MutableList<ChessPiece> = deepCloneListOfPieces(startingBlackPieces),
     val boardMatrix: Array<Array<BoardCell>> = generateBoard(whitePieces, blackPieces),
-    val enPassantEdiblePiece: Pawn? = null
+    var enPassantEdiblePiece: Pawn? = null
 ){
     //Creates a deep clone of this chessboard, this is necessary for simulating moves
     fun deepClone(): ChessBoard{
@@ -117,7 +127,7 @@ class ChessBoard(
         val clonedEnPassantEdiblePiece : Pawn? = if(enPassantEdiblePiece == null){
             null
         }else{
-            if(enPassantEdiblePiece.color == PieceColor.White){
+            if(enPassantEdiblePiece?.color == PieceColor.White){
 
                 clonedWhitePieces.find{ it is Pawn && !it.firstMove } as? Pawn?
 
@@ -126,7 +136,7 @@ class ChessBoard(
             }
         }
 
-        return ChessBoard(boardMatrix= clonedBoardMatrix, whitePieces=clonedWhitePieces, blackPieces=clonedBlackPieces, enPassantEdiblePiece = clonedEnPassantEdiblePiece)
+        return ChessBoard(id= id+1,boardMatrix= clonedBoardMatrix, whitePieces=clonedWhitePieces, blackPieces=clonedBlackPieces, enPassantEdiblePiece = clonedEnPassantEdiblePiece)
     }
 
     fun getKing(pieceColor: PieceColor) : King{

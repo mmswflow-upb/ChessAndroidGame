@@ -12,7 +12,9 @@ enum class PieceColor{
 //row and column must range from 0 to 7
 class PiecePosition(val row: Int, val column: Int){
 
+
     fun getColumnLetter(): String{
+
        return('a' + column).toString()
     }
 
@@ -31,6 +33,9 @@ class PiecePosition(val row: Int, val column: Int){
         return 31* row + column
     }
 
+    override fun toString() : String {
+        return "($row, ${getColumnLetter()})"
+    }
 }
 
 
@@ -45,7 +50,7 @@ abstract class ChessPiece(
 
     abstract fun isPieceMoveLegal(chessBoard: ChessBoard, newPosition: PiecePosition, enPassantEdiblePiece: Pawn?): Boolean
     //Return all possible moves (even the ones in which in the new position there's a piece of the same color)
-    abstract fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?): List<PiecePosition>
+    abstract fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?, underCheck: Boolean = false): List<PiecePosition>
     //Return all legal moves in which we exclude the positions in which the occupying pieces are of the same color
     abstract fun getAllLegalNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?): List<PiecePosition>
 
@@ -55,6 +60,7 @@ abstract class ChessPiece(
     //Returns a deep clone of the chess piece object
     abstract fun deepClone(): ChessPiece
 
+    abstract override fun toString(): String
 }
 
 fun deepCloneListOfPositions(listOfPositions: List<PiecePosition>) : MutableList<PiecePosition>{

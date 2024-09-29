@@ -20,23 +20,29 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import mmswflow.chessandroidgame.chess_game_classes.ChessPiece
 import mmswflow.chessandroidgame.chess_game_classes.BoardCell
-import mmswflow.chessandroidgame.chess_game_classes.King
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
 import mmswflow.chessandroidgame.ui.theme.Black
+import mmswflow.chessandroidgame.ui.theme.BrightRed
 import mmswflow.chessandroidgame.ui.theme.LightGreen
 import mmswflow.chessandroidgame.ui.theme.LightRed
+import mmswflow.chessandroidgame.ui.theme.WarningOrange
 import mmswflow.chessandroidgame.ui_components.UISizingValue.*
 @Composable
 fun ChessBoardCell(
     cell: BoardCell,
     zAngle: Float,
     selectedChessPiece: MutableState<ChessPiece?>,
-    paddingMod: Modifier,
+    iconPaddingMod: Modifier,
     playingColor: PieceColor,
     isVisibleToSelectedPiece: Boolean,
     onPieceMove: (PiecePosition) -> Unit,
-    gameActive: Boolean = true
+    gameActive: Boolean = true,
+    isCheckingPiece: Boolean,
+    isSavingPiece: Boolean,
+    kingUnderCheck: Boolean,
+    isCheckMate: Boolean,
+    isNormalCheck: Boolean
 ){
     val chessPiece = cell.occupyingPiece
 
@@ -49,6 +55,10 @@ fun ChessBoardCell(
                 }else if(isVisibleToSelectedPiece && it != null && it.color != selectedChessPiece.value?.color){
                     BorderStroke(color= LightRed, width= SelectableBoardCellBorderStrokeWidth.value.dp)
 
+                }else if(kingUnderCheck && isNormalCheck && !isCheckMate) {
+                    BorderStroke(color= WarningOrange,width= SelectableBoardCellBorderStrokeWidth.value.dp)
+                }else if(kingUnderCheck && isNormalCheck){
+                    BorderStroke(color= BrightRed,width= SelectableBoardCellBorderStrokeWidth.value.dp)
                 }else{
                     BorderStroke(width=0.dp,Black)
 
@@ -93,24 +103,34 @@ fun ChessBoardCell(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier= Modifier.fillMaxSize()
             ) {
-                ChessPieceIconButton(
+                ChessPieceIcon(
                     chessPiece = cell.occupyingPiece!!,
                     zAngle= zAngle,
                     selectedChessPiece= selectedChessPiece,
-                    paddingMod= paddingMod,
+                    paddingMod= iconPaddingMod,
+                    passedTint= if(isCheckingPiece && isNormalCheck && !isCheckMate) WarningOrange
+                    else if(isCheckMate && isCheckingPiece && isNormalCheck) BrightRed
+                    else if(isSavingPiece && isNormalCheck) LightGreen
+                    else null
                 )
             }
         }
 
         //When a player selects a piece, their paths should become visible, so we display green circles
         if(isVisibleToSelectedPiece && cell.occupyingPiece == null && gameActive){
-            Canvas(modifier = Modifier.fillMaxSize()){
-                drawCircle(
-                    color= LightGreen,
-                    radius= size.width /6f,
-                    center= Offset(x= size.width/2f, y= size.height/2f)
-                )
+            //If there's a check, we can only display the positions that would save the king for the selected piece
+            //and that happens only if our selected piece is part of the ones that can actually save the king
+            if((isNormalCheck && isSavingPiece && selectedChessPiece.value!!.listOfPositionsThatCanSaveKing.contains(cell.position)) || !isNormalCheck){
+
+                Canvas(modifier = Modifier.fillMaxSize()){
+                    drawCircle(
+                        color= LightGreen,
+                        radius= size.width /6f,
+                        center= Offset(x= size.width/2f, y= size.height/2f)
+                    )
+                }
             }
+
         }
     }
 

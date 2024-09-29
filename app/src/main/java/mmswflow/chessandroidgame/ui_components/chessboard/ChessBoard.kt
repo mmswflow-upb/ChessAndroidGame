@@ -6,7 +6,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import mmswflow.chessandroidgame.ChessGameViewModel
+import mmswflow.chessandroidgame.chess_game_classes.GameEnding
 import mmswflow.chessandroidgame.chess_game_classes.PieceColor
 import mmswflow.chessandroidgame.chess_game_classes.PiecePosition
 
@@ -25,7 +28,7 @@ fun ChessBoard(
 
         val chessPieceIconPaddingMod= if(zAngle==0f) Modifier.padding(top=4.dp) else Modifier.padding(bottom=4.dp)
 
-        val onPieceMove : (PiecePosition) -> Unit = {newPosition -> gameViewModel.movePiece(newPosition)}
+        val onPieceMove : (PiecePosition) -> Unit = {newPosition -> gameViewModel.viewModelScope.launch {  gameViewModel.movePiece(newPosition) } }
 
         LazyVerticalGrid(
             modifier= modifier,
@@ -62,16 +65,29 @@ fun ChessBoard(
                             it?.protectsPosition(chessBoard = gameViewModel.chessBoard.value!! ,cell.position)
                         } ?: false
 
+                        val isCheckingPiece = cell.occupyingPiece != null && gameViewModel.enemyPiecesCheckingPlayer.value.any { cell.occupyingPiece == it}
+                        val isSavingPiece = cell.occupyingPiece != null && gameViewModel.piecesAbleToSavePlayer.value.any { cell.occupyingPiece == it }
+                        val kingUnderCheck = (cell.occupyingPiece != null && cell.occupyingPiece == gameViewModel.chessBoard.value!!.getKing(cell.occupyingPiece!!.color)
+                                && gameViewModel.getPlayerFromColor(cell.occupyingPiece!!.color).underCheck)
+
+                        val isCheckMate = gameViewModel.gameEnding.value == GameEnding.Checkmate
+                        val isNormalCheck = gameViewModel.player1.value!!.underCheck || gameViewModel.player2.value!!.underCheck
+
                         item{
                             ChessBoardCell(
                                 cell= cell,
                                 zAngle= zAngle,
                                 selectedChessPiece= gameViewModel.selectedChessPiece,
-                                paddingMod= chessPieceIconPaddingMod,
+                                iconPaddingMod= chessPieceIconPaddingMod,
                                 playingColor= playerInTurn!!.color,
                                 isVisibleToSelectedPiece = isVisibleToSelectedPiece,
                                 onPieceMove = onPieceMove,
-                                gameActive= !gameViewModel.gameEnded.value
+                                gameActive= !gameViewModel.gameEnded.value,
+                                isCheckingPiece = isCheckingPiece,
+                                isSavingPiece = isSavingPiece,
+                                kingUnderCheck = kingUnderCheck,
+                                isCheckMate= isCheckMate,
+                                isNormalCheck= isNormalCheck
                             )
                         }
                     }
@@ -120,16 +136,29 @@ fun ChessBoard(
                             it?.protectsPosition(chessBoard = gameViewModel.chessBoard.value!! ,cell.position)
                         } ?: false
 
+                        val isCheckingPiece = cell.occupyingPiece != null && gameViewModel.enemyPiecesCheckingPlayer.value.any { cell.occupyingPiece == it}
+                        val isSavingPiece = cell.occupyingPiece != null && gameViewModel.piecesAbleToSavePlayer.value.any { cell.occupyingPiece == it }
+                        val kingUnderCheck = (cell.occupyingPiece != null && cell.occupyingPiece == gameViewModel.chessBoard.value!!.getKing(cell.occupyingPiece!!.color)
+                                && gameViewModel.getPlayerFromColor(cell.occupyingPiece!!.color).underCheck)
+
+                        val isCheckMate = gameViewModel.gameEnding.value == GameEnding.Checkmate
+                        val isNormalCheck = gameViewModel.player1.value!!.underCheck || gameViewModel.player2.value!!.underCheck
+
                         item{
                             ChessBoardCell(
                                 cell= cell,
                                 zAngle= zAngle,
                                 selectedChessPiece= gameViewModel.selectedChessPiece,
-                                paddingMod= chessPieceIconPaddingMod,
+                                iconPaddingMod= chessPieceIconPaddingMod,
                                 playingColor= playerInTurn!!.color,
                                 isVisibleToSelectedPiece= isVisibleToSelectedPiece,
                                 onPieceMove = onPieceMove,
-                                gameActive= !gameViewModel.gameEnded.value
+                                gameActive= !gameViewModel.gameEnded.value,
+                                isCheckingPiece = isCheckingPiece,
+                                isSavingPiece = isSavingPiece,
+                                kingUnderCheck = kingUnderCheck,
+                                isCheckMate= isCheckMate,
+                                isNormalCheck= isNormalCheck
                             )
                         }
                     }

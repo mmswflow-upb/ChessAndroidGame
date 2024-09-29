@@ -10,7 +10,8 @@ class Queen(
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): List<PiecePosition>{
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
@@ -176,5 +177,9 @@ class Queen(
     override fun deepClone(): ChessPiece {
 
         return Queen(qColor, PiecePosition(qPosition.row,qPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+    }
+
+    override fun toString() : String {
+        return "${color.name} Queen at $position"
     }
 }

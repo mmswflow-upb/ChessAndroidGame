@@ -11,7 +11,8 @@ class Rook(
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): List<PiecePosition>{
 
         val newPossiblePositions = mutableListOf<PiecePosition>()
@@ -97,5 +98,9 @@ class Rook(
     override fun deepClone(): ChessPiece {
 
         return Rook(rColor, PiecePosition(rPosition.row,rPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+    }
+
+    override fun toString() : String {
+        return "${color.name} Rook at $position, first move: $firstMove"
     }
 }

@@ -1,6 +1,5 @@
 package mmswflow.chessandroidgame.screens
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.chess_game_classes.ChessBoard
@@ -76,13 +77,20 @@ fun GameModeSelectionScreen(
                                  },
                     description = currentGameMode.description,
                     actionOnSelection = {
+
+                            gameViewModel.viewModelScope.launch {
+
                                 gameViewModel.gameMode.value = currentGameMode
+
+                                //When game mode is edit mode, we won't set the starting board to the standard one
                                 if(gameViewModel.gameMode.value != GameMode.Edit){
                                     gameViewModel.chessBoard.value = ChessBoard()
+                                    gameViewModel.setPlayers()
+                                    navHost.navigate(Screen.Game.route)
                                 }
 
-                                gameViewModel.setPlayers()
-                                navHost.navigate(Screen.Game.route)
+                            }
+
                             },
                     modifier = Modifier,
                     minHeight = CarouselSelectableCardHeight.value,

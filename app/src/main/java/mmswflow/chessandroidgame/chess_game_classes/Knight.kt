@@ -11,7 +11,8 @@ class Knight(
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): List<PiecePosition> {
 
         val newPossiblePositions = mutableListOf<PiecePosition>(
@@ -67,5 +68,9 @@ class Knight(
     override fun deepClone(): ChessPiece {
 
         return Knight(kColor, PiecePosition(kPosition.row,kPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+    }
+
+    override fun toString() : String {
+        return "${color.name} Knight at $position"
     }
 }

@@ -11,7 +11,8 @@ class King(
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck : Boolean
     ): List<PiecePosition> {
         val newPossiblePositions: MutableList<PiecePosition> = mutableListOf<PiecePosition>(
             PiecePosition(this.position.row+1,this.position.column+1),
@@ -29,11 +30,11 @@ class King(
 
         //Castling condition, if the king didn't move before castling MIGHT be allowed
 
-        if(this.firstMove){
+        if(this.firstMove && !underCheck){
 
             //The rooks might have moved from their starting positions
-            val closeRook = chessBoard.boardMatrix.get(this.position.row).get(this.position.column+3).occupyingPiece
-            val farRook = chessBoard.boardMatrix.get(this.position.row).get(this.position.column-4).occupyingPiece
+            val closeRook = chessBoard.boardMatrix[this.position.row][this.position.column+3].occupyingPiece
+            val farRook = chessBoard.boardMatrix[this.position.row][this.position.column-4].occupyingPiece
 
             if(closeRook != null){
 
@@ -136,5 +137,9 @@ class King(
     override fun deepClone(): ChessPiece {
 
         return King(kgColor, PiecePosition(kgPosition.row,kgPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+    }
+
+    override fun toString() : String {
+        return "${color.name} King at $position, first move: $firstMove"
     }
 }

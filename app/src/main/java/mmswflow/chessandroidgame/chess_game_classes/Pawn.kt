@@ -11,7 +11,7 @@ class Pawn(
     val pListOfPositionsThatCanSaveKing :MutableList<PiecePosition> = mutableListOf()
 ): ChessPiece(pColor,R.drawable.pawn , pPosition, pListOfPositionsThatCanSaveKing){
 
-    override fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn? ): List<PiecePosition>{
+    override fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?, underCheck: Boolean ): List<PiecePosition>{
 
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
@@ -233,5 +233,9 @@ class Pawn(
     override fun deepClone(): ChessPiece {
 
         return Pawn(pColor, PiecePosition(pPosition.row,pPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+    }
+
+    override fun toString() : String {
+        return "${color.name} Pawn at $position , first move: $firstMove"
     }
 }

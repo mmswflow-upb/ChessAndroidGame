@@ -10,7 +10,8 @@ class Bishop(
 
     override fun getAllPossibleNewPositions(
         chessBoard: ChessBoard,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): List<PiecePosition>{
 
         val newPossiblePositions = mutableListOf<PiecePosition>()
@@ -134,5 +135,9 @@ class Bishop(
     override fun deepClone(): ChessPiece {
 
         return Bishop(bColor, PiecePosition(bPosition.row,bPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+    }
+
+    override fun toString() : String {
+        return "${color.name} Bishop at $position"
     }
 }

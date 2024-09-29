@@ -47,7 +47,7 @@ fun GameEndDialog(
 
     var colorsLists : List<List<Color>>
     var textsLists : List<List<String>>
-    var reasonForWinning = ""
+    var reasonForGameEnding = ""
     Dialog(
 
         onDismissRequest = {gameViewModel.displayGameEndedDialog.value = false}
@@ -80,7 +80,7 @@ fun GameEndDialog(
                         //Player 1 won
                         textsLists = listOf(listOf(player1.name + " ", "+1"),listOf(player2.name + " ", "-1"))
                         colorsLists = listOf(listOf(White, LightGreen),listOf(White, BrightRed))
-                        reasonForWinning = "${player2.name} ${stringResource(id = gameViewModel.reasonForWinning.value)}" 
+                        reasonForGameEnding = "${player2.name} ${stringResource(id = gameViewModel.gameEnding.value.reasonForGameEnding)}"
                     }
 
                     player2 -> {
@@ -88,7 +88,7 @@ fun GameEndDialog(
                         //Player 2 won
                         textsLists = listOf(listOf(player1.name + " ", "-1"),listOf(player2.name + " ", "+1"))
                         colorsLists = listOf(listOf(White, BrightRed),listOf(White, LightGreen))
-                        reasonForWinning = "${player1.name} ${stringResource(id = gameViewModel.reasonForWinning.value)}"
+                        reasonForGameEnding = "${player1.name} ${stringResource(id = gameViewModel.gameEnding.value.reasonForGameEnding)}"
                     }
                     else -> {
 
@@ -105,8 +105,8 @@ fun GameEndDialog(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         LargeInfoText(text = "${winner!!.name} " + stringResource(id =  R.string.game_ending_dialog))
-                        if(reasonForWinning.isNotEmpty()) {
-                            SmallInfoText(text = reasonForWinning)
+                        if(reasonForGameEnding.isNotEmpty()) {
+                            SmallInfoText(text = reasonForGameEnding)
                         }
                     }
                 }

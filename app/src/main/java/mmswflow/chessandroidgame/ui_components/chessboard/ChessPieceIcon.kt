@@ -17,24 +17,33 @@ import mmswflow.chessandroidgame.ui.theme.White
 import mmswflow.chessandroidgame.ui_components.UISizingValue
 
 @Composable
-fun ChessPieceIconButton(
+fun ChessPieceIcon(
         chessPiece: ChessPiece,
         zAngle: Float,
         selectedChessPiece: MutableState<ChessPiece?>,
         paddingMod: Modifier,
+        passedTint : Color? = null
     ){
 
-    val tint: Color = if(selectedChessPiece.value != null && chessPiece == selectedChessPiece.value){
+    //Sometimes there's colors that have bigger priority (passed tints)
+    val tint : Color
 
-        LightBlue
-    }else{
+    if(passedTint == null){
+        tint = if(selectedChessPiece.value != null && chessPiece == selectedChessPiece.value){
 
-        if(chessPiece.color == PieceColor.White){
-            White
+            LightBlue
         }else{
-            Black
+
+            if(chessPiece.color == PieceColor.White){
+                White
+            }else{
+                Black
+            }
         }
+    }else{
+        tint = passedTint
     }
+
 
 
     Icon(
