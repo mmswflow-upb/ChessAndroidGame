@@ -48,13 +48,13 @@ abstract class ChessPiece(
 
     //This checks whether the move would be legal excluding the check/checkmate condition
 
-    abstract fun isPieceMoveLegal(chessBoard: ChessBoard, newPosition: PiecePosition, enPassantEdiblePiece: Pawn?): Boolean
+    abstract fun isPieceMoveLegal(chessBoard: ChessBoard, newPosition: PiecePosition, enPassantEdiblePiece: Pawn?,underCheck: Boolean= false ): Boolean
     //Return all possible moves (even the ones in which in the new position there's a piece of the same color)
-    abstract fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?, underCheck: Boolean = false): List<PiecePosition>
+    abstract fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?, underCheck: Boolean= false): List<PiecePosition>
     //Return all legal moves in which we exclude the positions in which the occupying pieces are of the same color
-    abstract fun getAllLegalNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?): List<PiecePosition>
+    abstract fun getAllLegalNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?, underCheck: Boolean= false): List<PiecePosition>
 
-    //Returns whether an enemy piece is protected by another enemy piece
+    //Returns whether a piece is protected by another piece
     abstract fun protectsPosition(chessBoard: ChessBoard, protectedPiecePosition: PiecePosition): Boolean
 
     //Returns a deep clone of the chess piece object

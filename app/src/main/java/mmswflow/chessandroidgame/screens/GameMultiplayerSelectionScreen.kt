@@ -14,13 +14,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import mmswflow.chessandroidgame.ChessGameViewModel
 import mmswflow.chessandroidgame.R
 import mmswflow.chessandroidgame.chess_game_classes.GameMode
+import mmswflow.chessandroidgame.ui_components.UISizingValue
 import mmswflow.chessandroidgame.ui_components.screens_utils.ScreenTopBar
 import mmswflow.chessandroidgame.ui_components.selectable_options.SelectableCard
 import mmswflow.chessandroidgame.ui_components.selectable_options.SelectionIconIdentifier
+import mmswflow.chessandroidgame.ui_components.texts.ScreenTitleText
 
 @Composable
 fun GameMultiplayerSelectionScreen(
@@ -62,7 +66,11 @@ fun GameMultiplayerSelectionScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         SelectableCard(
-                            identifier = { SelectionIconIdentifier(icon = R.drawable.offline, tint= MaterialTheme.colorScheme.error) },
+                            identifier = {
+                                SelectionIconIdentifier(icon = R.drawable.offline, tint= MaterialTheme.colorScheme.error)
+                                ScreenTitleText(text = stringResource(id = R.string.offline_selectable_card_title), modifier= Modifier.padding(bottom= UISizingValue.ScreenTitleTextBottomPadding.value.dp))
+
+                                         },
                             description = R.string.offline_mode_description,
                             actionOnSelection = {
                                 gameViewModel.onlineMode.value = false
@@ -76,7 +84,11 @@ fun GameMultiplayerSelectionScreen(
                         )
 
                         SelectableCard(
-                            identifier = { SelectionIconIdentifier(icon = R.drawable.online, tint= MaterialTheme.colorScheme.onPrimary) },
+                            identifier = {
+                                SelectionIconIdentifier(icon = R.drawable.online, tint= MaterialTheme.colorScheme.onPrimary)
+                                ScreenTitleText(text = stringResource(id = R.string.online_selectable_card_title), modifier= Modifier.padding(bottom= UISizingValue.ScreenTitleTextBottomPadding.value.dp))
+
+                                         },
                             description = R.string.online_mode_description,
                             actionOnSelection = {
                                 gameViewModel.onlineMode.value = true

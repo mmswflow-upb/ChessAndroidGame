@@ -76,14 +76,15 @@ class King(
 
     override fun getAllLegalNewPositions(
         chessBoard: ChessBoard,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): List<PiecePosition> {
 
 
         //Filter out the positions that are occupied by pieces of the same color
         //then filter out the positions which are protected by any of the other enemy pieces
 
-        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
+        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece, underCheck).filter {
             val currentPiece = chessBoard.boardMatrix.get(it.row).get(it.column).occupyingPiece
 
             if(currentPiece != null){
@@ -121,17 +122,18 @@ class King(
     override fun isPieceMoveLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece, underCheck).contains(newPosition)
     }
 
     override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
+        return getAllPossibleNewPositions(chessBoard, null, false).contains(protectedPiecePosition)
     }
 
     override fun deepClone(): ChessPiece {

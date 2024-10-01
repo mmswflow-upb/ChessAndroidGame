@@ -65,8 +65,8 @@ fun ChessBoard(
                             it?.protectsPosition(chessBoard = gameViewModel.chessBoard.value!! ,cell.position)
                         } ?: false
 
-                        val isCheckingPiece = cell.occupyingPiece != null && gameViewModel.enemyPiecesCheckingPlayer.value.any { cell.occupyingPiece == it}
-                        val isSavingPiece = cell.occupyingPiece != null && gameViewModel.piecesAbleToSavePlayer.value.any { cell.occupyingPiece == it }
+                        val isCheckingPiece = cell.occupyingPiece != null && gameViewModel.enemyPiecesCheckingPlayer.any { cell.occupyingPiece == it}
+                        val isSavingPiece = cell.occupyingPiece != null && gameViewModel.piecesAbleToSavePlayer.any { cell.occupyingPiece == it }
                         val kingUnderCheck = (cell.occupyingPiece != null && cell.occupyingPiece == gameViewModel.chessBoard.value!!.getKing(cell.occupyingPiece!!.color)
                                 && gameViewModel.getPlayerFromColor(cell.occupyingPiece!!.color).underCheck)
 
@@ -136,8 +136,8 @@ fun ChessBoard(
                             it?.protectsPosition(chessBoard = gameViewModel.chessBoard.value!! ,cell.position)
                         } ?: false
 
-                        val isCheckingPiece = cell.occupyingPiece != null && gameViewModel.enemyPiecesCheckingPlayer.value.any { cell.occupyingPiece == it}
-                        val isSavingPiece = cell.occupyingPiece != null && gameViewModel.piecesAbleToSavePlayer.value.any { cell.occupyingPiece == it }
+                        val isCheckingPiece = cell.occupyingPiece != null && gameViewModel.enemyPiecesCheckingPlayer.any { cell.occupyingPiece == it}
+                        val isSavingPiece = cell.occupyingPiece != null && gameViewModel.piecesAbleToSavePlayer.any { cell.occupyingPiece == it }
                         val kingUnderCheck = (cell.occupyingPiece != null && cell.occupyingPiece == gameViewModel.chessBoard.value!!.getKing(cell.occupyingPiece!!.color)
                                 && gameViewModel.getPlayerFromColor(cell.occupyingPiece!!.color).underCheck)
 

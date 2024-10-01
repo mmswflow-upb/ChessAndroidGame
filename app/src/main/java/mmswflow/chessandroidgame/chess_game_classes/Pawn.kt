@@ -11,7 +11,11 @@ class Pawn(
     val pListOfPositionsThatCanSaveKing :MutableList<PiecePosition> = mutableListOf()
 ): ChessPiece(pColor,R.drawable.pawn , pPosition, pListOfPositionsThatCanSaveKing){
 
-    override fun getAllPossibleNewPositions(chessBoard: ChessBoard, enPassantEdiblePiece: Pawn?, underCheck: Boolean ): List<PiecePosition>{
+    override fun getAllPossibleNewPositions(
+        chessBoard: ChessBoard,
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
+    ): List<PiecePosition>{
 
         val newPossiblePositions = mutableListOf<PiecePosition>()
 
@@ -198,11 +202,12 @@ class Pawn(
 
     override fun getAllLegalNewPositions(
         chessBoard: ChessBoard,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): List<PiecePosition> {
 
 
-        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece).filter {
+        return getAllPossibleNewPositions(chessBoard, enPassantEdiblePiece, underCheck).filter {
             val currentPiece = chessBoard.boardMatrix[it.row][it.column].occupyingPiece
 
             if(currentPiece != null){
@@ -217,17 +222,18 @@ class Pawn(
     override fun isPieceMoveLegal(
         chessBoard: ChessBoard,
         newPosition: PiecePosition,
-        enPassantEdiblePiece: Pawn?
+        enPassantEdiblePiece: Pawn?,
+        underCheck: Boolean
     ): Boolean {
 
-        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece).contains(newPosition)
+        return getAllLegalNewPositions(chessBoard, enPassantEdiblePiece, underCheck).contains(newPosition)
     }
 
     override fun protectsPosition(
         chessBoard: ChessBoard,
         protectedPiecePosition: PiecePosition
     ): Boolean {
-        return getAllPossibleNewPositions(chessBoard, null).contains(protectedPiecePosition)
+        return getAllPossibleNewPositions(chessBoard, null, false).contains(protectedPiecePosition)
     }
 
     override fun deepClone(): ChessPiece {
