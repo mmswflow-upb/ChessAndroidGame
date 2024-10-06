@@ -328,43 +328,43 @@ class ChessGameViewModel: ViewModel(){
     //then the enemy player will be able to move when their turn comes, otherwise checkmate will be established
     //and the current player in turn will win
     //Returns true for possibility of escaping a check, false for checkmate
-    private fun detectCheckmate(testChessBoard: ChessBoard, enemyColor: PieceColor): Boolean{
+    private fun detectCheckmateOnColor(testChessBoard: ChessBoard, checkedColor: PieceColor): Boolean{
 
-        Log.d("DETECTING CHECKMATE TEST", "\n\ndetectCheckmate was called, the one who's checking is: ${enemyColor.name}")
+        Log.d("DETECTING CHECKMATE TEST", "\n\ndetectCheckmate was called, the one who's getting checked is: ${checkedColor.name}")
 
         //Loop through all pieces of enemy, and loop through all their possible positions,
         //and check in each case whether the check on their king can be stopped
-        //for each move we find, we add it the piece's list of positions that can save the king
+        //for each move we find, we add it to the piece's list of positions that can save the king
         //and we add that piece to the list of pieces that can save the enemy player
 
 
-        //get a list of the enemy's pieces
-        val enemyPieces = if(enemyColor == PieceColor.White){
+        //get a list of the pieces of the checked king's color
+        val checkedColorPieces = if(checkedColor == PieceColor.White){
             testChessBoard.whitePieces
         }else{
             testChessBoard.blackPieces
         }
 
-        Log.d("DETECTING CHECKMATE TEST", "Enemy Color: ${enemyColor.name} \n\n")
+        Log.d("DETECTING CHECKMATE TEST", "Color: ${checkedColor.name} \n\n")
 
         //loop through enemy's pieces
-        for(enemyPiece in enemyPieces){
+        for(checkedColorPiece in checkedColorPieces){
 
-            val movedBefore = if(enemyPiece is Pawn){
-                enemyPiece.firstMove
-            }else if(enemyPiece is King){
-                enemyPiece.firstMove
-            }else if(enemyPiece is Rook){
-                enemyPiece.firstMove
+            val movedBefore = if(checkedColorPiece is Pawn){
+                checkedColorPiece.firstMove
+            }else if(checkedColorPiece is King){
+                checkedColorPiece.firstMove
+            }else if(checkedColorPiece is Rook){
+                checkedColorPiece.firstMove
             }else{
                 null
             }
 
             //loop through all possible positions of enemy's pieces (legal ones)
-            for(newPos in enemyPiece.getAllLegalNewPositions(testChessBoard, testChessBoard.enPassantEdiblePiece, true)){
+            for(newPos in checkedColorPiece.getAllLegalNewPositions(testChessBoard, testChessBoard.enPassantEdiblePiece, true)){
 
                 //Save original position as we're going to revert the board to what it was before
-                val originalPos = enemyPiece.position
+                val originalPos = checkedColorPiece.position
 
                 val occPieceInNewPos = testChessBoard.boardMatrix[newPos.row][newPos.column].occupyingPiece
 
@@ -373,8 +373,9 @@ class ChessGameViewModel: ViewModel(){
 
                 //Create a temporary list where we'll store the pieces of the player in turn that are still going to check the enemy after
                 //we've simulated the current movement of the current piece & Find out if the enemy player is still under check
-                if(!findPiecesThatCheck(testChessBoard, playerInTurn.value!!.color, piecesAbleToSavePlayer)){
-                    enemyPiece.listOfPositionsThatCanSaveKing.add(newPos)
+                if(!findEnemyPiecesThatCheck(testChessBoard, playerInTurn.value!!.color, piecesAbleToSavePlayer)){
+                    Log.d("FINDING PIECES THAT STOP CHECK TEST", "This enemy piece can save its king: $checkedColorPiece")
+                    checkedColorPiece.listOfPositionsThatCanSaveKing.add(newPos)
                 }
 
                 //Revert Movement (also there might have been a captured piece that we must put back)
@@ -388,15 +389,19 @@ class ChessGameViewModel: ViewModel(){
                 }
             }
 
+            if(checkedColorPiece.listOfPositionsThatCanSaveKing.isNotEmpty()){
+                Log.d("ENEMY KING UNDER CHECK TEST", "This piece can save the king: $checkedColorPiece")
+                piecesAbleToSavePlayer.add(checkedColorPiece)
+            }
 
         }
-
-        return piecesAbleToSavePlayer.isNotEmpty()
+        Log.d("ENEMY KING UNDER CHECK TEST", "Pieces of enemy player that can save their king: $piecesAbleToSavePlayer")
+        return piecesAbleToSavePlayer.isEmpty()
     }
 
     //Find who's the enemy, and loop through the pieces of the enemy to check whether they're checking our king or not
     //and add the checking pieces to the appropriate list, returns true if there are pieces checking the enemy and false otherwise
-    private fun findPiecesThatCheck(chessBoard: ChessBoard, enemyColor: PieceColor, listOfPiecesThatCheck: MutableList<ChessPiece>): Boolean{
+    private fun findEnemyPiecesThatCheck(chessBoard: ChessBoard, enemyColor: PieceColor, listOfPiecesThatCheck: MutableList<ChessPiece>): Boolean{
 
         val king : ChessPiece
         val enemyPieces: List<ChessPiece>
@@ -435,7 +440,7 @@ class ChessGameViewModel: ViewModel(){
         revertFirstMove : Boolean? = null
     ): Boolean{
 
-        Log.d("PIECE MOVEMENT TEST", "\n\nSimulating move of: ${selectedChessPiece.value.toString()} from $oldPosition to $newPosition \n\n")
+        Log.d("MOVEMENT SIMULATION TEST", "\n\nSimulating move of: ${selectedChessPiece.value.toString()} from $oldPosition to $newPosition \n\n")
 
         var capture = false
 
@@ -497,7 +502,7 @@ class ChessGameViewModel: ViewModel(){
         //There is a piece that must be placed back on the board
         if(revertedPiece != null){
 
-            Log.d("PIECE MOVEMENT TEST", "A piece has to be replaced: $revertedPiece \n\n")
+            Log.d("PIECE REVERSION TEST", "A piece has to be replaced: $revertedPiece \n\n")
             val row = revertedPiece.position.row
             val column = revertedPiece.position.column
 
@@ -538,20 +543,20 @@ class ChessGameViewModel: ViewModel(){
     fun movePiece(newPosition : PiecePosition){
 
         if(selectedChessPiece.value == null){
-            Log.d("PIECE MOVEMENT TEST", "Selected Piece was Null")
+//            Log.d("PIECE MOVEMENT TEST", "Selected Piece was Null")
             return
         }
 
         val capturedPiece = chessBoard.value!!.boardMatrix[newPosition.row][newPosition.column].occupyingPiece
         if(capturedPiece != null && capturedPiece is King){
-            Log.d("PIECE MOVEMENT TEST", "Captured piece is a king, we can't capture kings!")
+//            Log.d("PIECE MOVEMENT TEST", "Captured piece is a king, we can't capture kings!")
                return
         }
 
-        Log.d("PIECE MOVEMENT TEST", "Selected Piece: ${selectedChessPiece.value.toString()}")
-        Log.d("PIECE MOVEMENT TEST", "New Position: $newPosition")
-        Log.d("PIECE MOVEMENT TEST", "Pieces checking current king: ${enemyPiecesCheckingPlayer}")
-        Log.d("PIECE MOVEMENT TEST", "Pieces that can save the current king: ${piecesAbleToSavePlayer}")
+//        Log.d("PIECE MOVEMENT TEST", "Selected Piece: ${selectedChessPiece.value.toString()}")
+//        Log.d("PIECE MOVEMENT TEST", "New Position: $newPosition")
+        Log.d("CHECKING PIECES TEST", "Pieces checking current king: ${enemyPiecesCheckingPlayer}")
+        Log.d("CHECKING PIECES TEST", "Pieces that can save the current king: ${piecesAbleToSavePlayer}")
 
         // Step 1: Check whether move is legal
         if(!selectedChessPiece.value!!.isPieceMoveLegal(chessBoard.value!!,newPosition, chessBoard.value!!.enPassantEdiblePiece)){
@@ -562,43 +567,45 @@ class ChessGameViewModel: ViewModel(){
             playSoundEffect(invalidMoveSound)
             return
         }
-        Log.d("PIECE MOVEMENT TEST", "Piece Move is Legal")
+//        Log.d("PIECE MOVEMENT TEST", "Piece Move is Legal")
 
 
         // Step 2: Check whether the selected piece is part of the list of pieces that can save the king (in case there's a check)
         if(playerInTurn.value!!.underCheck){
 
-            Log.d("PIECE MOVEMENT TEST", "Player In Turn is Under Check")
+            Log.d("UNDER CHECK TEST", "Player In Turn is Under Check")
 
             //Piece can't be moved because it won't save the king from the check
             if(!piecesAbleToSavePlayer.any { it == selectedChessPiece.value}){
-                Log.d("PIECE MOVEMENT TEST","The selected piece is not among the ones that can save the king")
+                Log.d("UNDER CHECK TEST","The selected piece is not among the ones that can save the king")
                 playSoundEffect(invalidMoveSound)
                 return
             }else{
-                Log.d("PIECE MOVEMENT TEST", "Selected piece is among  the ones that can save the king")
+                Log.d("UNDER CHECK TEST", "Selected piece is among  the ones that can save the king")
                 //Piece could potentially save king from check
                 if(selectedChessPiece.value!!.listOfPositionsThatCanSaveKing.contains(newPosition)){
 
-                    Log.d("PIECE MOVEMENT TEST", "New position is part of the list of positions that can save king")
+                    Log.d("UNDER CHECK TEST", "New position is part of the list of positions that can save king")
 
                     //This move can save the king from the check, so now we can clear all lists
                     //containing the pieces that are checking the playerInTurn's king and
-                    //so on
+                    //because the methods that populated these lists take into account whether moving the pieces
+                    //to save the king under check will cause a new check or not (step 3 becomes redundant in this case only)
 
                     piecesAbleToSavePlayer.clear()
                     enemyPiecesCheckingPlayer.clear()
-
+                    playerInTurn.value!!.underCheck = false
 
                 }else{
-                    Log.d("PIECE MOVEMENT TEST", "User didn't choose the right move, but the selected piece could save the king")
+                    Log.d("UNDER CHECK TEST", "User didn't choose the right move, but the selected piece could save the king")
                     //Piece could potentially save the king but the user didn't choose the right move
                     playSoundEffect(invalidMoveSound)
                     return
                 }
             }
+        }else{
+            Log.d("UNDER CHECK TEST", "King of player in turn isn't under check")
         }
-        Log.d("PIECE MOVEMENT TEST", "King of player in turn isn't under check")
 
 
         // Step 3: Check whether moving the selected piece will cause a new check for the king
@@ -611,11 +618,10 @@ class ChessGameViewModel: ViewModel(){
         Log.d("PIECE MOVEMENT TEST", "The simulated move turned out to be a capture: $capture")
 
         //Then look for enemy pieces that might check king of the playerInTurn
-        if(findPiecesThatCheck(testChessBoard.value!!, getEnemyPlayer().color, enemyPiecesCheckingPlayer)){
+        if(findEnemyPiecesThatCheck(testChessBoard.value!!, getEnemyPlayer().color, enemyPiecesCheckingPlayer)){
 
             Log.d("PIECE MOVEMENT TEST", "There are pieces that could check the king of player in turn if he made this move")
             Log.d("PIECE MOVEMENT TEST", "The pieces are:\n${enemyPiecesCheckingPlayer}")
-
 
 
             testChessBoard.value = null
@@ -639,16 +645,16 @@ class ChessGameViewModel: ViewModel(){
 
 
         //Step 4: Check whether moving the selected piece will cause a check for the enemy king
-        if(findPiecesThatCheck(testChessBoard.value!!,playerInTurn.value!!.color, enemyPiecesCheckingPlayer)){
-            Log.d("PIECE MOVEMENT TEST","There are pieces of the player in turn that are checking the enemy's king")
-            Log.d("PIECE MOVEMENT TEST", "The pieces are: ${enemyPiecesCheckingPlayer}")
+        if(findEnemyPiecesThatCheck(testChessBoard.value!!,playerInTurn.value!!.color, enemyPiecesCheckingPlayer)){
+            Log.d("ENEMY KING UNDER CHECK TEST","There are pieces of the player in turn that are checking the enemy's king")
+            Log.d("ENEMY KING UNDER CHECK TEST", "The pieces are: ${enemyPiecesCheckingPlayer}")
 
             getEnemyPlayer().underCheck = true
 
             //Step 5: Check if the enemy player can escape from the check we're causing
-            if(!detectCheckmate(testChessBoard.value!!,getEnemyPlayer().color )){
+            if(detectCheckmateOnColor(testChessBoard.value!!,getEnemyPlayer().color )){
 
-                Log.d("PIECE MOVEMENT TEST","Enemy player can't escape the check, so it's a checkmate")
+                Log.d("ENEMY KING UNDER CHECK TEST","Enemy player can't escape the check, so it's a checkmate")
 
                 //Checkmate detected
                 replaceChessBoard()
@@ -656,11 +662,10 @@ class ChessGameViewModel: ViewModel(){
                 endGame(winningPlayer= playerInTurn.value!!)
                 return
             }
-            Log.d("PIECE MOVEMENT TEST","Enemy player can escape check, so it's not a checkmate")
-
+            Log.d("ENEMY KING UNDER CHECK TEST","Enemy player can escape check, so it's not a checkmate")
 
         }else if(detectStalemate(testChessBoard.value!!, getEnemyPlayer().color)){
-            Log.d("PIECE MOVEMENT TEST","Stalemate detected!")
+            Log.d("STALEMATE TEST","Stalemate detected!")
 
             //Detect stalemate when the enemy player can't move any of their pieces anymore
             testChessBoard.value = null
@@ -669,7 +674,7 @@ class ChessGameViewModel: ViewModel(){
             return
 
         }else{
-            Log.d("PIECE MOVEMENT TEST", "No stalemate or checkmate detected!")
+            Log.d("PIECE MOVEMENT TEST", "No stalemate or check/checkmate detected!")
         }
 
         //The testChessBoard will become the newly displayed chessboard after all checks are done
