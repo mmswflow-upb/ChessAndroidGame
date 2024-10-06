@@ -1,5 +1,6 @@
 package mmswflow.chessandroidgame.chess_game_classes
 
+import android.util.Log
 import mmswflow.chessandroidgame.R
 
 class King(
@@ -137,8 +138,7 @@ class King(
     }
 
     override fun deepClone(): ChessPiece {
-
-        return King(kgColor, PiecePosition(kgPosition.row,kgPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+        return King(kgColor, position.deepClone(), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 
     override fun toString() : String {

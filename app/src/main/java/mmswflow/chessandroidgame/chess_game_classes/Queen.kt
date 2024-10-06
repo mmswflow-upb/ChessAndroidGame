@@ -178,7 +178,7 @@ class Queen(
 
     override fun deepClone(): ChessPiece {
 
-        return Queen(qColor, PiecePosition(qPosition.row,qPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+        return Queen(qColor, position.deepClone(), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 
     override fun toString() : String {

@@ -34,7 +34,7 @@ class PiecePosition(val row: Int, val column: Int){
     }
 
     override fun toString() : String {
-        return "($row, ${getColumnLetter()})"
+        return "(${row+1}, ${getColumnLetter()})"
     }
 }
 

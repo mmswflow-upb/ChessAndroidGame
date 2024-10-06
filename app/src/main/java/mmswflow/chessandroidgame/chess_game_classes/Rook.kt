@@ -99,7 +99,7 @@ class Rook(
 
     override fun deepClone(): ChessPiece {
 
-        return Rook(rColor, PiecePosition(rPosition.row,rPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+        return Rook(rColor, position.deepClone(), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 
     override fun toString() : String {

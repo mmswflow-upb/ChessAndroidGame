@@ -330,7 +330,7 @@ class ChessGameViewModel: ViewModel(){
     //Returns true for possibility of escaping a check, false for checkmate
     private fun detectCheckmate(testChessBoard: ChessBoard, enemyColor: PieceColor): Boolean{
 
-        Log.d("DETECTING CHECKMATE TEST", "\n\ndetectCheckmate was called, enemy color: ${enemyColor.name}")
+        Log.d("DETECTING CHECKMATE TEST", "\n\ndetectCheckmate was called, the one who's checking is: ${enemyColor.name}")
 
         //Loop through all pieces of enemy, and loop through all their possible positions,
         //and check in each case whether the check on their king can be stopped
@@ -349,6 +349,16 @@ class ChessGameViewModel: ViewModel(){
 
         //loop through enemy's pieces
         for(enemyPiece in enemyPieces){
+
+            val movedBefore = if(enemyPiece is Pawn){
+                enemyPiece.firstMove
+            }else if(enemyPiece is King){
+                enemyPiece.firstMove
+            }else if(enemyPiece is Rook){
+                enemyPiece.firstMove
+            }else{
+                null
+            }
 
             //loop through all possible positions of enemy's pieces (legal ones)
             for(newPos in enemyPiece.getAllLegalNewPositions(testChessBoard, testChessBoard.enPassantEdiblePiece, true)){
@@ -370,10 +380,10 @@ class ChessGameViewModel: ViewModel(){
                 //Revert Movement (also there might have been a captured piece that we must put back)
                 if(capture){
 
-                    simulateMove(testChessBoard, newPos, originalPos, occPieceInNewPos)
+                    simulateMove(testChessBoard, newPos, originalPos, occPieceInNewPos, movedBefore)
 
                 }else{
-                    simulateMove(testChessBoard, newPos, originalPos)
+                    simulateMove(testChessBoard, newPos, originalPos, null, movedBefore)
 
                 }
             }
@@ -417,7 +427,13 @@ class ChessGameViewModel: ViewModel(){
 
     // Simulate a move, returns true if it's a capture or not, revertedPiece is a piece that we want to put back if it was captured previously
     //especially when simulating multiple times for checkmate detection
-    private fun simulateMove(testChessBoard: ChessBoard, oldPosition: PiecePosition,newPosition: PiecePosition, revertedPiece: ChessPiece? = null): Boolean{
+    private fun simulateMove(
+        testChessBoard: ChessBoard,
+        oldPosition: PiecePosition,
+        newPosition: PiecePosition,
+        revertedPiece: ChessPiece? = null,
+        revertFirstMove : Boolean? = null
+    ): Boolean{
 
         Log.d("PIECE MOVEMENT TEST", "\n\nSimulating move of: ${selectedChessPiece.value.toString()} from $oldPosition to $newPosition \n\n")
 
@@ -430,6 +446,8 @@ class ChessGameViewModel: ViewModel(){
         val newColumn = newPosition.column
 
         val occPiece = testChessBoard.boardMatrix[newRow][newColumn].occupyingPiece
+
+        //If there's an occupying piece, then it's clear that we have to remove it from the chessboard (it's a capture)
         if(occPiece != null){
 
             if(occPiece.color == PieceColor.White){
@@ -452,22 +470,28 @@ class ChessGameViewModel: ViewModel(){
         //Temp piece might be a pawn or a king or a rook, we have to check if they're
         if(tempPiece is Pawn){
 
-
             if(tempPiece.firstMove){
                 if(newPosition.column == tempPiece.position.column &&
                     newPosition.row == tempPiece.position.row + 2){
                     testChessBoard.enPassantEdiblePiece = tempPiece
                 }
             }
-            tempPiece.firstMove = false
+            if(revertFirstMove != null){
+                tempPiece.firstMove = revertFirstMove
+            }
+
 
         }else if(tempPiece is King){
 
-            tempPiece.firstMove = false
+            if(revertFirstMove != null){
+                tempPiece.firstMove = revertFirstMove
+            }
 
         }else if(tempPiece is Rook){
 
-            tempPiece.firstMove = false
+            if(revertFirstMove != null){
+                tempPiece.firstMove = revertFirstMove
+            }
         }
 
         //There is a piece that must be placed back on the board
@@ -516,6 +540,12 @@ class ChessGameViewModel: ViewModel(){
         if(selectedChessPiece.value == null){
             Log.d("PIECE MOVEMENT TEST", "Selected Piece was Null")
             return
+        }
+
+        val capturedPiece = chessBoard.value!!.boardMatrix[newPosition.row][newPosition.column].occupyingPiece
+        if(capturedPiece != null && capturedPiece is King){
+            Log.d("PIECE MOVEMENT TEST", "Captured piece is a king, we can't capture kings!")
+               return
         }
 
         Log.d("PIECE MOVEMENT TEST", "Selected Piece: ${selectedChessPiece.value.toString()}")
@@ -571,15 +601,13 @@ class ChessGameViewModel: ViewModel(){
         Log.d("PIECE MOVEMENT TEST", "King of player in turn isn't under check")
 
 
-
-
         // Step 3: Check whether moving the selected piece will cause a new check for the king
 
         //First create a clone of the current chessboard
         testChessBoard.value = chessBoard.value!!.deepClone()
 
         //Secondly simulate the move
-        val capture= simulateMove(testChessBoard.value!!,selectedChessPiece.value!!.position,newPosition)
+        val capture= simulateMove(testChessBoard.value!!,selectedChessPiece.value!!.position,newPosition,null, false)
         Log.d("PIECE MOVEMENT TEST", "The simulated move turned out to be a capture: $capture")
 
         //Then look for enemy pieces that might check king of the playerInTurn

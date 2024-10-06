@@ -241,8 +241,7 @@ class Pawn(
     }
 
     override fun deepClone(): ChessPiece {
-
-        return Pawn(pColor, PiecePosition(pPosition.row,pPosition.column), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+        return Pawn(pColor, position.deepClone(), firstMove, deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 
     override fun toString() : String {

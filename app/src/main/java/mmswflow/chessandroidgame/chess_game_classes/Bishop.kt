@@ -136,7 +136,7 @@ class Bishop(
 
     override fun deepClone(): ChessPiece {
 
-        return Bishop(bColor, PiecePosition(bPosition.row,bPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+        return Bishop(bColor, position.deepClone(), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 
     override fun toString() : String {

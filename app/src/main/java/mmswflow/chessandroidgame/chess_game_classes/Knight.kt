@@ -69,7 +69,7 @@ class Knight(
 
     override fun deepClone(): ChessPiece {
 
-        return Knight(kColor, PiecePosition(kPosition.row,kPosition.column), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
+        return Knight(kColor, position.deepClone(), deepCloneListOfPositions(listOfPositionsThatCanSaveKing))
     }
 
     override fun toString() : String {
