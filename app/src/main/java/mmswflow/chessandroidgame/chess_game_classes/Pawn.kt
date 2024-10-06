@@ -52,7 +52,8 @@ class Pawn(
                             //Check if enPassant edible piece is on its right
                             if(enPassantEdiblePiece.position.row == this.position.row
                                 && enPassantEdiblePiece.position.column == this.position.column+1
-                                && enPassantEdiblePiece.color != this.color){
+                                && enPassantEdiblePiece.color != this.color
+                                && chessBoard.boardMatrix[position.row+1][position.column+1].occupyingPiece == null){
 
                                 newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column+1))
                             }
@@ -75,7 +76,8 @@ class Pawn(
                             //Check if enPassant edible piece is on its left
                             if(enPassantEdiblePiece.position.row == this.position.row
                                 && enPassantEdiblePiece.position.column == this.position.column-1
-                                && enPassantEdiblePiece.color != this.color){
+                                && enPassantEdiblePiece.color != this.color
+                                && chessBoard.boardMatrix[position.row+1][position.column-1].occupyingPiece == null){
                                 newPossiblePositions.add(PiecePosition(row= this.position.row+1,column= this.position.column-1))
                             }
                         }
@@ -141,7 +143,8 @@ class Pawn(
                             //Check if enPassant edible piece is on its right
                             if(enPassantEdiblePiece.position.row == this.position.row
                                 && enPassantEdiblePiece.position.column == this.position.column-1
-                                && enPassantEdiblePiece.color != this.color){
+                                && enPassantEdiblePiece.color != this.color
+                                && chessBoard.boardMatrix[position.row-1][position.column-1].occupyingPiece == null){
 
                                 newPossiblePositions.add(PiecePosition(row= this.position.row-1,column= this.position.column-1))
                             }
@@ -165,6 +168,7 @@ class Pawn(
                             if (enPassantEdiblePiece.position.row == this.position.row
                                 && enPassantEdiblePiece.position.column == this.position.column + 1
                                 && enPassantEdiblePiece.color != this.color
+                                && chessBoard.boardMatrix[position.row-1][position.column+1].occupyingPiece == null
                             ) {
 
                                 newPossiblePositions.add(PiecePosition(row = this.position.row - 1, column = this.position.column + 1))
